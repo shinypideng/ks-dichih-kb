@@ -794,6 +794,53 @@ a { color: inherit; text-decoration: none; }
 .form-grid .wide { grid-column: 1 / -1; }
 @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } .form-grid .wide { grid-column: auto; } }
 
+/* ===== 知识库：子标签与文档记录 ===== */
+.sub-tabs { display: flex; gap: 2px; margin: -4px 0 18px; border-bottom: 1px solid var(--line); }
+.sub-tab {
+  position: relative; padding: 8px 14px 10px; font-size: 13px; font-weight: 550; color: var(--ink-3);
+  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: .14s;
+}
+.sub-tab:hover { color: var(--ink-2); }
+.sub-tab.on { color: var(--brand-deep); border-bottom-color: var(--brand); }
+.sub-tab .cnt { font-size: 10.5px; color: var(--ink-4); margin-left: 3px; }
+.sub-tab.on .cnt { color: var(--brand); }
+
+.doc-table-wrap { background: #fff; border: 1px solid var(--line); border-radius: var(--r); overflow: auto; box-shadow: var(--shadow-1); }
+.doc-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 760px; }
+.doc-table th {
+  text-align: left; font-size: 10.5px; font-weight: 650; color: var(--ink-4); letter-spacing: .5px;
+  padding: 11px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: #FBFBFC;
+  position: sticky; top: 0; z-index: 1;
+}
+.doc-table td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.doc-table tr:last-child td { border-bottom: 0; }
+.doc-table tbody tr:hover { background: #FFFBFA; }
+.doc-table .t-title { font-weight: 550; max-width: 340px; }
+.doc-table .t-title a { color: var(--ink); }
+.doc-table .t-title a:hover { color: var(--brand); }
+.doc-table .t-muted { color: var(--ink-3); }
+.doc-table .t-stage { font-size: 10.5px; color: var(--ink-4); }
+.doc-table .t-date { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.doc-table .t-act { white-space: nowrap; }
+.doc-table .t-act button {
+  font-size: 11.5px; color: var(--ink-2); padding: 3px 7px; border-radius: 6px; border: 1px solid transparent;
+}
+.doc-table .t-act button:hover { background: #F2F2F6; color: var(--ink); }
+.doc-table .t-act button.danger:hover { background: var(--danger-soft); color: var(--danger); }
+.dot-edit {
+  display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
+  margin-right: 5px; vertical-align: 2px;
+}
+.recycle {
+  margin-top: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 11.5px; color: var(--ink-3); background: #FBFBFC; border: 1px dashed var(--line);
+  border-radius: 10px; padding: 9px 12px;
+}
+.recycle b { color: var(--ink-2); font-weight: 600; }
+.rc-item { display: inline-flex; align-items: center; gap: 5px; background: #fff; border: 1px solid var(--line); border-radius: 99px; padding: 2px 5px 2px 9px; }
+.rc-item button { color: var(--brand); font-size: 11px; padding: 1px 5px; border-radius: 99px; }
+.rc-item button:hover { background: var(--brand-soft); }
+
 </style>
 </head>
 <body>
@@ -980,8 +1027,8 @@ a { color: inherit; text-decoration: none; }
   <div class="modal" style="max-width:620px">
     <div class="modal-h">
       <div>
-        <h3>新增一条知识</h3>
-        <p>先存为本地草稿，导出发布后代理才看得到。</p>
+        <h3 id="ndHead">新增一条知识</h3>
+        <p id="ndHeadSub">先存为本地草稿，导出发布后代理才看得到。</p>
       </div>
     </div>
     <div class="modal-b">
@@ -1001,6 +1048,17 @@ a { color: inherit; text-decoration: none; }
     <div class="modal-f">
       <button class="btn" id="ndCancel">取消</button>
       <button class="btn btn-primary" id="ndSave">存为草稿</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-mask" id="confirmMask">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-h"><div><h3 id="cfTitle">确认</h3><p id="cfMsg"></p></div></div>
+    <div class="modal-f">
+      <button class="btn" id="cfCancel">取消</button>
+      <button class="btn btn-primary" id="cfOk">确定</button>
     </div>
   </div>
 </div>
@@ -3875,6 +3933,7 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     if (r.view === 'list' && (r.arg === 'policy' || r.arg === 'training')) r.arg = 'stage';
     main = document.getElementById('main');
     var cur = r.view + (r.arg ? '/' + r.arg : '');
+    if (r.view === 'graph' && r.arg === 'list') cur = 'graph';
     document.querySelectorAll('.nav-item[data-nav]').forEach(function (el) {
       var t = el.getAttribute('data-nav');
       el.classList.toggle('active', t === cur || (r.view === 'doc' && t === 'list/' + (DOC_MAP[r.arg] ? DOC_MAP[r.arg].cat : '')));
@@ -3890,7 +3949,7 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
       case 'mine': viewMine(r.arg || 'fav'); break;
       case 'gov': viewGov(); break;
       case 'spec': viewSpec(); break;
-      case 'graph': viewGraph(); break;
+      case 'graph': viewGraph(r.arg === 'list'); break;
       case 'search': viewSearch(r.q || ''); break;
       default: viewHome();
     }
@@ -4603,7 +4662,7 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
         setAdmin(true);
         document.getElementById('authMask').classList.remove('on');
         toast('已设置密码并登录');
-        if (parseHash().view === 'graph') viewGraph();
+        if (parseHash().view === 'graph') viewGraph(parseHash().arg === 'list');
       });
       return;
     }
@@ -4612,25 +4671,12 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
       setAdmin(true);
       document.getElementById('authMask').classList.remove('on');
       toast('已登录');
-      if (parseHash().view === 'graph') viewGraph();
+      if (parseHash().view === 'graph') viewGraph(parseHash().arg === 'list');
     });
   }
 
   /* ============ 本地草稿（管理员录入） ============ */
   function drafts() { return S.get('drafts', []); }
-
-  function mergeDrafts() {
-    drafts().forEach(function (d) {
-      if (DOC_MAP[d.id]) return;
-      d.draft = true;
-      d.related = d.related || [];
-      d.tags = d.tags || [];
-      d.readMin = d.readMin || 3;
-      d.status = '待发布';
-      DOCS.push(d);
-      DOC_MAP[d.id] = d;
-    });
-  }
 
   function rebuildIndex() {
     CHUNKS.length = 0;
@@ -4705,9 +4751,10 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     return { nodes: nodes, edges: edges, map: map };
   }
 
-  function viewGraph() {
+  function viewGraph(showList) {
     if (window.__graphCleanup) { window.__graphCleanup(); window.__graphCleanup = null; }
     graphRaf = 0;
+    if (showList) { viewDocList(); return; }
     var G = buildGraphData();
     var isolated = G.nodes.filter(function (n) { return n.deg === 0; }).length;
     var isAdmin = adminOn();
@@ -4717,6 +4764,7 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
       '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>知识图谱</span></div>' +
       '<h1>知识图谱</h1>' +
       '<p>' + G.nodes.length + ' 个知识点，' + G.edges.length + ' 条关联。单击看关联，双击打开正文，拖动可以理清关系。</p></div>' +
+      tabsHtml('graph') +
       '<div class="graph-wrap">' +
       '<div class="graph-box">' +
       '<canvas id="gcv"></canvas>' +
@@ -5037,6 +5085,7 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
         '<button class="btn btn-sm" data-nav="doc/' + n.id + '" style="width:100%;justify-content:center;margin-top:8px">打开这篇</button>';
     }
 
+    bindTabs();
     document.querySelectorAll('[data-gf]').forEach(function (b) {
       b.addEventListener('click', function () {
         document.querySelectorAll('[data-gf]').forEach(function (x) { x.classList.remove('on'); });
@@ -5122,64 +5171,307 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     toast('已复制 ' + arr.length + ' 篇的代码片段');
   }
 
-  /* ---- 新增知识（弹层表单） ---- */
-  function openNewDoc() {
+  /* ---- 新增 / 编辑（弹层表单） ---- */
+  var ndMode = 'new', ndEditId = null;
+
+  function openNewDoc(doc) {
     var mask = document.getElementById('docMask');
     var catSel = document.getElementById('ndCat');
     catSel.innerHTML = KB.cats.filter(function (c) { return c.key !== 'faq'; })
       .map(function (c) { return '<option value="' + c.key + '">' + esc(c.name) + '</option>'; }).join('');
-    var subList = document.getElementById('ndSubList');
-    subList.innerHTML = uniq(DOCS.map(function (d) { return d.sub; }))
+    document.getElementById('ndSubList').innerHTML = uniq(DOCS.map(function (d) { return d.sub; }))
       .map(function (s) { return '<option value="' + esc(s) + '">'; }).join('');
-    ['ndTitle', 'ndSummary', 'ndTags', 'ndOwner', 'ndSub', 'ndBody'].forEach(function (id) {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('ndMsg').textContent = '';
+
+    ndMode = doc ? 'edit' : 'new';
+    ndEditId = doc ? doc.id : null;
+    document.getElementById('ndHead').textContent = doc ? '编辑知识' : '新增一条知识';
+    document.getElementById('ndHeadSub').textContent = doc
+      ? '改动先在本机生效，导出变更后才会同步给代理。'
+      : '先存为本地草稿，导出发布后代理才看得到。';
+    document.getElementById('ndSave').textContent = doc ? '保存修改' : '存为草稿';
+
+    var g = function (id) { return document.getElementById(id); };
+    g('ndTitle').value = doc ? doc.title : '';
+    g('ndSummary').value = doc ? doc.summary : '';
+    g('ndTags').value = doc ? (doc.tags || []).join(',') : '';
+    g('ndOwner').value = doc ? doc.owner : '';
+    g('ndSub').value = doc ? doc.sub : '';
+    g('ndBody').value = doc ? doc.body : '';
+    g('ndCat').value = doc ? doc.cat : 'stage';
+    g('ndStage').value = doc && doc.stage ? doc.stage : '投放前';
+    g('ndStageWrap').style.display = (doc ? doc.cat : 'stage') === 'stage' ? '' : 'none';
+    g('ndMsg').textContent = '';
     mask.classList.add('on');
-    setTimeout(function () { document.getElementById('ndTitle').focus(); }, 60);
+    setTimeout(function () { g('ndTitle').focus(); }, 60);
   }
 
   function initDocModal() {
     var mask = document.getElementById('docMask');
     if (!mask) return;
     document.getElementById('ndCancel').addEventListener('click', function () { mask.classList.remove('on'); });
-    document.getElementById('ndStageWrap').style.display = '';
     document.getElementById('ndCat').addEventListener('change', function () {
       document.getElementById('ndStageWrap').style.display = this.value === 'stage' ? '' : 'none';
     });
     document.getElementById('ndSave').addEventListener('click', function () {
-      var msg = document.getElementById('ndMsg');
-      var title = document.getElementById('ndTitle').value.trim();
-      var body = document.getElementById('ndBody').value.trim();
-      var sub = document.getElementById('ndSub').value.trim();
+      var g = function (id) { return document.getElementById(id); };
+      var msg = g('ndMsg');
+      var title = g('ndTitle').value.trim();
+      var body = g('ndBody').value.trim();
+      var sub = g('ndSub').value.trim();
       if (title.length < 4) { msg.textContent = '标题至少 4 个字'; return; }
       if (body.length < 20) { msg.textContent = '正文太短，至少 20 个字'; return; }
       if (!sub) { msg.textContent = '请填一个主题'; return; }
-      var cat = document.getElementById('ndCat').value;
-      var doc = {
-        id: 'u' + Date.now().toString(36),
+
+      var cat = g('ndCat').value;
+      var patch = {
         cat: cat,
-        stage: cat === 'stage' ? document.getElementById('ndStage').value : '',
+        stage: cat === 'stage' ? g('ndStage').value : '',
         sub: sub,
         title: title,
-        summary: document.getElementById('ndSummary').value.trim() || clip(plainOf(body), 56),
-        tags: document.getElementById('ndTags').value.split(/[,，\s]+/).filter(Boolean),
-        owner: document.getElementById('ndOwner').value.trim() || '待指定',
+        summary: g('ndSummary').value.trim() || clip(plainOf(body), 56),
+        tags: g('ndTags').value.split(/[,，\s]+/).filter(Boolean),
+        owner: g('ndOwner').value.trim() || '待指定',
         updated: new Date().toISOString().slice(0, 10),
-        version: 'v0.1',
-        level: '推荐',
-        readMin: Math.max(2, Math.round(plainOf(body).length / 260)),
-        status: '待发布',
-        body: body,
-        related: [],
-        draft: true
+        body: body
       };
-      var arr = drafts(); arr.push(doc); S.set('drafts', arr);
-      DOCS.push(doc); DOC_MAP[doc.id] = doc;
-      rebuildIndex();
+
+      if (ndMode === 'edit' && ndEditId) {
+        var base = DOC_MAP[ndEditId];
+        patch.readMin = Math.max(2, Math.round(plainOf(body).length / 260));
+        if (String(ndEditId).charAt(0) === 'u') {
+          var arr = S.get('drafts', []).map(function (d) {
+            return d.id === ndEditId ? mergeObj(d, patch) : d;
+          });
+          S.set('drafts', arr);
+        } else {
+          var ed = S.get('edits', {});
+          ed[ndEditId] = mergeObj(ed[ndEditId] || {}, mergeObj({ id: ndEditId }, patch));
+          ed[ndEditId] = mergeObj(ed[ndEditId], { draft: false, local: false });
+          S.set('edits', ed);
+        }
+        applyContent();
+        mask.classList.remove('on');
+        toast('已保存修改');
+      } else {
+        var doc = mergeObj(patch, {
+          id: 'u' + Date.now().toString(36),
+          version: 'v0.1',
+          level: '推荐',
+          status: '待发布',
+          readMin: Math.max(2, Math.round(plainOf(body).length / 260)),
+          related: [],
+          draft: true
+        });
+        var ds = S.get('drafts', []); ds.push(doc); S.set('drafts', ds);
+        applyContent();
+        mask.classList.remove('on');
+        toast('已存为本地草稿，记得导出发布');
+      }
+      var r = parseHash();
+      if (r.view === 'graph') viewGraph(r.arg === 'list');
+    });
+  }
+
+  /* ============ 文档记录：本地覆盖层 ============ */
+  var SEED = [];
+
+  function mergeObj(a, b) {
+    var o = {}, k;
+    for (k in a) if (Object.prototype.hasOwnProperty.call(a, k)) o[k] = a[k];
+    for (k in b) if (Object.prototype.hasOwnProperty.call(b, k)) o[k] = b[k];
+    return o;
+  }
+
+  function applyContent() {
+    var del = S.get('del', []);
+    var edits = S.get('edits', {});
+    var dr = S.get('drafts', []);
+    var all = [];
+    SEED.concat(dr).forEach(function (d) {
+      if (del.indexOf(d.id) >= 0) return;
+      all.push(edits[d.id] ? mergeObj(d, edits[d.id]) : d);
+    });
+    DOCS.length = 0;
+    all.forEach(function (d) { DOCS.push(d); });
+    Object.keys(DOC_MAP).forEach(function (k) { delete DOC_MAP[k]; });
+    DOCS.forEach(function (d) { DOC_MAP[d.id] = d; });
+    rebuildIndex();
+  }
+
+  function changeCount() {
+    return S.get('del', []).length + Object.keys(S.get('edits', {})).length + S.get('drafts', []).length;
+  }
+
+  function viewDocList() {
+    var isAdmin = adminOn();
+    var del = S.get('del', []);
+    var edits = S.get('edits', {});
+    var dr = S.get('drafts', []);
+    var q = (window.__docQ || '').toLowerCase();
+    var cat = window.__docCat || 'all';
+
+    var rows = DOCS.filter(function (d) {
+      if (cat !== 'all' && d.cat !== cat) return false;
+      if (!q) return true;
+      return (d.title + d.summary + d.sub + (d.tags || []).join(' ')).toLowerCase().indexOf(q) >= 0;
+    });
+
+    var statusChip = function (d) {
+      var cls = d.status === '已定稿' ? 'chip-ok' : 'chip-draft';
+      return '<span class="chip ' + cls + '">' + esc(d.status) + '</span>';
+    };
+
+    var h = '<div class="view view-wide">' +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>知识库</span></div>' +
+      '<h1>知识图谱</h1>' +
+      '<p>文档记录是知识库的全部条目。改动先在本地生效，导出变更后才会同步给代理。</p></div>' +
+      tabsHtml('list') +
+      '<div class="toolbar">' +
+      '<div class="mini-search" style="width:240px">' + ico('search') + '<input id="dq" placeholder="搜索标题、主题、标签" value="' + esc(window.__docQ || '') + '"/></div>' +
+      '<button class="filter-chip' + (cat === 'all' ? ' on' : '') + '" data-dc="all">全部 ' + DOCS.length + '</button>' +
+      KB.cats.filter(function (c) { return c.key !== 'faq'; }).map(function (c) {
+        var n = DOCS.filter(function (d) { return d.cat === c.key; }).length;
+        return '<button class="filter-chip' + (cat === c.key ? ' on' : '') + '" data-dc="' + c.key + '">' + esc(c.name) + ' ' + n + '</button>';
+      }).join('') +
+      '<span class="spacer"></span>' +
+      (isAdmin
+        ? '<button class="btn btn-sm" id="dNew">' + ico('pinch') + '新增</button>' +
+          (changeCount() ? '<button class="btn btn-sm" id="dExport">' + ico('dl') + '导出变更 ' + changeCount() + '</button>' : '')
+        : '<button class="btn btn-sm" id="dLogin">' + ico('user') + '管理员登录</button>') +
+      '</div>';
+
+    if (!isAdmin) {
+      h += '<div class="banner" style="margin-bottom:12px">' + ico('warn') +
+        '<span>当前为只读模式。改名、改内容、删除需要管理员密码。</span></div>';
+    }
+
+    h += '<div class="doc-table-wrap"><table class="doc-table"><thead><tr>' +
+      '<th>标题</th><th>板块</th><th>主题</th><th>责任方</th><th>更新</th><th>状态</th>' +
+      (isAdmin ? '<th style="width:96px">操作</th>' : '') +
+      '</tr></thead><tbody>';
+
+    if (!rows.length) {
+      h += '<tr><td colspan="' + (isAdmin ? 7 : 6) + '" style="text-align:center;color:var(--ink-3);padding:34px 0">没有匹配的文档</td></tr>';
+    }
+    rows.forEach(function (d) {
+      var touched = edits[d.id] ? '<span class="dot-edit" title="本地已修改"></span>' : '';
+      h += '<tr data-row="' + d.id + '">' +
+        '<td class="t-title">' + touched + '<a data-nav="doc/' + d.id + '">' + esc(d.title) + '</a>' +
+        (d.draft ? ' <span class="chip chip-draft">本地</span>' : '') + '</td>' +
+        '<td class="t-muted">' + esc(CAT_NAME[d.cat] || '') + (d.stage ? '<br><span class="t-stage">' + esc(d.stage) + '</span>' : '') + '</td>' +
+        '<td class="t-muted">' + esc(d.sub) + '</td>' +
+        '<td class="t-muted">' + esc(d.owner) + '</td>' +
+        '<td class="t-muted t-date">' + fmtDate(d.updated) + '</td>' +
+        '<td>' + statusChip(d) + '</td>' +
+        (isAdmin ? '<td class="t-act"><button data-edit="' + d.id + '">编辑</button><button class="danger" data-del="' + d.id + '">删除</button></td>' : '') +
+        '</tr>';
+    });
+    h += '</tbody></table></div>';
+
+    if (isAdmin && del.length) {
+      h += '<div class="recycle"><b>本地已删除 ' + del.length + ' 条</b>' +
+        del.map(function (id) {
+          var d = SEED.filter(function (x) { return x.id === id; })[0];
+          return '<span class="rc-item">' + esc(d ? clip(d.title, 14) : id) +
+            '<button data-restore="' + id + '">恢复</button></span>';
+        }).join('') + '</div>';
+    }
+
+    h += '</div>';
+    main.innerHTML = h;
+
+    var dq = document.getElementById('dq');
+    if (dq) dq.addEventListener('input', function () {
+      window.__docQ = dq.value;
+      viewDocList();
+      var el = document.getElementById('dq');
+      if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+    });
+    document.querySelectorAll('[data-dc]').forEach(function (b) {
+      b.addEventListener('click', function () { window.__docCat = b.getAttribute('data-dc'); viewDocList(); });
+    });
+    var dl = document.getElementById('dLogin');
+    if (dl) dl.addEventListener('click', openAuth);
+    var dn = document.getElementById('dNew');
+    if (dn) dn.addEventListener('click', function () { openNewDoc(null); });
+    var de = document.getElementById('dExport');
+    if (de) de.addEventListener('click', exportChanges);
+    document.querySelectorAll('[data-edit]').forEach(function (b) {
+      b.addEventListener('click', function () { openNewDoc(DOC_MAP[b.getAttribute('data-edit')]); });
+    });
+    document.querySelectorAll('[data-del]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = DOC_MAP[b.getAttribute('data-del')];
+        confirmBox('删除这条知识？', '《' + clip(d.title, 22) + '》会从工作台移除。删除在本地生效，可随时恢复，导出发布后才真正消失。', function () {
+          if (d.draft || String(d.id).charAt(0) === 'u') {
+            S.set('drafts', S.get('drafts', []).filter(function (x) { return x.id !== d.id; }));
+          } else {
+            var arr = S.get('del', []);
+            if (arr.indexOf(d.id) < 0) arr.push(d.id);
+            S.set('del', arr);
+          }
+          var ed = S.get('edits', {}); delete ed[d.id]; S.set('edits', ed);
+          applyContent();
+          toast('已删除');
+          viewDocList();
+        });
+      });
+    });
+    bindTabs();
+    document.querySelectorAll('[data-restore]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        S.set('del', S.get('del', []).filter(function (x) { return x !== b.getAttribute('data-restore'); }));
+        applyContent();
+        toast('已恢复');
+        viewDocList();
+      });
+    });
+  }
+
+  function tabsHtml(cur) {
+    return '<div class="sub-tabs">' +
+      '<button class="sub-tab' + (cur === 'graph' ? ' on' : '') + '" data-gtab="graph">图谱视图</button>' +
+      '<button class="sub-tab' + (cur === 'list' ? ' on' : '') + '" data-gtab="list">文档记录 <span class="cnt">' + DOCS.length + '</span></button>' +
+      '</div>';
+  }
+
+  function bindTabs() {
+    document.querySelectorAll('[data-gtab]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        go(b.getAttribute('data-gtab') === 'list' ? 'graph/list' : 'graph');
+      });
+    });
+  }
+
+  function exportChanges() {
+    var pack = {
+      add: S.get('drafts', []),
+      update: Object.keys(S.get('edits', {})).map(function (k) { return S.get('edits', {})[k]; }),
+      remove: S.get('del', [])
+    };
+    var n = pack.add.length + pack.update.length + pack.remove.length;
+    if (!n) { toast('没有本地变更'); return; }
+    copyText(JSON.stringify(pack, null, 2));
+    toast('变更包已复制（' + n + ' 条），发给维护者即可发布');
+  }
+
+  /* ============ 确认弹层 ============ */
+  var confirmCb = null;
+  function confirmBox(title, msg, onOk) {
+    var mask = document.getElementById('confirmMask');
+    document.getElementById('cfTitle').textContent = title;
+    document.getElementById('cfMsg').textContent = msg;
+    confirmCb = onOk;
+    mask.classList.add('on');
+  }
+  function initConfirm() {
+    var mask = document.getElementById('confirmMask');
+    if (!mask) return;
+    document.getElementById('cfCancel').addEventListener('click', function () { mask.classList.remove('on'); confirmCb = null; });
+    document.getElementById('cfOk').addEventListener('click', function () {
       mask.classList.remove('on');
-      toast('已存为本地草稿，记得导出发布');
-      viewGraph();
+      var cb = confirmCb; confirmCb = null;
+      if (cb) cb();
     });
   }
 
@@ -5397,10 +5689,11 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
   }
 
   function init() {
-    mergeDrafts();
-    buildIndex();
+    SEED = DOCS.slice();
+    applyContent();
     initSidebar();
     initAuth();
+    initConfirm();
     initDocModal();
     initGlobalSearch();
     initSettings();
