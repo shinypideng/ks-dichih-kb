@@ -4204,7 +4204,10 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     var rel = (d.related || []).map(function (r) { return DOC_MAP[r]; }).filter(Boolean);
     var isFav = favs().indexOf(id) >= 0;
 
-    var h = '<div class="view"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') +
+    var h = '<div class="view">' +
+      (d.draft ? '<div class="banner" style="background:#FFF4EC;border-color:#FFD8C8;color:#8A3B12">' + ico('warn') +
+        '<span>这是本地草稿，只有你能看到，尚未发布给代理。</span><button data-nav="graph">回知识图谱导出 →</button></div>' : '') +
+      '<div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') +
       ' <a data-nav="list/' + d.cat + '">' + CAT_NAME[d.cat] + '</a> ' + ico('right') + ' <span>' + esc(d.sub) + '</span></div>' +
       '<div class="doc-layout"><div>' +
       '<div class="doc-head">' +
@@ -4462,21 +4465,21 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     var h = '<div class="view">' +
       '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>内容体系</span></div>' +
       '<h1>内容体系与入库规范</h1>' +
-      '<p>这一页给维护者看。代理侧只需要搜和问，不需要登录、上传或搭体系——所以页面里没有上传入口。</p></div>';
+      '<p>这一页说明知识是怎么被组织和维护的。代理侧只需要搜和问，不用登录；录入在「知识图谱」页，需要管理员密码。</p></div>';
 
     /* 入库方式 */
     h += '<div class="card" style="margin-bottom:14px"><h3>内容怎么进来</h3>' +
-      '<p class="card-sub">只有一个维护者时，最省事的通道就是对话：你把原始素材发过来，结构化、校验、发布由这边完成。</p>' +
+      '<p class="card-sub">三条通道，按场景选。只有管理员能用第三条，代理始终只能读。</p>' +
       '<div class="way-grid">' +
-      '<div class="way"><div class="way-tag">推荐</div><b>直接发对话框</b>' +
-      '<span>原文、链接、截图、PPT、群聊记录都行，不用整理格式。这边按内容模型拆字段、生成文档、跑一遍检索确认能命中，再发布上线。</span></div>' +
-      '<div class="way"><div class="way-tag">批量</div><b>打包给我</b>' +
+      '<div class="way"><div class="way-tag">推荐</div><b>发对话框给我</b>' +
+      '<span>原文、链接、截图、PPT、群聊记录都行，不用整理格式。这边按内容模型拆字段、跑一遍检索确认能命中，再发布。这是最省事的一条。</span></div>' +
+      '<div class="way"><div class="way-tag">批量</div><b>打包导入</b>' +
       '<span>历史培训 PPT、Word 规范、答疑记录打包，一次 20-50 篇。适合上线前的存量梳理。</span></div>' +
-      '<div class="way"><div class="way-tag">自助</div><b>自己改数据文件</b>' +
-      '<span>在 data.js 的 docs 里加一条记录，跑一次 deploy.sh。适合临时改错别字这类小修。</span></div>' +
+      '<div class="way"><div class="way-tag">页内</div><b>知识图谱页录入</b>' +
+      '<span>登录后在右侧「内容录入」新增，存为本地草稿，导出成数据片段再发布。适合临时补一条、当场就能看到它在图谱里的位置。</span></div>' +
       '</div>' +
       '<div class="note" style="margin-top:14px">' + ico('warn') +
-      ' <b>为什么不做一个页面上传口：</b>单人维护时它没有协作价值；而纯前端把内容存在浏览器本地，只有操作者自己能看到，其他人打开链接还是旧内容——这会造成“我明明传了”的错觉。真要多人在线协作，需要后端加权限，那是另一件事。</div>' +
+      ' <b>页内录入的边界：</b>存下来的是本地草稿，只有你这台浏览器能看到，代理打开还是旧内容。所以录完必须导出发布才生效。要在线上直接实时生效，需要接后端——纯前端做不到，这不是省事与否的问题。</div>' +
       '</div>';
 
     /* 采集流程 */
@@ -4703,7 +4706,8 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
   }
 
   function viewGraph() {
-    if (graphRaf) { cancelAnimationFrame(graphRaf); graphRaf = 0; }
+    if (window.__graphCleanup) { window.__graphCleanup(); window.__graphCleanup = null; }
+    graphRaf = 0;
     var G = buildGraphData();
     var isolated = G.nodes.filter(function (n) { return n.deg === 0; }).length;
     var isAdmin = adminOn();
