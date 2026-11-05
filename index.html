@@ -693,9 +693,25 @@ a { color: inherit; text-decoration: none; }
 .flow4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
 @media (max-width: 1080px) { .flow4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 620px) { .flow4 { grid-template-columns: 1fr; } }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-grid .wide { grid-column: 1 / -1; }
-@media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } .form-grid .wide { grid-column: auto; } }
+.way-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 940px) { .way-grid { grid-template-columns: 1fr; } }
+.way { background: #FBFBFC; border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
+.way .way-tag {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .3px;
+  color: var(--brand-deep); background: var(--brand-soft); border-radius: 4px; padding: 1px 6px; margin-bottom: 7px;
+}
+.way b { display: block; font-size: 13px; margin-bottom: 5px; }
+.way span { font-size: 11.5px; color: var(--ink-3); line-height: 1.65; display: block; }
+.check-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+@media (max-width: 780px) { .check-list { grid-template-columns: 1fr; } }
+.ck { display: flex; gap: 9px; align-items: flex-start; background: #FBFBFC; border: 1px solid var(--line-soft); border-radius: 9px; padding: 10px 12px; }
+.ck i {
+  flex: none; width: 18px; height: 18px; border-radius: 5px; background: var(--brand-soft);
+  color: var(--brand-deep); font-style: normal; font-size: 10.5px; font-weight: 700;
+  display: grid; place-items: center; margin-top: 1px;
+}
+.ck b { display: block; font-size: 12.5px; margin-bottom: 2px; }
+.ck span { font-size: 11.5px; color: var(--ink-3); line-height: 1.6; display: block; }
 .field select, .field textarea {
   width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 0 11px;
   font-size: 13px; outline: none; background: #fff; transition: .15s; color: var(--ink);
@@ -703,8 +719,6 @@ a { color: inherit; text-decoration: none; }
 .field select { height: 36px; }
 .field textarea { padding: 9px 11px; line-height: 1.7; resize: vertical; font-family: inherit; }
 .field select:focus, .field textarea:focus { border-color: var(--brand-line); box-shadow: 0 0 0 3px rgba(255,90,30,.09); }
-.form-foot { display: flex; align-items: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-.form-msg { font-size: 12px; color: var(--danger); }
 
 </style>
 </head>
@@ -798,6 +812,10 @@ a { color: inherit; text-decoration: none; }
         <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
         最近浏览
       </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-title">管理员</div>
       <a class="nav-item" data-nav="spec" href="#/spec">
         <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5-8 4.5-8-4.5z"/><path d="m4 12 8 4.5 8-4.5"/><path d="m4 16.5 8 4.5 8-4.5"/></svg>
         内容体系
@@ -4030,7 +4048,6 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
     return '<button class="doc-card" data-nav="doc/' + d.id + '">' +
       '<span class="dc-top">' +
       (d.stage ? '<span class="chip chip-stage">' + esc(d.stage) + '</span>' : '') +
-      (d.local ? '<span class="chip chip-ok">本地</span>' : '') +
       (d.level === '必读' ? '<span class="chip chip-must">必读</span>' : '') +
       '<span class="chip chip-tag">' + esc(d.sub) + '</span>' +
       '<span class="chip chip-draft">' + esc(d.status) + '</span></span>' +
@@ -4297,49 +4314,39 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
   }
 
 
-  /* ============ 内容体系：本地内容与入库 ============ */
-  var LOCAL_KEY = 'local';
-  var BT = String.fromCharCode(96);
-
-  function localDocs() { return S.get(LOCAL_KEY, []); }
-
-  function mergeLocal() {
-    localDocs().forEach(function (d) {
-      if (DOC_MAP[d.id]) return;
-      d.local = true;
-      d.related = d.related || [];
-      d.tags = d.tags || [];
-      d.readMin = d.readMin || 3;
-      if (!d.status) d.status = '本地';
-      DOCS.push(d);
-      DOC_MAP[d.id] = d;
-    });
-  }
-
-  function rebuildIndex() {
-    CHUNKS.length = 0;
-    for (var k in IDF) delete IDF[k];
-    AVG = 0;
-    buildIndex();
-  }
-
+  /* ============ 内容体系（管理员 / 入库规范） ============ */
   function viewSpec() {
     var subs = uniq(DOCS.map(function (d) { return d.sub; }));
-    var catOpts = KB.cats.filter(function (c) { return c.key !== 'faq'; });
-    var locals = localDocs();
+    var byCat = {};
+    DOCS.forEach(function (d) { byCat[d.cat] = (byCat[d.cat] || 0) + 1; });
 
     var h = '<div class="view">' +
       '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>内容体系</span></div>' +
-      '<h1>内容体系与接入规范</h1>' +
-      '<p>这个工作台是前端，真正决定它好不好用的是背后的内容模型：一篇内容有哪些字段、归到哪个板块、谁来维护、什么时候该下线。</p></div>';
+      '<h1>内容体系与入库规范</h1>' +
+      '<p>这一页给维护者看。代理侧只需要搜和问，不需要登录、上传或搭体系——所以页面里没有上传入口。</p></div>';
+
+    /* 入库方式 */
+    h += '<div class="card" style="margin-bottom:14px"><h3>内容怎么进来</h3>' +
+      '<p class="card-sub">只有一个维护者时，最省事的通道就是对话：你把原始素材发过来，结构化、校验、发布由这边完成。</p>' +
+      '<div class="way-grid">' +
+      '<div class="way"><div class="way-tag">推荐</div><b>直接发对话框</b>' +
+      '<span>原文、链接、截图、PPT、群聊记录都行，不用整理格式。这边按内容模型拆字段、生成文档、跑一遍检索确认能命中，再发布上线。</span></div>' +
+      '<div class="way"><div class="way-tag">批量</div><b>打包给我</b>' +
+      '<span>历史培训 PPT、Word 规范、答疑记录打包，一次 20-50 篇。适合上线前的存量梳理。</span></div>' +
+      '<div class="way"><div class="way-tag">自助</div><b>自己改数据文件</b>' +
+      '<span>在 data.js 的 docs 里加一条记录，跑一次 deploy.sh。适合临时改错别字这类小修。</span></div>' +
+      '</div>' +
+      '<div class="note" style="margin-top:14px">' + ico('warn') +
+      ' <b>为什么不做一个页面上传口：</b>单人维护时它没有协作价值；而纯前端把内容存在浏览器本地，只有操作者自己能看到，其他人打开链接还是旧内容——这会造成“我明明传了”的错觉。真要多人在线协作，需要后端加权限，那是另一件事。</div>' +
+      '</div>';
 
     /* 采集流程 */
-    h += '<div class="card" style="margin-bottom:14px"><h3>内容是怎么进来的</h3>' +
+    h += '<div class="card" style="margin-bottom:14px"><h3>内容的加工流程</h3>' +
       '<p class="card-sub">散落各处的内容，走完这四步才能进库。少了任何一步，库就会变成另一个没人看的网盘。</p>' +
       '<div class="flow4">' +
-      '<div class="flow-step"><div class="fs-n">STEP 01</div><b>采集</b><span>群聊答疑、培训 PPT、平台规则、复盘邮件，先全部收拢到一个待处理清单。</span></div>' +
+      '<div class="flow-step"><div class="fs-n">STEP 01</div><b>采集</b><span>群聊答疑、培训 PPT、平台规则、复盘邮件，先全部收拢到待处理清单。</span></div>' +
       '<div class="flow-step"><div class="fs-n">STEP 02</div><b>结构化</b><span>按内容模型填字段：板块、阶段、主题、标签、责任方。这一步决定能不能被检索到。</span></div>' +
-      '<div class="flow-step"><div class="fs-n">STEP 03</div><b>质检</b><span>三查：事实是否可核对、表述是否合规、有没有和现有内容冲突。</span></div>' +
+      '<div class="flow-step"><div class="fs-n">STEP 03</div><b>质检</b><span>三查：事实能否核对、表述是否合规、有没有和现有内容冲突。</span></div>' +
       '<div class="flow-step"><div class="fs-n">STEP 04</div><b>发布与更新</b><span>定版本号与生效日期，指定 owner，到期复核。过期内容下线，不留在库里误导人。</span></div>' +
       '</div></div>';
 
@@ -4361,128 +4368,38 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
       '<tr><td class="nm">status</td><td>枚举</td><td>是</td><td class="nt">草稿 / 评审中 / 已定稿 / 已过期</td></tr>' +
       '<tr><td class="nm">body</td><td>Markdown</td><td>是</td><td class="nt">支持 ## 标题、列表、步骤、表格、引用</td></tr>' +
       '<tr><td class="nm">related</td><td>字符串数组</td><td>否</td><td class="nt">关联文档，构成知识网络</td></tr>' +
-      '</tbody></table></div></div>';
+      '</tbody></table></div>' +
+      '<div style="margin-top:12px;font-size:12px;color:var(--ink-3)">当前分布：' +
+      KB.cats.filter(function (c) { return c.key !== 'faq'; }).map(function (c) {
+        return esc(c.name) + ' ' + (byCat[c.key] || 0) + ' 篇';
+      }).join(' · ') + ' · FAQ ' + FAQS.length + ' 条</div></div>';
 
     /* 生命周期 */
     h += '<div class="card" style="margin-bottom:14px"><h3>生命周期</h3>' +
       '<p class="card-sub">内容会腐化。没有状态的库，三个月后没人敢信。</p>' +
       '<div class="flow4">' +
-      '<div class="flow-step"><div class="fs-n">草稿</div><b>刚入库</b><span>可以检索，但会带「草稿」标记，提示未定稿。</span></div>' +
+      '<div class="flow-step"><div class="fs-n">草稿</div><b>刚入库</b><span>可以检索，但带「草稿」标记，提示未定稿。</span></div>' +
       '<div class="flow-step"><div class="fs-n">评审中</div><b>业务方核对</b><span>确认事实、口径、合规表述，指定 owner。</span></div>' +
       '<div class="flow-step"><div class="fs-n">已定稿</div><b>可对外</b><span>去掉草稿标记，进入培训与对外引用。</span></div>' +
       '<div class="flow-step"><div class="fs-n">已过期</div><b>下线</b><span>政策变更或内容失效，标记过期并说明替代文档。</span></div>' +
       '</div></div>';
 
-    /* 在线新增 */
-    h += '<div class="card"><h3>在线新增内容（演示）</h3>' +
-      '<p class="card-sub">填完保存，内容会立刻进入检索与问答，不需要重新打包。正式环境这一步由后台完成，这里用来演示「入库后马上可用」。</p>' +
-      '<div class="form-grid">' +
-      '<div class="field"><label>板块</label><select id="nfCat">' +
-      catOpts.map(function (c) { return '<option value="' + c.key + '">' + esc(c.name) + '</option>'; }).join('') +
-      '</select></div>' +
-      '<div class="field" id="nfStageWrap"><label>阶段</label><select id="nfStage">' +
-      STAGES.map(function (s) { return '<option>' + s + '</option>'; }).join('') + '</select></div>' +
-      '<div class="field"><label>主题</label><input id="nfSub" list="subList" placeholder="如：行业专项"/><datalist id="subList">' +
-      subs.map(function (s) { return '<option value="' + esc(s) + '">'; }).join('') + '</datalist></div>' +
-      '<div class="field"><label>责任方</label><input id="nfOwner" placeholder="如：投放合规组"/></div>' +
-      '<div class="field wide"><label>标题</label><input id="nfTitle" placeholder="用代理的话写，不要用内部黑话"/></div>' +
-      '<div class="field wide"><label>摘要</label><input id="nfSummary" placeholder="60 字内说清解决什么问题"/></div>' +
-      '<div class="field"><label>标签</label><input id="nfTags" placeholder="逗号分隔，如：审核,素材,驳回"/></div>' +
-      '<div class="field"><label>级别</label><select id="nfLevel"><option>推荐</option><option>必读</option><option>参考</option></select></div>' +
-      '<div class="field wide"><label>正文（Markdown）</label><textarea id="nfBody" rows="9" placeholder="## 适用范围&#10;正文…&#10;&#10;## 怎么做&#10;1. 第一步&#10;2. 第二步"></textarea></div>' +
+    /* 送料清单 */
+    h += '<div class="card"><h3>发我内容时，带上这五项就够</h3>' +
+      '<p class="card-sub">不需要你排版。只要这五项在，我就能直接结构化入库；缺的我按默认值补，并标成待确认。</p>' +
+      '<div class="check-list">' +
+      '<div class="ck"><i>1</i><div><b>原文或来源</b><span>链接、截图、PPT 页面、群聊记录都行，附出处方便核对</span></div></div>' +
+      '<div class="ck"><i>2</i><div><b>归到哪个板块</b><span>投放前中后 / 案例 / 团队管理，拿不准就描述场景，我来判断</span></div></div>' +
+      '<div class="ck"><i>3</i><div><b>谁负责维护</b><span>一个人或一个组，改稿找他</span></div></div>' +
+      '<div class="ck"><i>4</i><div><b>生效或过期时间</b><span>政策类必填，避免半年后还在被引用</span></div></div>' +
+      '<div class="ck"><i>5</i><div><b>代理会怎么问这件事</b><span>一两句口语就行，我拿它做标签和检索词</span></div></div>' +
       '</div>' +
-      '<div class="form-foot"><button class="btn btn-primary btn-sm" id="nfSave">' + ico('check') + '保存并入库</button>' +
-      '<button class="btn btn-sm" id="nfExport">' + ico('dl') + '导出为代码片段</button>' +
-      '<button class="btn btn-sm" id="nfClear">清空本地内容</button>' +
-      '<span class="form-msg" id="nfMsg"></span></div>' +
-      (locals.length ? '<div style="margin-top:12px;font-size:12px;color:var(--ink-3)">本地已新增 ' + locals.length + ' 篇：' +
-        locals.map(function (d) { return '<a class="doc-link" data-nav="doc/' + d.id + '">' + esc(clip(d.title, 18)) + '</a>'; }).join('、') + '</div>' : '') +
+      '<div class="note" style="margin-top:14px">' + ico('spark') +
+      ' 一次发一篇、一次发二十篇都可以。入库后我会跑几个真实问法验一遍能不能命中，命中不了就回去补标签。</div>' +
       '</div>';
 
     h += '</div>';
     main.innerHTML = h;
-
-    var catSel = document.getElementById('nfCat');
-    function syncStage() {
-      var wrap = document.getElementById('nfStageWrap');
-      wrap.style.visibility = catSel.value === 'stage' ? 'visible' : 'hidden';
-    }
-    catSel.addEventListener('change', syncStage);
-    syncStage();
-
-    document.getElementById('nfSave').addEventListener('click', function () {
-      var msg = document.getElementById('nfMsg');
-      var title = document.getElementById('nfTitle').value.trim();
-      var summary = document.getElementById('nfSummary').value.trim();
-      var body = document.getElementById('nfBody').value.trim();
-      var sub = document.getElementById('nfSub').value.trim();
-      if (title.length < 4) { msg.textContent = '标题至少 4 个字'; return; }
-      if (body.length < 20) { msg.textContent = '正文太短，至少 20 个字'; return; }
-      if (!sub) { msg.textContent = '请填一个主题，用于二级筛选'; return; }
-      msg.textContent = '';
-      var doc = {
-        id: 'u' + Date.now().toString(36),
-        cat: catSel.value,
-        stage: catSel.value === 'stage' ? document.getElementById('nfStage').value : '',
-        sub: sub,
-        title: title,
-        summary: summary || clip(plainOf(body), 56),
-        tags: document.getElementById('nfTags').value.split(/[,，\s]+/).filter(Boolean),
-        owner: document.getElementById('nfOwner').value.trim() || '待指定',
-        updated: new Date().toISOString().slice(0, 10),
-        version: 'v0.1',
-        level: document.getElementById('nfLevel').value,
-        readMin: Math.max(2, Math.round(plainOf(body).length / 260)),
-        status: '草稿',
-        body: body,
-        related: [],
-        local: true
-      };
-      var arr = localDocs(); arr.push(doc); S.set(LOCAL_KEY, arr);
-      DOCS.push(doc); DOC_MAP[doc.id] = doc;
-      rebuildIndex();
-      toast('已入库，现在就能搜到');
-      go('doc/' + doc.id);
-    });
-
-    document.getElementById('nfExport').addEventListener('click', function () {
-      var arr = localDocs();
-      if (!arr.length) { toast('还没有本地内容'); return; }
-      var code = arr.map(function (d) {
-        return '    {\n' +
-          "      id: '" + d.id + "',\n" +
-          "      cat: '" + d.cat + "',\n" +
-          "      stage: '" + (d.stage || '') + "',\n" +
-          "      sub: '" + d.sub + "',\n" +
-          "      title: '" + d.title + "',\n" +
-          "      summary: '" + d.summary + "',\n" +
-          "      tags: ['" + d.tags.join("', '") + "'],\n" +
-          "      owner: '" + d.owner + "',\n" +
-          "      updated: '" + d.updated + "',\n" +
-          "      version: 'v1.0',\n" +
-          "      level: '" + d.level + "',\n" +
-          "      readMin: " + d.readMin + ",\n" +
-          "      status: '草稿',\n" +
-          '      body: ' + BT + String(d.body).replace(/\$\{/g, '\\${') + BT + ',\n' +
-          '      related: []';
-      }).join(',\n') + '\n    }';
-      copyText(code);
-      toast('代码片段已复制，可贴入 data.js 的 docs 数组');
-    });
-
-    document.getElementById('nfClear').addEventListener('click', function () {
-      var arr = localDocs();
-      if (!arr.length) { toast('没有本地内容'); return; }
-      arr.forEach(function (d) {
-        var i = DOCS.indexOf(DOC_MAP[d.id]);
-        if (i >= 0) DOCS.splice(i, 1);
-        delete DOC_MAP[d.id];
-      });
-      S.set(LOCAL_KEY, []);
-      rebuildIndex();
-      toast('已清空本地内容');
-      viewSpec();
-    });
   }
 
   /* ============ 全局搜索 ============ */
@@ -4699,7 +4616,6 @@ window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
   }
 
   function init() {
-    mergeLocal();
     buildIndex();
     initSidebar();
     initGlobalSearch();
