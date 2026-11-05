@@ -1,0 +1,3619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>快手阵地业务知识工作台 · 代理伙伴专用</title>
+<meta name="description" content="面向快手阵地代理的智能知识工作台：投放规范、政策要求、培训指南、FAQ 答疑，支持自然语言检索与可溯源的智能问答。"/>
+<style>
+/* ===== tokens ===== */
+:root {
+  --bg: #F6F6F8;
+  --surface: #FFFFFF;
+  --surface-2: #FBFBFC;
+  --line: #E8E8EE;
+  --line-soft: #F0F0F4;
+  --ink: #17171C;
+  --ink-2: #4B4B58;
+  --ink-3: #6E6E7B;
+  --ink-4: #9B9BA7;
+  --brand: #FF5A1E;
+  --brand-deep: #E2430C;
+  --brand-soft: #FFF2EC;
+  --brand-line: #FFD8C8;
+  --ok: #12855A;
+  --ok-soft: #E9F8F1;
+  --warn: #B06A00;
+  --warn-soft: #FFF6E5;
+  --danger: #C62F45;
+  --danger-soft: #FDECEF;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-lg: 16px;
+  --shadow-1: 0 1px 2px rgba(20, 20, 34, .05);
+  --shadow-2: 0 4px 14px rgba(20, 20, 34, .07);
+  --shadow-3: 0 16px 48px rgba(20, 20, 34, .13);
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+svg { width: 1em; height: 1em; flex: none; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button, input, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; padding: 0; }
+a { color: inherit; text-decoration: none; }
+::selection { background: #FFD9C9; }
+
+/* scrollbar */
+* { scrollbar-width: thin; scrollbar-color: #D6D6DE transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-thumb { background: #D8D8E0; border-radius: 99px; border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: #BEBEC9; background-clip: content-box; }
+
+/* ===== shell ===== */
+.app {
+  display: grid;
+  grid-template-columns: 258px minmax(0, 1fr);
+  grid-template-rows: 58px minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+}
+.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, .86);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line);
+  z-index: 40;
+  position: relative;
+}
+.brand { display: flex; align-items: center; gap: 10px; flex: none; min-width: 0; }
+.logo-mark {
+  width: 30px; height: 30px; border-radius: 9px; flex: none;
+  background: linear-gradient(140deg, #FF8A2B 0%, #FF5A1E 45%, #F0332C 100%);
+  display: grid; place-items: center;
+  box-shadow: 0 2px 8px rgba(255, 90, 30, .3);
+}
+.logo-mark svg { width: 17px; height: 17px; }
+.brand-txt { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.brand-txt b { font-size: 14px; font-weight: 650; letter-spacing: -.2px; white-space: nowrap; }
+.brand-txt span { font-size: 10.5px; color: var(--ink-3); letter-spacing: .3px; white-space: nowrap; }
+
+/* global search */
+.gsearch { position: relative; flex: 1 1 auto; max-width: 460px; }
+.gsearch-input {
+  display: flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 10px 0 11px;
+  background: #F2F2F6; border: 1px solid transparent; border-radius: 10px;
+  transition: .16s;
+}
+.gsearch-input:focus-within { background: #fff; border-color: var(--brand-line); box-shadow: 0 0 0 3px rgba(255, 90, 30, .1); }
+.gsearch-input svg { width: 15px; height: 15px; color: var(--ink-3); flex: none; }
+.gsearch-input input { flex: 1; border: 0; background: none; outline: none; font-size: 13.5px; min-width: 0; }
+.gsearch-input input::placeholder { color: var(--ink-4); }
+.kbd {
+  font-size: 10.5px; color: var(--ink-3); border: 1px solid var(--line);
+  background: #fff; border-radius: 5px; padding: 1px 5px; letter-spacing: .4px; flex: none;
+}
+.gsearch-panel {
+  position: absolute; top: 44px; left: 0; right: 0;
+  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: var(--shadow-3); overflow: hidden; display: none; max-height: 68vh; overflow-y: auto;
+}
+.gsearch-panel.on { display: block; }
+.gs-group-t { font-size: 11px; color: var(--ink-3); font-weight: 600; padding: 10px 14px 4px; letter-spacing: .6px; }
+.gs-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 14px; cursor: pointer; border-left: 2px solid transparent; }
+.gs-item:hover, .gs-item.cur { background: var(--brand-soft); border-left-color: var(--brand); }
+.gs-item .t { font-size: 13px; font-weight: 550; }
+.gs-item .s { font-size: 11.5px; color: var(--ink-3); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gs-item .t, .gs-item .s { min-width: 0; }
+.gs-empty { padding: 22px 16px; text-align: center; color: var(--ink-3); font-size: 13px; }
+.gs-foot { border-top: 1px solid var(--line-soft); padding: 8px 14px; font-size: 11.5px; color: var(--ink-3); display: flex; justify-content: space-between; }
+.gs-item em, .hl { font-style: normal; color: var(--brand-deep); background: #FFE9DF; border-radius: 3px; padding: 0 1px; }
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: none; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px;
+  border-radius: 9px; font-size: 13px; font-weight: 550; border: 1px solid var(--line);
+  background: #fff; transition: .15s; white-space: nowrap;
+}
+.btn:hover { border-color: #D5D5DE; background: #FCFCFD; }
+.btn svg { width: 14px; height: 14px; }
+.btn-primary {
+  background: linear-gradient(180deg, #FF6A32, #F5500F); color: #fff; border-color: #EC4A0C;
+  box-shadow: 0 1px 2px rgba(230, 70, 15, .28), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.btn-primary:hover { background: linear-gradient(180deg, #FF7A45, #F85A18); border-color: #E2430C; }
+.btn-ghost { background: none; border-color: transparent; color: var(--ink-2); }
+.btn-ghost:hover { background: #F2F2F6; }
+.btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: 7px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.icon-btn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; color: var(--ink-2); }
+.icon-btn:hover { background: #F2F2F6; }
+.icon-btn svg { width: 17px; height: 17px; }
+
+/* ===== sidebar ===== */
+.sidebar {
+  background: var(--surface-2);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 12px 10px 28px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.nav-group { display: flex; flex-direction: column; gap: 2px; }
+.nav-title {
+  font-size: 10.5px; font-weight: 650; color: var(--ink-4);
+  letter-spacing: .8px; padding: 6px 10px 4px; text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px;
+  border-radius: 9px; font-size: 13.5px; color: var(--ink-2); font-weight: 500;
+  transition: .13s; position: relative;
+}
+.nav-item:hover { background: #F1F1F5; color: var(--ink); }
+.nav-item.active { background: var(--brand-soft); color: var(--brand-deep); font-weight: 600; }
+.nav-item.active .n-ico { color: var(--brand); }
+.n-ico { width: 16px; height: 16px; flex: none; color: var(--ink-3); }
+.n-count { margin-left: auto; font-size: 11px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.nav-item.active .n-count { color: var(--brand); }
+.n-badge {
+  margin-left: auto; font-size: 9.5px; font-weight: 700; letter-spacing: .4px;
+  background: linear-gradient(135deg, #FF7A3D, #F0332C); color: #fff;
+  padding: 1px 5px; border-radius: 5px;
+}
+.side-sub { display: flex; flex-direction: column; gap: 1px; margin: 1px 0 4px; }
+.side-sub button {
+  text-align: left; font-size: 12.5px; color: var(--ink-3); padding: 5px 10px 5px 35px;
+  border-radius: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.side-sub button:hover { background: #F1F1F5; color: var(--ink-2); }
+.side-sub button.active { color: var(--brand-deep); background: #FFF6F2; font-weight: 550; }
+.side-card {
+  margin-top: auto; background: #fff; border: 1px solid var(--line); border-radius: var(--r);
+  padding: 12px; box-shadow: var(--shadow-1);
+}
+.side-card h4 { margin: 0 0 4px; font-size: 12.5px; }
+.side-card p { margin: 0 0 9px; font-size: 11.5px; color: var(--ink-3); line-height: 1.5; }
+.side-card .btn { width: 100%; justify-content: center; height: 30px; font-size: 12px; }
+
+/* ===== main ===== */
+.main { overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth; }
+.view { max-width: 1180px; margin: 0 auto; padding: 26px 30px 80px; }
+.view-narrow { max-width: 920px; }
+@media (max-width: 1280px) { .view { padding: 22px 24px 70px; } }
+
+/* banner */
+.banner {
+  display: flex; align-items: center; gap: 9px; font-size: 12px; color: #8A5A1A;
+  background: linear-gradient(90deg, #FFF8EA, #FFFDF7); border: 1px solid #F6E3C0;
+  border-radius: 10px; padding: 7px 12px; margin-bottom: 20px;
+}
+.banner svg { width: 14px; height: 14px; flex: none; }
+.banner button { margin-left: auto; font-size: 11.5px; color: #A9660E; text-decoration: underline; text-underline-offset: 2px; flex: none; }
+
+/* hero */
+.hero {
+  position: relative; overflow: hidden; border-radius: 20px; padding: 34px 34px 30px;
+  background: linear-gradient(135deg, #1C1B22 0%, #2A2029 42%, #3A1F1F 100%);
+  color: #fff; margin-bottom: 22px;
+  box-shadow: 0 12px 40px rgba(24, 18, 20, .18);
+}
+.hero::before {
+  content: ""; position: absolute; right: -110px; top: -140px; width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(255, 106, 50, .5), transparent 62%); filter: blur(8px);
+}
+.hero::after {
+  content: ""; position: absolute; left: 30%; bottom: -190px; width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(240, 51, 44, .26), transparent 65%);
+}
+.hero-inner { position: relative; z-index: 1; max-width: 720px; }
+.hero .tagline {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600;
+  letter-spacing: .6px; color: #FFC9AE; background: rgba(255, 255, 255, .09);
+  border: 1px solid rgba(255, 255, 255, .14); padding: 3px 9px; border-radius: 99px; margin-bottom: 14px;
+}
+.hero h1 { margin: 0 0 8px; font-size: 27px; line-height: 1.32; font-weight: 680; letter-spacing: -.5px; }
+.hero h1 em { font-style: normal; color: #FF9C6B; }
+.hero p { margin: 0 0 20px; font-size: 13.5px; color: rgba(255, 255, 255, .62); line-height: 1.7; }
+.hero-ask {
+  display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, .97);
+  border-radius: 13px; padding: 7px 7px 7px 15px; box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
+}
+.hero-ask svg { width: 17px; height: 17px; color: var(--brand); flex: none; }
+.hero-ask input { flex: 1; border: 0; outline: none; background: none; font-size: 14.5px; color: var(--ink); min-width: 0; }
+.hero-ask input::placeholder { color: var(--ink-4); }
+.hero-ask .btn { height: 36px; padding: 0 16px; flex: none; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.hero-chips button {
+  font-size: 12px; color: rgba(255, 255, 255, .78); background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .13); border-radius: 99px; padding: 4px 11px; transition: .14s;
+}
+.hero-chips button:hover { background: rgba(255, 255, 255, .17); color: #fff; border-color: rgba(255,255,255,.24); }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 26px; }
+.stat { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; box-shadow: var(--shadow-1); }
+.stat b { display: block; font-size: 22px; font-weight: 680; letter-spacing: -.6px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 11.5px; color: var(--ink-3); }
+.stat .delta { font-size: 11px; color: var(--ok); font-weight: 600; }
+
+/* section head */
+.sec-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+.sec-head h2 { margin: 0; font-size: 15.5px; font-weight: 650; letter-spacing: -.2px; }
+.sec-head p { margin: 0; font-size: 12px; color: var(--ink-3); }
+.sec-head .more { margin-left: auto; font-size: 12px; color: var(--ink-3); }
+.sec-head .more:hover { color: var(--brand); }
+
+/* scene cards */
+.scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+.scene {
+  text-align: left; background: #fff; border: 1px solid var(--line); border-radius: var(--r);
+  padding: 15px 16px; transition: .16s; box-shadow: var(--shadow-1); position: relative; overflow: hidden;
+}
+.scene:hover { border-color: var(--brand-line); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+.scene .s-ico {
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand); margin-bottom: 10px;
+}
+.scene .s-ico svg { width: 16px; height: 16px; }
+.scene b { display: block; font-size: 13.5px; font-weight: 620; margin-bottom: 3px; }
+.scene span { font-size: 11.5px; color: var(--ink-3); line-height: 1.5; display: block; }
+.scene .s-arrow { position: absolute; right: 14px; top: 16px; color: var(--ink-4); opacity: 0; transition: .16s; }
+.scene:hover .s-arrow { opacity: 1; color: var(--brand); transform: translateX(2px); }
+
+/* two col */
+.cols { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 22px; }
+@media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
+
+/* list rows */
+.row-list { display: flex; flex-direction: column; gap: 1px; background: #fff; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow-1); }
+.row {
+  display: flex; align-items: flex-start; gap: 11px; padding: 12px 15px; text-align: left; width: 100%;
+  border-bottom: 1px solid var(--line-soft); transition: .12s; background: #fff;
+}
+.row:last-child { border-bottom: 0; }
+.row:hover { background: #FFFBF9; }
+.row .r-ico { width: 26px; height: 26px; border-radius: 7px; background: #F3F3F7; display: grid; place-items: center; flex: none; margin-top: 1px; color: var(--ink-3); }
+.row .r-ico svg { width: 13px; height: 13px; }
+.row .r-body { min-width: 0; flex: 1; }
+.row .r-t { font-size: 13px; font-weight: 550; display: flex; align-items: center; gap: 7px; }
+.row .r-t span { font-weight: 400; }
+.row .r-d { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .r-meta { font-size: 11px; color: var(--ink-4); flex: none; white-space: nowrap; margin-top: 2px; }
+
+/* hot questions */
+.q-list { display: flex; flex-direction: column; gap: 8px; }
+.q-item {
+  display: flex; gap: 10px; align-items: flex-start; text-align: left; background: #fff;
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12.5px;
+  color: var(--ink-2); transition: .14s; box-shadow: var(--shadow-1);
+}
+.q-item:hover { border-color: var(--brand-line); color: var(--ink); background: #FFFCFB; }
+.q-item .num { font-size: 11px; font-weight: 700; color: var(--brand); font-variant-numeric: tabular-nums; flex: none; margin-top: 1px; }
+.q-item svg { width: 13px; height: 13px; color: var(--ink-4); flex: none; margin-left: auto; margin-top: 3px; }
+
+/* ===== chat ===== */
+.chat-wrap { display: flex; flex-direction: column; min-height: calc(100dvh - 58px); }
+.chat-scroll { flex: 1; overflow-y: auto; }
+.chat-inner { max-width: 860px; margin: 0 auto; padding: 28px 24px 150px; }
+.chat-composer-outer {
+  position: sticky; bottom: 0; background: linear-gradient(180deg, rgba(246,246,248,0), var(--bg) 34%);
+  padding: 18px 24px 20px; z-index: 5;
+}
+.chat-composer { max-width: 812px; margin: 0 auto; }
+.composer-box {
+  display: flex; align-items: flex-end; gap: 8px; background: #fff; border: 1px solid var(--line);
+  border-radius: 14px; padding: 8px 8px 8px 14px; box-shadow: var(--shadow-2); transition: .16s;
+}
+.composer-box:focus-within { border-color: var(--brand-line); box-shadow: 0 0 0 3px rgba(255,90,30,.09), var(--shadow-2); }
+.composer-box textarea {
+  flex: 1; border: 0; outline: none; resize: none; background: none; font-size: 14px;
+  line-height: 1.6; padding: 6px 0; max-height: 160px; min-height: 26px;
+}
+.composer-box textarea::placeholder { color: var(--ink-4); }
+.send-btn {
+  width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; flex: none;
+  background: linear-gradient(180deg, #FF6A32, #F5500F); color: #fff;
+  box-shadow: 0 1px 3px rgba(230, 70, 15, .3); transition: .15s;
+}
+.send-btn:hover { filter: brightness(1.05); }
+.send-btn:disabled { background: #E6E6EC; color: #fff; box-shadow: none; cursor: not-allowed; }
+.send-btn svg { width: 16px; height: 16px; }
+.composer-hint { text-align: center; font-size: 11px; color: var(--ink-4); margin-top: 8px; }
+.composer-hint b { color: var(--ink-3); font-weight: 600; }
+
+.msg { margin-bottom: 26px; animation: fade .28s ease both; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.msg-user { display: flex; justify-content: flex-end; }
+.msg-user .bubble {
+  background: #fff; border: 1px solid var(--line); border-radius: 14px 14px 4px 14px;
+  padding: 9px 14px; font-size: 14px; max-width: 74%; box-shadow: var(--shadow-1);
+}
+.msg-ai { display: flex; gap: 11px; }
+.ai-ava {
+  width: 27px; height: 27px; border-radius: 8px; flex: none; margin-top: 2px;
+  background: linear-gradient(140deg, #FF8A2B, #F0332C); display: grid; place-items: center;
+  box-shadow: 0 2px 7px rgba(240, 80, 30, .28);
+}
+.ai-ava svg { width: 15px; height: 15px; }
+.msg-ai .ai-body { min-width: 0; flex: 1; }
+.ai-name { font-size: 11.5px; color: var(--ink-3); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.ai-name .mode { font-size: 10px; background: #F1F1F5; color: var(--ink-3); border-radius: 4px; padding: 0 5px; }
+
+.answer {
+  background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  box-shadow: var(--shadow-1);
+}
+.ans-head { padding: 15px 18px 0; }
+.ans-kicker {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 650;
+  letter-spacing: .5px; color: var(--brand-deep); background: var(--brand-soft);
+  border-radius: 5px; padding: 2px 7px; margin-bottom: 9px;
+}
+.ans-lead { font-size: 14.5px; line-height: 1.78; color: var(--ink); }
+.ans-body { padding: 2px 18px 4px; }
+.ans-block { margin-top: 14px; }
+.ans-block-t {
+  font-size: 11.5px; font-weight: 650; color: var(--ink-3); letter-spacing: .4px;
+  display: flex; align-items: center; gap: 6px; margin-bottom: 7px;
+}
+.ans-block-t::after { content: ""; height: 1px; flex: 1; background: var(--line-soft); }
+.steps { counter-reset: st; margin: 0; padding: 0; list-style: none; }
+.steps li { position: relative; padding: 0 0 0 27px; margin-bottom: 8px; font-size: 13.5px; line-height: 1.7; }
+.steps li::before {
+  counter-increment: st; content: counter(st);
+  position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 6px;
+  background: var(--brand-soft); color: var(--brand-deep); font-size: 10.5px; font-weight: 700;
+  display: grid; place-items: center;
+}
+.bullets { margin: 0; padding: 0; list-style: none; }
+.bullets li { position: relative; padding-left: 16px; margin-bottom: 6px; font-size: 13.5px; line-height: 1.7; }
+.bullets li::before { content: ""; position: absolute; left: 3px; top: 9px; width: 5px; height: 5px; border-radius: 2px; background: var(--brand); opacity: .55; }
+.note {
+  background: #FFFBF4; border: 1px solid #F7E7CE; border-left: 3px solid #F0A93B;
+  border-radius: 8px; padding: 9px 12px; font-size: 12.5px; color: #7A5416; line-height: 1.68; margin-top: 12px;
+}
+.note svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 3px; color: #D8912A; }
+
+.ans-kicker svg { width: 12px; height: 12px; }
+.scene .s-arrow svg { width: 15px; height: 15px; }
+.note b { color: #6A470F; }
+.ans-table { overflow-x: auto; border: 1px solid var(--line); border-radius: 9px; }
+.ans-table table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 0; }
+.ans-table th { text-align: left; background: #F8F8FA; font-weight: 650; color: var(--ink-2); padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.ans-table td { padding: 7px 10px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.6; }
+.ans-table tr:last-child td { border-bottom: 0; }
+.src-wrap { padding: 13px 18px 15px; background: #FCFCFD; border-top: 1px solid var(--line-soft); margin-top: 14px; }
+.src-t { font-size: 10.5px; font-weight: 650; color: var(--ink-4); letter-spacing: .6px; margin-bottom: 8px; }
+.src-list { display: flex; flex-direction: column; gap: 6px; }
+.src {
+  display: flex; gap: 8px; align-items: flex-start; text-align: left; background: #fff;
+  border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; transition: .14s; width: 100%;
+}
+.src:hover { border-color: var(--brand-line); background: #FFFAF7; }
+.src .s-n { font-size: 10px; font-weight: 700; color: var(--brand); background: var(--brand-soft); border-radius: 4px; width: 16px; height: 16px; display: grid; place-items: center; flex: none; margin-top: 1px; }
+.src .s-b { min-width: 0; flex: 1; }
+.src .s-title { font-size: 12.5px; font-weight: 550; display: flex; gap: 6px; align-items: center; }
+.src .s-title i { font-style: normal; font-size: 10px; color: var(--ink-3); background: #F3F3F7; border-radius: 3px; padding: 0 4px; font-weight: 500; }
+.src .s-snip { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.55; }
+.src .s-quote { border-left: 2px solid var(--brand-line); padding-left: 7px; color: var(--ink-2); }
+.ans-foot { display: flex; align-items: center; gap: 6px; padding: 0 18px 14px; }
+.ans-foot .lbl { font-size: 11.5px; color: var(--ink-4); margin-right: 2px; }
+.fb-btn { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 9px; border-radius: 7px; font-size: 11.5px; color: var(--ink-3); border: 1px solid var(--line); background: #fff; }
+.fb-btn:hover { color: var(--ink); border-color: #D6D6DF; }
+.fb-btn.on { color: var(--brand-deep); border-color: var(--brand-line); background: var(--brand-soft); }
+.fb-btn svg { width: 12px; height: 12px; }
+.ans-foot .spacer { flex: 1; }
+.copy-btn { font-size: 11.5px; color: var(--ink-3); }
+.copy-btn:hover { color: var(--brand); }
+
+.followups { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 7px; }
+.fu {
+  font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 99px;
+  padding: 5px 12px; color: var(--ink-2); transition: .14s;
+}
+.fu:hover { border-color: var(--brand-line); color: var(--brand-deep); background: var(--brand-soft); }
+
+/* typing */
+.typing { display: inline-flex; gap: 3px; align-items: center; height: 18px; }
+.typing i { width: 5px; height: 5px; border-radius: 50%; background: var(--brand); opacity: .35; animation: blink 1.1s infinite; }
+.typing i:nth-child(2) { animation-delay: .18s; }
+.typing i:nth-child(3) { animation-delay: .36s; }
+@keyframes blink { 0%, 60%, 100% { opacity: .25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+
+/* chat welcome */
+.welcome { text-align: center; padding: 34px 0 10px; }
+.welcome .w-ico {
+  width: 46px; height: 46px; border-radius: 14px; margin: 0 auto 14px;
+  background: linear-gradient(140deg, #FF8A2B, #F0332C); display: grid; place-items: center;
+  box-shadow: 0 8px 24px rgba(240, 80, 30, .26);
+}
+.welcome .w-ico svg { width: 24px; height: 24px; }
+.welcome h2 { margin: 0 0 6px; font-size: 20px; font-weight: 660; letter-spacing: -.3px; }
+.welcome p { margin: 0 auto 22px; font-size: 13px; color: var(--ink-3); max-width: 460px; line-height: 1.7; }
+.w-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; max-width: 640px; margin: 0 auto; text-align: left; }
+.w-card { background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: 11px 13px; text-align: left; transition: .15s; box-shadow: var(--shadow-1); }
+.w-card:hover { border-color: var(--brand-line); box-shadow: var(--shadow-2); }
+.w-card b { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 2px; }
+.w-card span { font-size: 11px; color: var(--ink-3); }
+.w-note { margin: 20px auto 0; max-width: 640px; font-size: 11.5px; color: var(--ink-4); line-height: 1.7; }
+
+/* ===== library list ===== */
+.page-head { margin-bottom: 20px; }
+.crumb { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+.crumb a:hover { color: var(--brand); }
+.page-head h1 { margin: 0 0 6px; font-size: 21px; font-weight: 660; letter-spacing: -.4px; }
+.page-head p { margin: 0; font-size: 13px; color: var(--ink-3); }
+
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.filter-chip {
+  font-size: 12px; padding: 5px 11px; border-radius: 99px; border: 1px solid var(--line);
+  background: #fff; color: var(--ink-2); transition: .14s;
+}
+.filter-chip:hover { border-color: #D6D6DF; }
+.filter-chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.toolbar .spacer { flex: 1; }
+.mini-search { display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; background: #fff; border: 1px solid var(--line); border-radius: 8px; width: 210px; }
+.mini-search svg { width: 13px; height: 13px; color: var(--ink-4); flex: none; }
+.mini-search input { border: 0; outline: none; background: none; width: 100%; font-size: 12.5px; }
+
+.doc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+@media (max-width: 900px) { .doc-grid { grid-template-columns: 1fr; } }
+.doc-card {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 15px 16px;
+  text-align: left; transition: .16s; box-shadow: var(--shadow-1); display: flex; flex-direction: column;
+}
+.doc-card:hover { border-color: var(--brand-line); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+.doc-card .dc-top { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.doc-card h3 { margin: 0 0 5px; font-size: 14px; font-weight: 620; line-height: 1.45; }
+.doc-card p { margin: 0 0 10px; font-size: 12px; color: var(--ink-3); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.doc-card .dc-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--ink-4); }
+
+.chip {
+  font-size: 10.5px; padding: 1px 7px; border-radius: 5px; font-weight: 600; letter-spacing: .2px;
+  background: #F3F3F7; color: var(--ink-3); white-space: nowrap;
+}
+.chip-brand { background: var(--brand-soft); color: var(--brand-deep); }
+.chip-must { background: #FDECEF; color: var(--danger); }
+.chip-draft { background: #FFF6E5; color: var(--warn); }
+.chip-ok { background: var(--ok-soft); color: var(--ok); }
+.chip-tag { background: #F3F3F7; color: var(--ink-3); font-weight: 500; }
+
+/* faq */
+.faq-group { margin-bottom: 22px; }
+.faq-group h3 { font-size: 13px; font-weight: 650; color: var(--ink-2); margin: 0 0 9px; display: flex; align-items: center; gap: 7px; }
+.faq-group h3 .cnt { font-size: 10.5px; color: var(--ink-4); font-weight: 500; }
+.faq-item { background: #fff; border: 1px solid var(--line); border-radius: var(--r); margin-bottom: 8px; overflow: hidden; box-shadow: var(--shadow-1); }
+.faq-q { display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left; padding: 12px 15px; font-size: 13.5px; font-weight: 550; }
+.faq-q .qi { font-size: 11px; font-weight: 800; color: var(--brand); flex: none; margin-top: 2px; letter-spacing: -.5px; }
+.faq-q .arr { margin-left: auto; flex: none; color: var(--ink-4); transition: .2s; }
+.faq-q .arr svg { width: 14px; height: 14px; display: block; }
+.faq-item.open .faq-q .arr { transform: rotate(180deg); }
+.faq-a { display: none; padding: 0 15px 13px 40px; font-size: 13px; color: var(--ink-2); line-height: 1.75; }
+.faq-item.open .faq-a { display: block; animation: fade .2s ease both; }
+.faq-a .faq-src { margin-top: 9px; display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink-3); flex-wrap: wrap; }
+.faq-a .faq-src button { color: var(--brand); font-size: 11.5px; }
+.faq-a .faq-src button:hover { text-decoration: underline; }
+
+/* ===== doc reader ===== */
+.doc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 216px; gap: 34px; align-items: start; }
+@media (max-width: 1180px) { .doc-layout { grid-template-columns: 1fr; } .doc-rail { display: none; } }
+.doc-head { border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 22px; }
+.doc-head h1 { margin: 6px 0 10px; font-size: 25px; font-weight: 680; letter-spacing: -.5px; line-height: 1.35; }
+.doc-head .dh-sum { font-size: 13.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 14px; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 11.5px; color: var(--ink-3); }
+.doc-meta b { font-weight: 550; color: var(--ink-2); }
+.doc-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 11px; }
+
+.prose { font-size: 14.5px; line-height: 1.85; color: #26262E; max-width: 740px; }
+.prose h2 {
+  font-size: 17px; font-weight: 660; margin: 32px 0 12px; letter-spacing: -.2px;
+  padding-left: 11px; border-left: 3px solid var(--brand); line-height: 1.4; scroll-margin-top: 20px;
+}
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { font-size: 14.5px; font-weight: 650; margin: 22px 0 8px; color: #1D1D24; }
+.prose p { margin: 0 0 12px; }
+.prose strong { font-weight: 650; color: #14141A; }
+.prose ul, .prose ol { margin: 0 0 12px; padding-left: 20px; }
+.prose li { margin-bottom: 6px; }
+.prose ul li::marker { color: var(--brand); }
+.prose ol li::marker { color: var(--brand); font-weight: 600; }
+.prose blockquote {
+  margin: 14px 0; padding: 11px 15px; background: #FFFBF4; border-left: 3px solid #F0A93B;
+  border-radius: 0 8px 8px 0; color: #7A5416; font-size: 13.5px; line-height: 1.75;
+}
+.prose blockquote p { margin: 0; }
+.prose table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+.prose th { text-align: left; background: #F7F7FA; font-weight: 650; color: var(--ink-2); padding: 8px 11px; border: 1px solid var(--line); white-space: nowrap; }
+.prose td { padding: 8px 11px; border: 1px solid var(--line); vertical-align: top; line-height: 1.65; }
+.prose tr:nth-child(even) td { background: #FCFCFD; }
+.prose .doc-link { color: var(--brand-deep); border-bottom: 1px solid var(--brand-line); cursor: pointer; font-weight: 500; }
+.prose .doc-link:hover { background: var(--brand-soft); }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
+
+.doc-rail { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 20px; }
+.rail-box h4 { margin: 0 0 8px; font-size: 10.5px; font-weight: 650; color: var(--ink-4); letter-spacing: .7px; }
+.toc { display: flex; flex-direction: column; gap: 1px; border-left: 1px solid var(--line); }
+.toc button {
+  text-align: left; font-size: 12px; color: var(--ink-3); padding: 4px 0 4px 12px; margin-left: -1px;
+  border-left: 1.5px solid transparent; line-height: 1.5;
+}
+.toc button:hover { color: var(--ink); }
+.toc button.active { color: var(--brand-deep); border-left-color: var(--brand); font-weight: 550; }
+.rail-rel { display: flex; flex-direction: column; gap: 7px; }
+.rail-rel button { text-align: left; font-size: 12px; color: var(--ink-2); line-height: 1.5; display: flex; gap: 6px; }
+.rail-rel button:hover { color: var(--brand); }
+.rail-rel button i { font-style: normal; color: var(--ink-4); flex: none; }
+.doc-actions { display: flex; gap: 7px; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.doc-foot-fb {
+  margin-top: 26px; background: #fff; border: 1px solid var(--line); border-radius: var(--r);
+  padding: 15px 17px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; box-shadow: var(--shadow-1);
+}
+.doc-foot-fb b { font-size: 13px; }
+.doc-foot-fb span { font-size: 11.5px; color: var(--ink-3); }
+.doc-foot-fb .spacer { flex: 1; }
+
+/* ===== governance ===== */
+.gov-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-bottom: 26px; }
+@media (max-width: 900px) { .gov-grid { grid-template-columns: 1fr; } }
+.card { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 17px 18px; box-shadow: var(--shadow-1); }
+.card h3 { margin: 0 0 4px; font-size: 14px; font-weight: 640; }
+.card .card-sub { font-size: 11.5px; color: var(--ink-3); margin: 0 0 13px; line-height: 1.6; }
+.map-col { margin-bottom: 14px; }
+.map-col .mc-t { font-size: 12.5px; font-weight: 620; display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.map-col .mc-t .dot { width: 6px; height: 6px; border-radius: 2px; background: var(--brand); flex: none; }
+.map-col ul { margin: 0; padding: 0; list-style: none; }
+.map-col li { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); padding: 4px 0 4px 14px; border-left: 1px dashed var(--line); margin-left: 3px; }
+.map-col li .c { margin-left: auto; font-size: 10.5px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.map-col li.gap { color: var(--danger); }
+.map-col li.gap .c { color: var(--danger); }
+
+.gov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.gov-table th { text-align: left; font-size: 10.5px; color: var(--ink-4); font-weight: 650; letter-spacing: .5px; padding: 0 10px 8px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.gov-table td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.6; }
+.gov-table tr:last-child td { border-bottom: 0; }
+.gov-table .nm { font-weight: 550; }
+.gov-table .nt { color: var(--ink-3); font-size: 11.5px; }
+.pri { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+.pri-P0 { background: #FDECEF; color: var(--danger); }
+.pri-P1 { background: #FFF6E5; color: var(--warn); }
+.pri-P2 { background: #F1F1F5; color: var(--ink-3); }
+
+.flow3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
+@media (max-width: 760px) { .flow3 { grid-template-columns: 1fr; } }
+.flow-step { background: #FBFAFB; border: 1px solid var(--line); border-radius: 10px; padding: 12px 13px; }
+.flow-step .fs-n { font-size: 10px; font-weight: 700; color: var(--brand); letter-spacing: .6px; }
+.flow-step b { display: block; font-size: 12.5px; margin: 3px 0 4px; }
+.flow-step span { font-size: 11.5px; color: var(--ink-3); line-height: 1.6; display: block; }
+
+.unresolved { display: flex; flex-direction: column; gap: 7px; }
+.unresolved .u-item { display: flex; gap: 9px; align-items: flex-start; font-size: 12.5px; padding: 8px 10px; background: #FCFCFD; border: 1px solid var(--line-soft); border-radius: 8px; }
+.unresolved .u-item .q { flex: 1; min-width: 0; }
+.unresolved .u-item .tm { font-size: 10.5px; color: var(--ink-4); flex: none; }
+
+/* empty */
+.empty { text-align: center; padding: 56px 20px; }
+.empty .e-ico { width: 44px; height: 44px; border-radius: 13px; background: #F2F2F6; display: grid; place-items: center; margin: 0 auto 12px; color: var(--ink-4); }
+.empty .e-ico svg { width: 20px; height: 20px; }
+.empty h3 { margin: 0 0 5px; font-size: 14px; font-weight: 600; }
+.empty p { margin: 0; font-size: 12.5px; color: var(--ink-3); }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: 34px; transform: translate(-50%, 14px);
+  background: #1C1C22; color: #fff; font-size: 12.5px; padding: 8px 16px; border-radius: 9px;
+  box-shadow: var(--shadow-3); opacity: 0; pointer-events: none; transition: .24s; z-index: 200;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* modal */
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(18, 18, 26, .42); backdrop-filter: blur(3px);
+  display: none; place-items: center; z-index: 150; padding: 20px;
+}
+.modal-mask.on { display: grid; }
+.modal {
+  background: #fff; border-radius: 18px; width: 100%; max-width: 520px; box-shadow: var(--shadow-3);
+  overflow: hidden; animation: pop .24s cubic-bezier(.2, .9, .3, 1) both;
+}
+@keyframes pop { from { opacity: 0; transform: scale(.97) translateY(8px); } to { opacity: 1; transform: none; } }
+.modal-h { padding: 18px 20px 0; display: flex; align-items: flex-start; gap: 10px; }
+.modal-h h3 { margin: 0 0 3px; font-size: 16px; font-weight: 650; }
+.modal-h p { margin: 0; font-size: 12px; color: var(--ink-3); line-height: 1.6; }
+.modal-b { padding: 16px 20px 4px; }
+.modal-f { padding: 14px 20px 18px; display: flex; gap: 8px; justify-content: flex-end; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 5px; }
+.field input {
+  width: 100%; height: 36px; border: 1px solid var(--line); border-radius: 9px; padding: 0 11px;
+  font-size: 13px; outline: none; transition: .15s; background: #fff;
+}
+.field input:focus { border-color: var(--brand-line); box-shadow: 0 0 0 3px rgba(255, 90, 30, .09); }
+.field .hint { font-size: 11px; color: var(--ink-4); margin-top: 4px; line-height: 1.55; }
+
+/* mobile */
+.menu-toggle { display: none; }
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .topbar { min-width: 0; }
+  .sidebar {
+    position: fixed; top: 58px; bottom: 0; left: 0; width: 262px; z-index: 60;
+    transform: translateX(-101%); transition: .24s ease; box-shadow: var(--shadow-3);
+  }
+  .sidebar.on { transform: none; }
+  .menu-toggle { display: grid; }
+  .brand-txt span { display: none; }
+  .brand-txt b { font-size: 13px; }
+  .gsearch { min-width: 0; flex: 1 1 0; }
+  .topbar-right { gap: 2px; }
+  .topbar-right .btn { display: none; }
+  .view { padding: 18px 16px 70px; }
+  .hero { padding: 24px 20px; border-radius: 16px; }
+  .hero h1 { font-size: 22px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .scenes { grid-template-columns: 1fr; }
+  .kbd { display: none; }
+  .topbar { gap: 8px; padding: 0 10px; }
+  .chat-inner { padding: 20px 16px 140px; }
+  .chat-composer-outer { padding: 14px 16px; }
+  .w-grid { grid-template-columns: 1fr; }
+  .doc-head h1 { font-size: 21px; }
+  .prose { font-size: 14px; }
+  .doc-meta { gap: 4px 12px; }
+  .ans-lead { font-size: 14px; }
+  .msg-user .bubble { max-width: 88%; }
+  .toolbar .mini-search { width: 100%; }
+}
+@media (max-width: 700px) {
+  .prose table { display: block; width: 100%; overflow-x: auto; white-space: nowrap; }
+  .prose th, .prose td { white-space: nowrap; }
+  .doc-foot-fb { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .doc-foot-fb .spacer { display: none; }
+}
+.hide { display: none !important; }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <button class="icon-btn menu-toggle" id="menuToggle" aria-label="菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+
+    <a class="brand" data-nav="home" href="#/home">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3 6 13h5l-1 8 8-11h-5z"/></svg>
+      </span>
+      <span class="brand-txt">
+        <b>快手阵地知识工作台</b>
+        <span>代理伙伴专用 · 智能知识库</span>
+      </span>
+    </a>
+
+    <div class="gsearch">
+      <div class="gsearch-input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+        <input id="gsearch" placeholder="搜索规范、流程、答疑，或直接提问…" autocomplete="off" spellcheck="false"/>
+        <span class="kbd">⌘K</span>
+      </div>
+      <div class="gsearch-panel" id="gsp"></div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="btn" data-nav="gov">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+        内容治理
+      </button>
+      <button class="btn btn-primary" data-nav="ask">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21M6 6l2.4 2.4M15.6 15.6 18 18M18 6l-2.4 2.4M8.4 15.6 6 18"/></svg>
+        问知识助手
+      </button>
+      <button class="icon-btn" id="cfgBtn" title="管理员配置">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="nav-group">
+      <div class="nav-title">工作台</div>
+      <a class="nav-item" data-nav="home" href="#/home">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"/></svg>
+        首页
+      </a>
+      <a class="nav-item" data-nav="ask" href="#/ask">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a7.5 7.5 0 0 1-11 6.7L4 20l1.3-4.2A7.5 7.5 0 1 1 20 12z"/><path d="M9 11.5h6M9 14.5h3.5"/></svg>
+        智能问答
+        <span class="n-badge">AI</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-title">知识库</div>
+      <a class="nav-item" data-nav="list/policy" href="#/list/policy">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+        投放规范与政策
+        <span class="n-count" id="cntPolicy">0</span>
+      </a>
+      <a class="nav-item" data-nav="list/training" href="#/list/training">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18.5V5.5"/></svg>
+        培训与操作指南
+        <span class="n-count" id="cntTraining">0</span>
+      </a>
+      <a class="nav-item" data-nav="faq" href="#/faq">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.8-.9 1.4v.3"/><path d="M12 16.8h.01"/></svg>
+        FAQ 答疑沉淀
+        <span class="n-count" id="cntFaq">0</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-title">我的</div>
+      <a class="nav-item" data-nav="mine/fav" href="#/mine/fav">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 4 2.4 5 5.6.8-4 3.9 1 5.5-5-2.7-5 2.7 1-5.5-4-3.9 5.6-.8z"/></svg>
+        我的收藏
+      </a>
+      <a class="nav-item" data-nav="mine/recent" href="#/mine/recent">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+        最近浏览
+      </a>
+      <a class="nav-item" data-nav="gov" href="#/gov">
+        <svg class="n-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12.5 16V7M17 16v-8"/></svg>
+        内容治理台
+      </a>
+    </div>
+
+    <div class="side-card">
+      <h4>找不到想要的？</h4>
+      <p>直接描述你遇到的事，比翻目录快。没答上来的问题会进内容治理清单。</p>
+      <button class="btn btn-primary" data-nav="ask">去提问</button>
+    </div>
+  </aside>
+
+  <main class="main" id="main"></main>
+</div>
+
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <div class="modal-h">
+      <div>
+        <h3>接入大模型（可选）</h3>
+        <p>默认使用内置检索问答，完全离线可用。填入任意 OpenAI 兼容接口后，答案会在检索结果基础上由大模型组织，更自然，但需要联网。</p>
+      </div>
+    </div>
+    <div class="modal-b">
+      <div class="field">
+        <label>接口地址 Base URL</label>
+        <input id="llmBase" placeholder="https://api.deepseek.com/v1"/>
+        <div class="hint">不要带末尾的 /chat/completions，程序会自动补全。</div>
+      </div>
+      <div class="field">
+        <label>API Key</label>
+        <input id="llmKey" placeholder="sk-..." type="password"/>
+        <div class="hint">仅保存在本机浏览器 localStorage，不会上传到任何服务器。对外发布的站点不建议在后端无代理的情况下填生产 Key。</div>
+      </div>
+      <div class="field">
+        <label>模型名</label>
+        <input id="llmModel" placeholder="deepseek-chat"/>
+      </div>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-ghost" id="cfgClear">关闭增强</button>
+      <button class="btn" id="cfgCancel">取消</button>
+      <button class="btn btn-primary" id="cfgSave">保存并启用</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* 快手阵地业务知识工作台 —— 知识库种子数据
+ * 说明：以下为内容框架 + 种子内容，用于验证工作台的检索与问答能力。
+ * 正式对外发布前，需按《内容梳理清单》逐篇替换为官方定稿版本。
+ */
+window.KB = {
+  meta: {
+    name: '快手阵地业务知识工作台',
+    sub: '代理伙伴专用 · 智能知识库',
+    version: 'v0.9 种子版',
+    updated: '2026-11-05',
+    notice: '当前为种子内容，正式对外前需逐篇替换为官方定稿版本。'
+  },
+
+  cats: [
+    { key: 'policy', name: '投放规范与政策', desc: '审核红线、行业准入、素材合规、违规处置' },
+    { key: 'training', name: '培训与操作指南', desc: '从新人上手到投放、直播、达人的标准动作' },
+    { key: 'faq', name: 'FAQ 答疑沉淀', desc: '代理日常高频问题的标准答复口径' }
+  ],
+
+  scenes: [
+    { id: 's1', icon: 'shield', title: '素材被驳回了', desc: '先看驳回原因归因，再对照自查清单改稿', docs: ['p2', 'p1', 'p8'], q: '素材被驳回是什么原因，怎么改' },
+    { id: 's2', icon: 'user', title: '新客户要开户', desc: '资质、账户结构、首次投放的完整顺序', docs: ['t4', 't3', 'p1'], q: '新客户开户流程是什么' },
+    { id: 's3', icon: 'live', title: '直播间没人看', desc: '冷启动五步法 + 起量诊断清单', docs: ['t7', 't10', 't5'], q: '直播间冷启动怎么做' },
+    { id: 's4', icon: 'star', title: '达人合作报备', desc: '聚星合作内容合规与执行流程', docs: ['p11', 't8'], q: '达人合作内容需要报备吗' },
+    { id: 's5', icon: 'book', title: '这个行业能不能投', desc: '医疗、食品、教育、金融、美妆准入要求', docs: ['p3', 'p4', 'p5', 'p6', 'p7'], q: '医疗行业投放需要什么资质' },
+    { id: 's6', icon: 'chart', title: '数据不好看', desc: '指标口径 + 账户诊断 + 复盘框架', docs: ['t9', 't10', 't11'], q: '成本高不起量怎么排查' }
+  ],
+
+  quickQuestions: [
+    '素材被驳回最常见的原因有哪些',
+    '新客户开户需要准备什么资质',
+    '磁力金牛账户结构怎么搭',
+    '直播间冷启动怎么做',
+    '达人合作内容需要报备吗',
+    'CTR 和 CVR 的口径是什么',
+    '短视频素材怎么批量测试',
+    '违规扣分怎么申诉'
+  ],
+
+  docs: [
+    /* ========== 投放规范与政策 ========== */
+    {
+      id: 'p1',
+      cat: 'policy',
+      sub: '通用审核规范',
+      title: '广告审核总则与送审流程',
+      summary: '所有商业推广内容的通用底线：真实可证、主体一致、不误导用户。附完整送审与驳回处理路径。',
+      tags: ['审核', '送审', '通用规范', '必读'],
+      owner: '投放合规组',
+      updated: '2026-10-28',
+      version: 'v2.3',
+      level: '必读',
+      readMin: 5,
+      status: '草稿',
+      body: `## 适用范围
+本规范适用于通过磁力引擎（含磁力金牛、磁力智投、磁力聚星、粉条等产品）在快手平台发布的一切商业推广内容，包括短视频、直播、图文、落地页、商品页与账号主页装修。
+
+代理侧承接的客户素材，**由代理承担初审责任，平台审核为终审**。代理初审不到位导致的批量驳回，会计入服务商质量考核。
+
+## 三条基本原则
+
+1. **真实可证**：所有效果数据、资质、对比结论必须有可提交的证明材料。不得使用「最」「第一」「国家级」「顶级」等绝对化表述。
+2. **主体一致**：投放主体、资质主体、落地页经营主体、收款主体需一致。不一致时必须提供完整的授权链路证明。
+3. **不误导用户**：不得通过诱导点击、虚假倒计时、伪装系统提示、虚构稀缺性、隐瞒关键限制条件等方式促使用户操作。
+
+## 送审流程
+
+1. 代理侧完成素材自查，对照 [[p2|素材高频驳回原因 Top 20]] 逐项过一遍
+2. 在投放平台提交素材，如实填写行业、资质、落地页地址
+3. 常规审核 **1 个工作日内**出结果；大促与节点期间时效见 [[p13|大促与节点审核时效说明]]
+4. 驳回后按驳回原因逐条修改，**不要只改表面文案就重复提交**
+5. 同一素材重复提交 3 次以上仍驳回，先联系行业对接人做人工预审
+
+## 驳回后的正确处理
+
+> 驳回原因是「修改方向」，不是「换一种说法再试一次」。同一违规点换词重提，会触发重复违规判定。
+
+- 逐条对应驳回原因，在提交备注里写清「已修改什么」
+- 涉及资质的，补齐资质而不是删掉资质相关表述
+- 涉及绝对化用语的，改写为可举证的客观描述
+- 同一客户一周内驳回率超过 30%，建议暂停投放并做一次全量素材体检
+
+## 代理侧自查责任
+每个代理团队应指定一名**素材合规责任人**，负责：新行业首投前的规范确认、批量素材的抽检（建议不低于 20%）、驳回原因的分类归因与月度复盘。`,
+      related: ['p2', 'p8', 'p12']
+    },
+    {
+      id: 'p2',
+      cat: 'policy',
+      sub: '通用审核规范',
+      title: '素材高频驳回原因 Top 20 与自查清单',
+      summary: '把驳回原因归成 5 类，每类给出改法。这是代理侧使用频率最高的一篇。',
+      tags: ['审核', '素材', '驳回', '自查', '必读'],
+      owner: '投放合规组',
+      updated: '2026-11-02',
+      version: 'v3.0',
+      level: '必读',
+      readMin: 7,
+      status: '草稿',
+      body: `## 五类归因
+驳回原因看似五花八门，实际集中在五类：**主体资质、绝对化表述、效果承诺、素材侵权、落地页不一致**。先归类，再改稿，效率最高。
+
+## 一、主体资质类
+1. 投放主体与资质主体不一致，且无授权链
+2. 行业特殊资质缺失（医疗、教育、金融、食品等）
+3. 资质过期或经营范围不覆盖所推广服务
+4. 冒用他人商标、门店、资质编号
+
+**改法**：补授权链路文件；资质与推广内容一一对应；过期资质先更新再投。
+
+## 二、绝对化与夸大表述类
+5. 「最」「第一」「唯一」「顶级」「国家级」「全网最低」
+6. 无依据的销量、排名、市占率宣称
+7. 「包治」「根治」「永久」「零风险」「稳赚」
+8. 虚构机构背书、专家身份、检测报告
+
+**改法**：改为可举证的事实描述。例如「销量领先」改为「2026 年 1-9 月累计售出 XX 万件」，并准备可核验来源。
+
+## 三、效果与收益承诺类
+9. 明示或暗示保证收益、保本、保回本
+10. 用收入截图、账户余额图暗示收益
+11. 「无门槛」「人人可做」「日入过千」类招募话术
+12. 诱导性金融、贷款、投资类话术
+
+**改法**：删除承诺性表述，改为流程与条件说明；收益类内容必须标注风险提示。
+
+## 四、素材侵权类
+13. 背景音乐无授权
+14. 字体商用未授权
+15. 盗用他人视频、图片、直播切片
+16. 未授权的真人肖像、明星素材、素人访谈
+
+**改法**：见 [[p8|音乐/字体/肖像：素材侵权风险自查]]，建立团队可商用素材库。
+
+## 五、落地页与链路类
+17. 落地页内容与素材宣称不一致
+18. 落地页无法打开、加载过慢、强制下载 App
+19. 诱导跳转站外、二跳页含违规内容
+20. 商品页价格、规格、赠品与素材不符
+
+**改法**：见 [[p9|落地页与二跳页合规标准]]，素材改稿后必须同步落地页。
+
+## 提交前 60 秒自查
+- 有没有出现绝对化用语？（搜索「最、第一、唯一、顶级、100%」）
+- 效果宣称有没有举证材料？
+- 音乐、字体、画面是否来自可商用库？
+- 落地页能不能打开，首屏与素材是否一致？
+- 资质是否覆盖本次推广的服务？
+- 主体信息是否前后一致？
+
+> 60 秒自查能挡掉大约七成的常见驳回，建议做成团队提交前的强制动作。`,
+      related: ['p1', 'p8', 'p9']
+    },
+    {
+      id: 'p3',
+      cat: 'policy',
+      sub: '行业专项',
+      title: '医疗健康行业投放资质与内容红线',
+      summary: '医疗、医美、药品、医疗器械、健康服务五类主体的资质要求与不可触碰的表述。',
+      tags: ['行业', '医疗', '医美', '资质', '红线'],
+      owner: '行业合规组',
+      updated: '2026-10-15',
+      version: 'v1.8',
+      level: '必读',
+      readMin: 6,
+      status: '草稿',
+      body: `## 准入前提
+医疗健康是准入最严的行业之一。**没有对应资质一律不接**，不要尝试用「健康咨询」「养生科普」等外壳规避行业属性，平台会按实际推广内容判定行业。
+
+## 资质要求
+
+| 推广对象 | 核心资质 |
+| --- | --- |
+| 医疗机构 | 医疗机构执业许可证 |
+| 医疗美容 | 医疗机构执业许可证 + 诊疗科目含医疗美容科 |
+| 药品 | 药品生产/经营许可证、药品注册批件 |
+| 医疗器械 | 医疗器械注册证/备案凭证、经营许可 |
+| 保健食品 | 保健食品注册证书或备案凭证、生产许可 |
+| 健康管理/咨询 | 营业执照经营范围需覆盖，不得涉及诊疗行为 |
+
+资质需在有效期内，且**经营范围必须覆盖所推广的具体服务**。超范围是高频驳回点。
+
+## 内容红线
+- 不得含有表示功效、安全性的断言或保证
+- 不得说明治愈率、有效率
+- 不得利用患者、专家、医生形象作证明（含扮演）
+- 不得与其他机构、产品做效果对比
+- 不得使用「根治」「无痛无痕」「一次性解决」「不复发」
+- 不得出现术前术后对比图、创口、血腥画面
+- 未成年人不得作为医疗广告的形象载体
+
+## 医美专项注意
+医美内容需明确提示风险，不得使用「变美无风险」「当天上班」等弱化风险的表述。使用真人案例必须取得书面授权，且不得暗示普适效果。
+
+## 落地页与咨询链路
+- 落地页不得自动弹出咨询窗口强制对话
+- 不得以「免费检测」「1 元体验」诱导到院后再加价
+- 咨询话术不得作出诊断结论或用药建议
+
+> 医疗类客户的首投素材，建议一律走人工预审，不要直接批量提交。`,
+      related: ['p1', 'p4', 'p9']
+    },
+    {
+      id: 'p4',
+      cat: 'policy',
+      sub: '行业专项',
+      title: '食品与保健食品宣传合规要点',
+      summary: '普通食品不得宣称功效，保健食品必须带提示语。两类主体的表述边界。',
+      tags: ['行业', '食品', '保健食品', '功效宣称'],
+      owner: '行业合规组',
+      updated: '2026-10-15',
+      version: 'v1.6',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 先分清主体属性
+普通食品、保健食品、特医食品的合规边界完全不同。**宣传前先确认产品属于哪一类**，很多违规来自把普通食品当保健食品讲。
+
+- 普通食品：SC 生产许可，**不得宣称任何保健或治疗功效**
+- 保健食品：需注册证书或备案凭证，可宣称批准的保健功能，但必须标注「本品不能代替药物」
+- 特医食品：需注册，适用人群严格限定，不得面向普通消费者推广
+
+## 普通食品的常见越界
+- 「增强免疫力」「改善睡眠」「减脂」「控糖」「养胃」
+- 用营养成分表暗示治疗作用
+- 借「0 糖 0 脂」暗示健康功效
+- 用医生、营养师形象背书
+
+**改法**：只描述口味、原料、工艺、规格、食用场景，不描述身体变化。
+
+## 保健食品必须标注
+1. 「本品不能代替药物」
+2. 保健食品标志与批准文号
+3. 适宜的与不适宜的人群
+4. 食用量与食用方法
+
+缺失任一项都可能被驳回或下线。
+
+## 直播口播特别提示
+直播间是食品类违规高发场景。主播即兴发挥最容易越界，建议：
+- 给主播准备**口播话术卡**，明确「不能说的十句话」
+- 直播中禁止现场试吃后描述身体感受
+- 禁止用「家人们相信我，吃了就知道」类体感引导
+
+> 食品类客户建议把合规话术做成直播间贴片或提词器，比事后整改便宜得多。`,
+      related: ['p1', 'p10', 'p3']
+    },
+    {
+      id: 'p5',
+      cat: 'policy',
+      sub: '行业专项',
+      title: '教育培训行业广告合规要点',
+      summary: '资质、承诺、师资宣称、退费表述四条线，以及职业教育与学科培训的差异。',
+      tags: ['行业', '教育', '培训', '承诺'],
+      owner: '行业合规组',
+      updated: '2026-10-20',
+      version: 'v1.5',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 资质
+- 学科类培训需办学许可证，且需符合「双减」相关要求
+- 职业技能培训需办学许可或人社部门备案
+- 留学中介需自费出国留学中介服务机构资格认定
+- 在线教育平台需 ICP 及相关经营许可
+
+## 四类高频违规
+
+### 1. 效果与结果承诺
+「包过」「保offer」「不过退款」「30 天拿证」「学完即就业」均属高危。可以讲课程体系、师资背景、服务流程，不能承诺结果。
+
+### 2. 师资与机构背书
+- 不得虚构名师、名校背景
+- 使用教师形象需授权，且需与实际授课一致
+- 不得宣称与不存在的机构合作
+- 「官方指定」「唯一授权」需有书面授权文件
+
+### 3. 收益与前景诱导
+「学完月入过万」「副业躺赚」「零基础也能接单」属诱导性表述，尤其是技能培训、剪辑、设计、电商培训类客户，这是驳回重灾区。
+
+### 4. 未成年人相关
+- 不得利用未成年人作代言或展示培训效果
+- 面向未成年人的内容不得制造教育焦虑
+- 不得出现「不学就落后」类恐吓式表述
+
+## 退费与服务条款
+落地页需清晰展示课程价格、课时、服务内容、退费规则。**模糊退费条款是被投诉最多的问题**，也是后续纠纷的根源。
+
+> 教育类客户的核心风险不在创意，而在承诺。写脚本前先跟客户确认：哪些结果是我们敢写进合同的。`,
+      related: ['p1', 'p9', 'p6']
+    },
+    {
+      id: 'p6',
+      cat: 'policy',
+      sub: '行业专项',
+      title: '金融与借贷类广告准入要求',
+      summary: '持牌要求、利率披露、风险提示，以及绝对不能出现的收益承诺。',
+      tags: ['行业', '金融', '借贷', '理财', '风险提示'],
+      owner: '行业合规组',
+      updated: '2026-10-22',
+      version: 'v1.7',
+      level: '必读',
+      readMin: 6,
+      status: '草稿',
+      body: `## 准入：必须持牌
+金融类广告只接受持牌机构或其授权合作方投放，需提供金融业务许可证（银行、保险、证券、基金、小贷、消费金融等对应牌照）。**助贷、导流平台需提供与持牌机构的合作协议**。
+
+无牌照的「理财课程」「投资社群」「荐股服务」一律不接。
+
+## 必备披露
+- 年化利率区间（借贷类必须显著展示）
+- 风险提示语（投资类必须展示，且不得缩小、弱化、快速闪过）
+- 机构名称与牌照信息
+- 「投资有风险，入市需谨慎」类标准提示不可省略
+
+## 绝对禁止
+1. 承诺保本、保收益、稳赚不赔
+2. 展示收益率数字而不披露风险
+3. 「零门槛」「秒批」「无视征信」「黑户可贷」
+4. 用收益截图、余额图、现金堆叠画面暗示赚钱
+5. 冒充银行、官方机构、政府平台
+6. 诱导以贷养贷、多头借贷
+7. 向学生、老年人等特定群体定向推销高风险产品
+
+## 素材与落地页一致性
+利率、额度、期限必须在素材与落地页完全一致。**「最高 20 万」「日息低至万二」这类表述，落地页必须同步且注明适用条件**，否则属于误导。
+
+## 直播特别要求
+金融类直播需具备相应资质的主讲人，禁止实时荐股、喊单、承诺收益。直播回放同样纳入审核。
+
+> 金融客户的素材，建议每一版都留存审核记录与截图，用于后续举证。`,
+      related: ['p1', 'p9', 'p12']
+    },
+    {
+      id: 'p7',
+      cat: 'policy',
+      sub: '行业专项',
+      title: '美妆个护功效宣称规范',
+      summary: '普通化妆品与特殊化妆品的功效边界，以及「成分党」内容容易踩的坑。',
+      tags: ['行业', '美妆', '功效宣称', '成分'],
+      owner: '行业合规组',
+      updated: '2026-10-18',
+      version: 'v1.4',
+      level: '参考',
+      readMin: 4,
+      status: '草稿',
+      body: `## 分类决定能说什么
+- **普通化妆品**：只能宣称清洁、保湿、修饰、芳香等基础功能
+- **特殊化妆品**：染发、烫发、祛斑美白、防晒、防脱发，需注册批件
+- **普通化妆品不得宣称**：祛斑美白、防晒、防脱、抗炎、抑菌、修护受损等医疗或特殊功效
+
+「祛痘」「抗敏」「修复屏障」等表述在普通化妆品上属于高危，实际审核中常被判定为医疗术语。
+
+## 高频违规表述
+- 医美级、药妆、医学护肤
+- 一次见效、7 天淡斑、根治痘肌
+- 无激素、无添加（无添加需明确不添加什么）
+- 医美术后修复
+- 换肤、刷酸治疗
+
+## 成分党内容的坑
+达人讲成分容易过度推演功效。合规做法是**只讲成分本身的作用机理，不承诺对本产品的使用效果**。例如可以说「烟酰胺在文献中被用于研究…」，不能说「含烟酰胺所以你的斑会消失」。
+
+## 前后对比图
+使用效果对比图需满足：真人授权、光线条件一致、标注使用周期、不得修图夸大。**祛斑美白类对比图仅限特殊化妆品使用**。
+
+## 直播试妆注意
+直播现场试妆不得宣称即时治疗或改善皮肤问题；不得使用「敏感肌闭眼入」等绝对化推荐。`,
+      related: ['p1', 'p8', 'p10']
+    },
+    {
+      id: 'p8',
+      cat: 'policy',
+      sub: '素材与版权',
+      title: '音乐、字体、肖像：素材侵权风险自查',
+      summary: '三类最常见的侵权来源，以及代理侧可以立刻落地的可商用素材管理方式。',
+      tags: ['素材', '版权', '音乐', '字体', '肖像', '侵权'],
+      owner: '投放合规组',
+      updated: '2026-10-25',
+      version: 'v2.0',
+      level: '必读',
+      readMin: 5,
+      status: '草稿',
+      body: `## 为什么这件事必须管
+侵权不像内容违规那样只被驳回，它可能带来**真实的法律索赔**，且责任最终会追溯到投放主体和制作方。代理是素材制作者，风险最直接。
+
+## 三类高频侵权
+
+### 1. 背景音乐
+- 直接使用热门流行歌曲、影视原声
+- 从短视频平台下载他人作品音频
+- 使用「免版权」网站但未核对授权范围（很多仅限个人非商用）
+
+**做法**：只使用平台音乐库内的商用授权曲目，或已购买商用授权的曲库。留存授权凭证与使用记录。
+
+### 2. 字体
+- 使用系统自带字体做商用以外的字库（部分字体商用需授权）
+- 从网络下载字体包直接使用
+- 客户提供的品牌字体未确认授权范围
+
+**做法**：团队统一使用开源可商用字体（如思源系列），并在剪辑模板中固定；客户提供字体需索取授权说明。
+
+### 3. 肖像与画面
+- 使用明星、达人素材未获授权
+- 街拍、素人访谈未签授权书
+- 盗用同行视频、直播切片、买家秀
+- AI 生成人脸但高度近似真实人物
+
+**做法**：所有真人出镜签署肖像使用授权书，明确使用范围与期限；直播切片需主播书面同意；买家秀需用户授权截图留档。
+
+## 团队落地动作
+1. 建立统一的**可商用素材库**（音乐、字体、贴纸、空镜），剪辑模板锁定
+2. 建立**授权台账**：素材名、来源、授权类型、有效期、凭证位置
+3. 提交前检查：音乐来源、字体名称、真人授权、画面来源四项
+4. 客户提供的素材，索取来源说明并留档
+
+> 授权台账看起来麻烦，但它是唯一能在纠纷发生时保护你的东西。建议一个客户一个文件夹。`,
+      related: ['p2', 'p9', 'p11']
+    },
+    {
+      id: 'p9',
+      cat: 'policy',
+      sub: '素材与版权',
+      title: '落地页与二跳页合规标准',
+      summary: '素材说一套、落地页说另一套，是最容易被判误导的组合。链路一致性检查清单。',
+      tags: ['落地页', '二跳页', '链路', '一致性', '转化'],
+      owner: '投放合规组',
+      updated: '2026-10-26',
+      version: 'v1.9',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 核心原则：素材即承诺
+用户在素材里看到的，落地页首屏必须能兑现。**素材与落地页不一致，按虚假宣传处理**，这是代理侧最容易忽视的一类违规。
+
+## 必查六项
+1. **价格一致**：素材上的价格、赠品、优惠门槛，落地页是否完全一致
+2. **主体一致**：落地页底部的主体名称、备案信息是否与投放主体一致
+3. **资质一致**：行业资质是否在落地页展示（医疗、金融、教育必须）
+4. **承诺一致**：素材里的效果承诺，落地页是否也有，且措辞不放大
+5. **商品一致**：规格、型号、颜色、数量是否对应
+6. **活动一致**：活动时间、限量数量、参与方式是否清晰
+
+## 落地页技术要求
+- 首屏加载建议控制在 3 秒内，移动端优先
+- 不得强制下载 App 才能查看内容
+- 不得自动跳转站外或诱导二次跳转
+- 表单收集信息需明示用途，不得超范围收集
+- 关闭按钮需真实可用，不得做虚假关闭
+
+## 二跳页风险
+二跳页（点击后进入的第二层页面）同样纳入审核。常见问题：
+- 二跳页含违规内容但主落地页干净
+- 二跳页是微信/QQ 群二维码，指向不可控内容
+- 二跳页频繁更换以规避审核
+
+> 链路只要有一层不可控，整个账户就在风险里。建议二跳页统一用自有可控页面。`,
+      related: ['p2', 'p6', 'p3']
+    },
+    {
+      id: 'p10',
+      cat: 'policy',
+      sub: '直播与达人',
+      title: '直播间场景与口播合规清单',
+      summary: '直播是即兴场景，违规往往是"说漏嘴"。给主播的话术边界与场景检查表。',
+      tags: ['直播', '口播', '场景', '合规', '主播'],
+      owner: '直播运营组',
+      updated: '2026-10-30',
+      version: 'v2.1',
+      level: '必读',
+      readMin: 6,
+      status: '草稿',
+      body: `## 开播前场景检查
+- 背景无违规元素：无仿官方标识、无虚假荣誉牌匾、无医疗场景道具
+- 商品陈列与链接一致，无未上架商品出镜
+- 价格牌、优惠牌与后台设置一致
+- 主播着装得体，无低俗暗示
+- 直播间标题、封面不含绝对化用语与诱导词
+
+## 口播十条禁令
+1. 不承诺效果与收益（「用了就好」「跟着买稳赚」）
+2. 不使用绝对化用语（最好、第一、全网最低）
+3. 不贬低同行或指名对比
+4. 不虚构原价、虚假折扣、假倒计时
+5. 不诱导站外交易、私下转账
+6. 不宣称医疗功效（食品、化妆品尤其）
+7. 不展示未授权明星、专家形象
+8. 不诱导未成年人消费
+9. 不进行虚假抽奖、虚假免单
+10. 不使用「点击下方」「扣 1 上车」等诱导互动话术过度堆叠
+
+## 高风险品类口播替换示例
+
+| 不要说 | 可以说 |
+| --- | --- |
+| 这个吃了保证你睡得香 | 这款含 XX 成分，规格是 XX，适合睡前饮用 |
+| 全网最低价，别家都没有 | 今天直播间到手价 XX，比日常价低 XX |
+| 一次就能淡斑 | 这款是特殊化妆品，备案功效为祛斑美白，需按说明坚持使用 |
+| 闭眼入，敏感肌也能用 | 建议先做耳后测试，敏感肌谨慎选择 |
+
+## 直播中控职责
+中控需要实时盯：违规词提醒、价格一致性、库存与承诺是否匹配、评论区引导。**建议配置违规词提醒工具 + 人工二次盯场**。
+
+## 违规后的处置
+直播违规可能导致断流、封禁直播权限。发生后立即：停止违规话术 → 保存回放 → 按 [[p12|违规分级处置与申诉]] 处理。`,
+      related: ['p4', 'p7', 'p12']
+    },
+    {
+      id: 'p11',
+      cat: 'policy',
+      sub: '直播与达人',
+      title: '达人内容合作（磁力聚星）合规与报备',
+      summary: '达人不是"第三方"，达人说的话品牌一样要负责。合作前中后的合规动作。',
+      tags: ['达人', '聚星', '报备', '合作', '广告标识'],
+      owner: '达人运营组',
+      updated: '2026-10-29',
+      version: 'v1.6',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 责任归属
+通过磁力聚星等产品进行的达人合作属于商业推广，**广告主与达人共同承担内容责任**。达人发布的内容违规，品牌方同样被处置。所以「达人自己写的脚本」不是免责理由。
+
+## 合作前
+1. 核查达人账号内容历史，是否有违规、低俗、争议记录
+2. 确认达人粉丝画像与目标人群匹配
+3. 签署合作合同，明确内容规范、修改权、违约责任
+4. 提供**品牌内容规范卡**：不能说的词、必须提的信息、资质要求
+
+## 合作中
+- 脚本需品牌方或代理审核后才可拍摄
+- 成片需审核后才可发布，**不接受"先发后改"**
+- 涉及功效、价格、活动的表述逐字核对
+- 商业内容需按平台要求进行广告标识
+
+## 合作后
+- 保存成片、脚本、审核记录、发布时间截图
+- 监测评论区，出现虚假宣传补充说明需及时处理
+- 内容授权范围（是否可用于二次投放）需在合同中明确
+
+## 二次投放注意
+把达人内容用于信息流投放（即"达人素材复用"），需要**达人明确授权**，且授权范围包含付费推广。仅授权"账号发布"不等于授权"广告投放"，这是常见纠纷点。
+
+## 高频问题
+- 达人说错话谁负责？—— 品牌与达人共同负责，品牌方会被处置
+- 达人自己加的优惠承诺有效吗？—— 对消费者有效，品牌需兑现，因此脚本必须锁定价格与活动
+- 达人内容能不能改？—— 未经同意擅自剪辑可能侵犯达人权益，需合同约定`,
+      related: ['p8', 't8', 'p12']
+    },
+    {
+      id: 'p12',
+      cat: 'policy',
+      sub: '违规处置',
+      title: '违规分级处置、扣分与申诉流程',
+      summary: '违规分几级、后果是什么、申诉怎么提才有用。别把申诉当抽奖。',
+      tags: ['违规', '处罚', '申诉', '扣分', '封禁'],
+      owner: '投放合规组',
+      updated: '2026-10-27',
+      version: 'v2.2',
+      level: '必读',
+      readMin: 5,
+      status: '草稿',
+      body: `## 处置分级
+
+| 级别 | 典型情形 | 常见处置 |
+| --- | --- | --- |
+| 轻微 | 表述不规范、信息缺失、首次偶发 | 素材驳回、提醒整改 |
+| 一般 | 绝对化用语、效果暗示、链路不一致 | 素材下线、账户警告、扣分 |
+| 严重 | 虚假宣传、资质造假、侵权、诱导站外交易 | 账户限流/暂停投放、扣分加重 |
+| 特别严重 | 违法内容、诈骗、伪造官方 | 账户封禁、清退、移交处理 |
+
+违规分按周期累计，扣分达到阈值会触发阶梯式限制，**不同账户之间存在关联影响**（同一主体多账户可能被联动处置）。
+
+## 申诉的正确姿势
+申诉不是"再解释一遍"，而是提供**新的、可核验的证据**。
+
+有效的申诉材料：
+- 资质原件与授权链路（清晰、完整、在有效期内）
+- 落地页/素材的整改前后对比截图
+- 第三方检测报告、合同、发票
+- 情况说明（时间、原因、整改动作、预防措施）
+
+无效的申诉：
+- 只写"我们已修改，请重新审核"
+- 换个账号重复提交同一素材
+- 提供模糊、遮挡、无法核验的截图
+- 情绪化表达或施压
+
+## 申诉流程
+1. 在处置通知中确认违规类型与凭证要求
+2. 准备材料，一次性提交完整（反复补充会拉长周期）
+3. 等待复核结论，常规 1-3 个工作日
+4. 复核不通过，可联系对接人申请二次复核，但需补充新材料
+
+## 预防优于申诉
+- 建立素材审核留痕（每一版都存档）
+- 新行业首投走人工预审
+- 每月做一次驳回原因归因分析
+- 客户资质建立到期提醒（提前 30 天）`,
+      related: ['p1', 'p2', 'p6']
+    },
+    {
+      id: 'p13',
+      cat: 'policy',
+      sub: '通用审核规范',
+      title: '大促与节点审核时效说明',
+      summary: '618、双11、年货节期间审核排队变长，代理侧应该如何提前排期。',
+      tags: ['审核', '时效', '大促', '排期'],
+      owner: '投放合规组',
+      updated: '2026-10-12',
+      version: 'v1.2',
+      level: '参考',
+      readMin: 3,
+      status: '草稿',
+      body: `## 时效会变
+常规审核约 1 个工作日内出结果。大促与节点（618、双11、双12、年货节、春节）期间，提交量激增，**审核时长可能延长至 2-3 个工作日**，夜间与周末时段更慢。
+
+## 排期建议
+- 大促前 **T-14 天**完成主力素材提交与过审
+- 大促前 **T-7 天**完成备用素材过审（每个主推品至少备 2 套）
+- 大促期间只做小改，不提交全新方向
+- 需要加急的，提前联系行业对接人报备，说明消耗量级与时间点
+
+## 加速过审的做法
+1. 素材信息填写完整（行业、资质、落地页），减少补件往返
+2. 首次提交就附上资质与授权文件
+3. 避免在 23:00 后集中提交
+4. 同一批次素材风格统一，审核员处理更快
+
+## 出问题时的止损
+如果大促当天素材仍未过审：
+- 立即启用已过审的备用素材
+- 用已过审素材做人群与出价调整维持消耗
+- 同步客户预期，避免临时承诺无法兑现
+
+> 大促真正的风险不是审核慢，而是没有备用素材。排期表里必须有一列「备用素材过审状态」。`,
+      related: ['p1', 'p2', 't10']
+    },
+
+    /* ========== 培训与操作指南 ========== */
+    {
+      id: 't1',
+      cat: 'training',
+      sub: '新人上手',
+      title: '新代理 7 天上手路径',
+      summary: '把"一堆文档"变成一条 7 天路线：每天一个目标，一个产出物。新人带教直接用。',
+      tags: ['新人', '培训', '上手', '带教'],
+      owner: '代理赋能组',
+      updated: '2026-10-31',
+      version: 'v2.0',
+      level: '必读',
+      readMin: 5,
+      status: '草稿',
+      body: `## 为什么需要一条路径
+新人面对几十篇规范会直接放弃。**不要让他们"先读完再上手"，而是边做边学**。下面这条路径每天只学一件事，且都有可交付的产出物。
+
+## Day 1：搞清业务是什么
+- 学习：[[t2|阵地业务全景]]
+- 产出：用自己的话画出「账号-内容-直播-投放-数据」的关系图，讲给带教听 5 分钟
+
+## Day 2：认识账户与后台
+- 学习：[[t3|企业号认证与装修]]、[[t4|磁力金牛开户与账户结构]]
+- 产出：在测试账户里独立完成一次账户结构搭建（1 个计划 → 2 个广告组 → 4 条素材）
+
+## Day 3：学会看数据
+- 学习：[[t9|核心指标口径与看板解读]]
+- 产出：拿一个历史账户，写出 3 条"数据说明了什么"的结论
+
+## Day 4：看懂素材与审核
+- 学习：[[p1|广告审核总则]]、[[p2|素材高频驳回 Top 20]]
+- 产出：对 10 条真实驳回素材做归因，正确率需达到 8 条以上
+
+## Day 5：动手做素材
+- 学习：[[t6|短视频素材生产 SOP]]
+- 产出：独立完成 1 条 15 秒素材（脚本 + 剪辑 + 标题）
+
+## Day 6：了解直播与达人
+- 学习：[[t7|直播间冷启动五步法]]、[[t8|达人筛选与执行]]
+- 产出：为一个虚拟客户写一份直播冷启动方案（含选品、脚本节奏、投放配合）
+
+## Day 7：完整过一遍客户流程
+- 学习：[[t11|周报与复盘模板]]
+- 产出：模拟一次客户提案，讲清"我们要做什么、怎么衡量、多久见效"
+
+## 带教检查点
+第 4 天和第 7 天是两个关键检查点。第 4 天判断"是否有合规意识"，第 7 天判断"是否能独立对接客户"。**任何一项不过，延长带教而不是放出去接客户**。`,
+      related: ['t2', 't4', 't9']
+    },
+    {
+      id: 't2',
+      cat: 'training',
+      sub: '新人上手',
+      title: '阵地业务全景：账号、内容、直播、投放、数据',
+      summary: '一张图理解阵地经营的五件事，以及代理在其中的价值位置。',
+      tags: ['新人', '全景', '阵地', '业务理解'],
+      owner: '代理赋能组',
+      updated: '2026-10-31',
+      version: 'v1.9',
+      level: '必读',
+      readMin: 5,
+      status: '草稿',
+      body: `## 什么是"阵地"
+阵地指品牌在快手的自有经营资产，核心是**账号 + 小店 + 直播 + 私域粉丝**。区别于纯买量，阵地经营追求的是"内容能持续带来自然流量，投放能放大有效内容"。
+
+## 五件事的关系
+
+| 模块 | 做什么 | 关键产出 |
+| --- | --- | --- |
+| 账号 | 企业号认证、主页装修、人设定位 | 可被信任的官方身份 |
+| 内容 | 短视频选题、脚本、拍摄、剪辑 | 有完播与互动的素材池 |
+| 直播 | 排期、选品、脚本、场控 | 单场 GMV 与粉丝沉淀 |
+| 投放 | 磁力金牛 / 粉条 / 聚星 | 可控成本的增量 |
+| 数据 | 看板、归因、复盘 | 可复用的结论 |
+
+## 正确的顺序
+**先有能打的内容，再用投放放大**。反过来做（先砸钱再找内容）在阵地业务里几乎不成立，因为投放在放大内容的同时也放大了内容的缺陷。
+
+## 代理的价值在哪
+客户自己做不好通常卡在三点：内容产能不足、投放不专业、数据不会读。代理的价值是把这三件事变成**标准化动作 + 稳定产出**，而不是"帮客户花钱"。
+
+## 常见误区
+- 把阵地当成纯信息流投放，只看 ROI 不看粉丝与内容资产
+- 内容全靠达人，账号自身没有稳定产出
+- 直播与短视频两条线各做各的，不互相导流
+- 数据只看消耗和 ROI，不看 CTR、完播、进店率等过程指标
+
+> 跟客户沟通时，先问"你今年想在这块阵地上留下什么资产"，比直接聊预算更有用。`,
+      related: ['t1', 't3', 't7']
+    },
+    {
+      id: 't3',
+      cat: 'training',
+      sub: '账户与投放',
+      title: '企业号认证与主页装修操作指引',
+      summary: '认证材料、常见卡点、主页装修的转化设计要点。',
+      tags: ['企业号', '认证', '主页', '装修', '蓝V'],
+      owner: '代理赋能组',
+      updated: '2026-10-24',
+      version: 'v1.7',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 认证前准备
+- 营业执照（在有效期内，经营范围覆盖推广业务）
+- 认证公函（按平台模板，加盖公章）
+- 运营者身份信息与授权
+- 行业特殊资质（医疗、教育、金融等，见对应行业规范）
+
+## 常见卡点
+1. **名称与商标冲突**：企业号名称若含他人商标，需提供商标授权
+2. **经营范围不覆盖**：执照经营范围与账号定位不符会被拒
+3. **资质过期**：提交前核对有效期，剩余不足 3 个月建议先更新
+4. **信息不一致**：公函主体、执照主体、付款主体三者需一致
+
+## 主页装修的转化逻辑
+主页不是"好看就行"，而是承接搜索与推荐的落地页。按这个顺序设计：
+
+1. **头像与名称**：一眼看出是谁、做什么
+2. **简介**：一句话说清价值 + 一个行动指令（如"私信领样品"）
+3. **封面图**：主推产品或活动，每 2 周更新
+4. **置顶视频**：3 条，分别是"我是谁""产品是什么""客户证言"
+5. **合集**：按场景或产品分类，方便新用户连续观看
+6. **组件**：小店、预约、私信、电话，按转化路径取舍
+
+## 装修检查清单
+- 简介里有没有违规词（最、第一、官方指定）
+- 封面图文字是否过多、移动端是否清晰
+- 置顶视频是否过期（活动已结束的必须换）
+- 组件链接是否可正常打开
+- 是否设置了自动回复，回复话术是否合规
+
+> 主页装修做得好，同等投放预算下的进店率通常会有明显差别。这是低成本高回报的动作。`,
+      related: ['t2', 't4', 'p1']
+    },
+    {
+      id: 't4',
+      cat: 'training',
+      sub: '账户与投放',
+      title: '磁力金牛开户与账户结构搭建',
+      summary: '开户资料、账户命名规范、三层结构怎么搭、冷启动预算怎么设。',
+      tags: ['开户', '磁力金牛', '账户结构', '冷启动', '预算'],
+      owner: '投放运营组',
+      updated: '2026-10-30',
+      version: 'v2.1',
+      level: '必读',
+      readMin: 6,
+      status: '草稿',
+      body: `## 开户需要什么
+1. 营业执照（与投放主体一致）
+2. 行业资质（按 [[p3|行业专项规范]] 对应准备）
+3. 落地页与小店（需已完成搭建并通过审核）
+4. 对接人信息与结算信息
+5. 代理授权（客户委托代理投放的书面授权）
+
+**主体一致性是第一道关**：投放主体、资质主体、收款主体不一致时，需提供完整授权链。
+
+## 账户命名规范
+建议统一格式：「客户简称-业务线-投放目标-日期」，例如「XX美妆-面膜-ROI-202611」。
+
+命名规范的价值在后期：多账户并行时，命名混乱会导致数据无法归集、复盘无法对齐。
+
+## 三层结构
+**账户 → 广告计划 → 广告组/创意**
+
+- **计划层**：按营销目标与预算切分（拉新 / 复购 / 清库存）
+- **广告组层**：按人群包与出价策略切分
+- **创意层**：同一个组内放 3-5 条素材做赛马
+
+### 结构搭建的三个原则
+1. **一计划一目标**：不要把拉新和复购塞进同一个计划，预算会互相挤占
+2. **一组一人群**：人群包不混投，否则无法判断哪个人群有效
+3. **同组多创意**：创意层要跑量，最少 3 条，避免单条素材决定成败
+
+## 冷启动预算
+建议单条计划日预算不低于「目标转化成本 × 20」。预算太小会导致模型学不动，表现为"消耗不出去"或"成本剧烈波动"。
+
+冷启动期 **不要频繁调价**（建议至少给 24 小时观察窗口），也不要在消耗刚起来时立刻降预算，容易打断模型学习。
+
+## 常见错误
+- 一上来建 20 个计划分散预算，每个都跑不动
+- 所有人群混在一个组，数据无法归因
+- 频繁改出价，模型反复重启
+- 素材只有 1 条，跑不动就以为"平台不行"
+
+> 结构清晰的账户，后期优化是"调参数"；结构混乱的账户，后期只能"重建"。`,
+      related: ['t5', 't10', 'p3']
+    },
+    {
+      id: 't5',
+      cat: 'training',
+      sub: '账户与投放',
+      title: '人群定向与出价策略入门',
+      summary: '定向不是越窄越好，出价不是越高越好。讲清两者的配合逻辑。',
+      tags: ['定向', '出价', '人群', '投放策略', 'ROI'],
+      owner: '投放运营组',
+      updated: '2026-10-28',
+      version: 'v1.8',
+      level: '推荐',
+      readMin: 6,
+      status: '草稿',
+      body: `## 定向的基本维度
+- **基础属性**：年龄、性别、地域、设备、网络环境
+- **行为兴趣**：内容偏好、互动行为、电商行为
+- **人群包**：自定义人群（一方数据上传）、Lookalike 扩展、平台人群包
+
+## 定向的核心矛盾
+定向越窄，人群越精准但**量级越小、成本越高、模型学习越难**；定向越宽，量级大但精准度下降。
+
+实操建议：**冷启动期适当放宽，跑出转化后再收窄**。先用宽定向 + 优质素材让模型找到人，再用人群包放量。
+
+## 出价的三种思路
+
+| 策略 | 适用场景 | 特点 |
+| --- | --- | --- |
+| 成本上限 | 有明确 ROI 要求 | 成本可控，但可能跑不出量 |
+| 优先跑量 | 新品冷启动、需要规模 | 起量快，成本波动大 |
+| 手动出价 | 成熟账户精细化 | 可控性最高，需要经验 |
+
+## 出价调整的纪律
+1. 单次调价幅度不超过 **10%**
+2. 两次调价间隔不少于 **4-6 小时**
+3. 消耗起量期（前 24 小时）**不降价**
+4. 成本超目标 30% 以上且持续 2 天，再考虑降价或换素材
+
+## 人群包的正确用法
+- **一方数据**：客户 CRM、历史订单手机号 → 上传后做排除或 Lookalike
+- **排除包**：已购用户、已留资用户必须排除，否则重复触达浪费预算
+- **Lookalike**：种子量建议不低于 1 万，量太少扩展质量差
+
+## 什么时候该怀疑定向
+如果素材 CTR 正常但 CVR 很低，问题通常在落地页或人群不匹配；如果 CTR 本身很低，问题在素材，不在定向。**先看 CTR 再决定动不动定向**。`,
+      related: ['t4', 't9', 't10']
+    },
+    {
+      id: 't6',
+      cat: 'training',
+      sub: '内容与直播',
+      title: '短视频素材生产 SOP',
+      summary: '从选题到批量测试的完整流水线，含脚本结构模板与测试方法。',
+      tags: ['素材', '短视频', '脚本', '剪辑', '测试', 'SOP'],
+      owner: '内容中心',
+      updated: '2026-11-01',
+      version: 'v2.4',
+      level: '必读',
+      readMin: 7,
+      status: '草稿',
+      body: `## 流水线五步
+**选题 → 脚本 → 拍摄 → 剪辑 → 测试**。每一步都有交付物，避免"拍完再想为什么拍"。
+
+## 一、选题
+三个来源：客户产品卖点、评论区真实问题、同行高完播内容的结构。
+
+判断标准：这个话题能否在 **3 秒内**让人知道"跟我有关"。
+
+## 二、脚本结构（15-30 秒）
+1. **0-3 秒 钩子**：冲突、反常识、强利益点、问题提问
+2. **3-10 秒 展开**：给出信息或场景，建立可信度
+3. **10-20 秒 印证**：使用场景、对比、细节特写
+4. **20-30 秒 行动**：明确的下一步（不是"点击下方"这种空话）
+
+### 钩子写法示例
+- 反常识：「用了三年精华，才知道第一步就错了」
+- 强利益：「这箱纸巾的价格，我怀疑标错了」
+- 场景痛点：「早上化妆卡粉的，问题不在粉底」
+- 提问：「你知道面膜敷完要不要洗吗」
+
+## 三、拍摄
+- 前 3 秒必须有人或强视觉变化，静止画面很难留住人
+- 竖屏 9:16，主体居中偏上，避免字幕遮挡
+- 环境音干净，口播用领夹麦
+- 每个镜头至少拍 3 条，后期有选择
+
+## 四、剪辑
+- 节奏：每 2-3 秒一个视觉变化
+- 字幕：全程字幕，字号足够大，重点词高亮
+- 音乐：只用可商用曲库（见 [[p8|素材侵权风险自查]]）
+- 结尾不要长时间定格 logo
+
+## 五、批量测试
+**一次至少做 3 个钩子版本，同一套正文**。这是最高效的测试方式：正文验证内容，钩子验证开头。
+
+测试纪律：
+- 单条素材消耗达到「目标成本 × 3」再做判断
+- 判断标准看 CTR 与 3 秒完播，不只看最终转化
+- 跑赢的素材做二次剪辑（换钩子、换开头、换 BGM）延长生命周期
+- 连续 5 条都不行，是选题问题，不是剪辑问题
+
+## 素材产能的现实建议
+一个成熟的素材组，日均稳定产出 3-5 条可用素材是合理目标。**不要追求单条爆款，要追求稳定的及格线产出 + 定期测试新方向**。`,
+      related: ['p8', 't7', 't10']
+    },
+    {
+      id: 't7',
+      cat: 'training',
+      sub: '内容与直播',
+      title: '直播间冷启动五步法',
+      summary: '新号开播没人看怎么办：从账号准备到流量承接的五个动作。',
+      tags: ['直播', '冷启动', '起量', '选品', '场控'],
+      owner: '直播运营组',
+      updated: '2026-10-30',
+      version: 'v2.2',
+      level: '必读',
+      readMin: 7,
+      status: '草稿',
+      body: `## 第一步：开播前的账号准备
+- 账号已完成企业号认证，主页装修完整（见 [[t3|企业号认证与装修]]）
+- 开播前 3-7 天保持短视频更新，让账号有活跃标签
+- 准备好直播封面、标题、预约（预约量影响开播初始流量）
+- 提前测试网络、灯光、收音、商品链接
+
+## 第二步：选品与排品
+冷启动期不要上太多品。建议结构：
+1. **引流款**（1-2 个）：低客单、高认知、有价格优势，用来拉停留
+2. **主推款**（2-3 个）：利润款，讲解时间最长
+3. **利润/搭配款**（2-3 个）：提高客单
+
+排品节奏：**每 20-30 分钟一个循环**，引流款反复上，主推款深度讲。
+
+## 第三步：脚本节奏
+一场 2 小时的直播，按 4-5 个循环设计。每个循环包含：
+- 开场留人（30 秒，说明本场有什么、为什么现在看）
+- 引流款讲解 + 上链接（5 分钟）
+- 主推款深度讲解（10 分钟，含痛点、演示、对比、答疑）
+- 促单（3 分钟，价格、库存、赠品、时限）
+- 过渡（2 分钟，预告下一个品）
+
+## 第四步：流量承接
+冷启动流量主要来自推荐与短视频引流。承接关键：
+- **前 3 分钟决定后续推流**：开播即进入状态，不要"等人多了再讲"
+- 停留时长是核心：用福利、抽奖、悬念留住人
+- 互动率：提问、扣屏、投票，每 5 分钟设计一次互动
+- 转化率：讲解要落到"为什么现在买"，而不是只讲产品参数
+
+## 第五步：投放配合
+自然流量跑出基础数据后，用投放放大：
+- 先用小额预算测人群与素材，找到转化成本区间
+- 用直播间引流目标，配合短视频素材（直播切片效果通常最好）
+- 投放节奏跟随排品节奏，主推款讲解时段加预算
+
+## 判断是否要调整
+- **曝光少**：账号权重/封面标题/预约量问题 → 优化封面与短视频引流
+- **曝光有但进不来**：封面或标题吸引力不足
+- **进来了但留不住**：开场话术与货品吸引力问题
+- **留住了但不买**：讲解没有建立信任，或价格优势不明显
+- **买了但不复购**：产品与服务问题，不是直播问题
+
+> 冷启动失败最常见的原因不是"没有流量"，而是"流量进来了接不住"。先修承接，再要流量。`,
+      related: ['t6', 't10', 'p10']
+    },
+    {
+      id: 't8',
+      cat: 'training',
+      sub: '达人与合作',
+      title: '达人筛选与合作执行流程',
+      summary: '怎么选、怎么谈、怎么管。附筛选评分表与执行节点。',
+      tags: ['达人', '筛选', '合作', '聚星', '执行'],
+      owner: '达人运营组',
+      updated: '2026-10-29',
+      version: 'v1.8',
+      level: '推荐',
+      readMin: 6,
+      status: '草稿',
+      body: `## 筛选的四个维度
+1. **匹配度**：粉丝画像（年龄、性别、地域、消费力）与目标人群重合度
+2. **内容力**：近期作品的自然完播、互动率，而不只看粉丝量
+3. **带货力**：历史带货转化、客单价带得动什么价位
+4. **安全性**：内容历史是否干净，是否有争议、违规记录
+
+## 筛选评分表（建议 100 分制）
+| 维度 | 权重 | 评分要点 |
+| --- | --- | --- |
+| 粉丝匹配 | 30 | 画像重合度、地域匹配 |
+| 互动质量 | 25 | 评论真实度、互动率 |
+| 带货能力 | 25 | 历史 GMV、转化率、客单 |
+| 内容调性 | 10 | 与品牌调性一致 |
+| 风险 | 10 | 无违规、无争议 |
+
+**低于 70 分不建议合作**，80 分以上可优先。
+
+## 合作执行节点
+1. **需求简报**：产品、目标人群、核心卖点、不能说的话、交付时间
+2. **人选确认**：提供 2-3 倍备选，客户确认
+3. **脚本沟通**：达人出初稿 → 品牌/代理审核 → 定稿
+4. **拍剪与审片**：成片审核通过才可发布，不接受先发后改
+5. **发布与监测**：约定发布时间，监测前 2 小时数据与评论区
+6. **数据回收**：播放、互动、点击、转化，72 小时内出结案
+
+## 效果不达预期怎么办
+先分清原因：
+- **播放低**：内容或账号流量问题，与产品关系不大
+- **播放高但点击低**：内容没有勾起兴趣，或引导不清晰
+- **点击高但转化低**：落地页/商品页/价格问题
+
+不要一上来就换达人，先看数据卡在哪一层。
+
+## 内容合规
+达人内容同样受广告规范约束，脚本需按 [[p11|达人内容合作合规与报备]] 审核，商业内容需做广告标识。`,
+      related: ['p11', 'p8', 't9']
+    },
+    {
+      id: 't9',
+      cat: 'training',
+      sub: '数据与复盘',
+      title: '核心指标口径与数据看板解读',
+      summary: '每个指标到底在说什么，以及诊断时该按什么顺序看。',
+      tags: ['数据', '指标', 'CTR', 'CVR', 'ROI', '口径', '看板'],
+      owner: '数据策略组',
+      updated: '2026-11-03',
+      version: 'v2.5',
+      level: '必读',
+      readMin: 7,
+      status: '草稿',
+      body: `## 指标口径
+
+| 指标 | 含义 | 说明 |
+| --- | --- | --- |
+| 曝光量 | 素材被展示的次数 | 反映拿量能力 |
+| 点击率 CTR | 点击 / 曝光 | 反映素材吸引力 |
+| 转化率 CVR | 转化数 / 点击数 | 反映落地页与商品力 |
+| 转化成本 | 消耗 / 转化数 | 核心成本指标 |
+| 千次曝光成本 CPM | 消耗 / 曝光 × 1000 | 反映流量竞争程度 |
+| 3 秒完播率 | 观看满 3 秒 / 播放 | 反映开头钩子质量 |
+| 完播率 | 完整观看 / 播放 | 反映内容整体质量 |
+| ROI | 成交金额 / 消耗 | 注意口径是否含退款 |
+| GMV | 成交总额 | 需明确是否含未付款、退款 |
+| 进店率 | 进店 / 点击 | 反映落地页承接 |
+
+**口径必须统一**：复盘时最常见的问题是两个团队用不同口径讨论同一个指标，结论完全相反。建议每次复盘先对齐口径。
+
+## 诊断顺序：从漏斗上游往下
+1. **曝光够不够** → 不够：预算、出价、账户结构、账户状态
+2. **CTR 高不高** → 低：素材钩子、封面、前 3 秒
+3. **CVR 高不高** → 低：落地页、价格、商品详情、人群匹配
+4. **成本可不可控** → 高：出价策略、转化目标设置
+5. **ROI 达不达标** → 不达标：客单价、复购、退款率
+
+**不要跳步**。曝光不够却去改落地页，是无效优化。
+
+## 数据看板怎么看
+- 看**趋势**而不是单点：至少看 3 天或 7 天移动平均
+- 看**分层**而不是总量：分计划、分人群、分素材看，总量会掩盖问题
+- 看**对比**：环比、同比、对照组（AB 测试）
+- 警惕**辛普森悖论**：总量变好但每个分组都变差的情况真实存在
+
+## 常见误读
+- CTR 高就是好素材？不一定，可能是标题党导致 CVR 低
+- ROI 高就是好？要看样本量与退款率
+- 成本涨了就是投放变差？可能是行业大盘流量成本上涨
+
+> 数据本身不给结论，是"对比"给结论。没有对照的数据，只能叫描述。`,
+      related: ['t10', 't11', 't5']
+    },
+    {
+      id: 't10',
+      cat: 'training',
+      sub: '数据与复盘',
+      title: '账户诊断 Checklist：不起量、成本高',
+      summary: '两个最常被问的问题，各给一套可执行的排查顺序。',
+      tags: ['诊断', '不起量', '成本', '优化', 'Checklist'],
+      owner: '投放运营组',
+      updated: '2026-11-02',
+      version: 'v2.3',
+      level: '必读',
+      readMin: 6,
+      status: '草稿',
+      body: `## 一、消耗不出去（不起量）
+
+按顺序排查，**不要跳步**：
+
+1. **账户状态**：余额是否充足、是否有违规限制、资质是否过期
+2. **审核状态**：素材是否全部在审或已驳回
+3. **出价水平**：出价是否显著低于行业竞争水平（参考同行业成本区间）
+4. **预算设置**：日预算是否低于「目标成本 × 20」
+5. **定向范围**：人群包是否过窄（覆盖人数过小）
+6. **账户结构**：是否计划过多导致预算分散
+7. **素材数量**：同组素材是否少于 3 条
+8. **落地页**：是否能正常打开、加载是否过慢
+9. **竞争环境**：是否处于大促节点，大盘成本整体上涨
+
+### 快速判断
+- 有曝光无消耗 → 出价过低或预算受限
+- 无曝光 → 审核、定向过窄、账户限制
+- 消耗少但在跑 → 预算或出价不足，先加预算观察 24 小时
+
+## 二、成本偏高
+
+1. **先看 CTR**：CTR 低 → 素材问题，换钩子
+2. **再看 CVR**：CVR 低 → 落地页、价格、人群匹配
+3. **看人群分层**：是否某个人群包在拉高整体成本，单独关掉测试
+4. **看时段**：是否在低效时段消耗过多，调整分时
+5. **看出价方式**：成本上限过紧会限制拿量，反而推高实际成本
+6. **看素材疲劳**：同一素材跑超过 7 天，CTR 通常开始衰减
+7. **看落地页转化路径**：表单字段是否过多、支付流程是否顺畅
+
+## 三、三天法则
+任何优化动作，**给足 3 天或至少 100 个转化样本**再判断。频繁改动会让账户永远处在学习期，数据永远不可信。
+
+## 四、什么时候该重建
+出现以下情况，优化不如重建：
+- 结构混乱（人群混投、目标混投）且已跑量较大
+- 历史数据污染严重（多次违规、异常流量）
+- 账户长期低于行业 CTR 一半
+
+重建时保留历史优质素材，结构按 [[t4|账户结构搭建]] 重来。`,
+      related: ['t4', 't5', 't9']
+    },
+    {
+      id: 't11',
+      cat: 'training',
+      sub: '数据与复盘',
+      title: '周报与月度复盘模板',
+      summary: '直接可用的结构：结论先行、数据支撑、下步动作，客户最认这种。',
+      tags: ['周报', '复盘', '模板', '汇报', '客户'],
+      owner: '代理赋能组',
+      updated: '2026-10-26',
+      version: 'v1.9',
+      level: '推荐',
+      readMin: 5,
+      status: '草稿',
+      body: `## 周报结构（一页纸）
+1. **本周结论**（3 条以内，每条形如「CTR 提升 18%，主因换了开头钩子」）
+2. **核心数据**（本周 vs 上周，消耗、转化、成本、ROI）
+3. **关键动作**（做了什么，为什么做）
+4. **问题与风险**（没解决的，需要客户配合的）
+5. **下周计划**（3 件事，可衡量）
+
+> 客户不看过程，只看结论和下一步。**把结论放第一行**，数据放第二块。
+
+## 月度复盘结构
+### 第一部分：目标达成
+- 月初目标 vs 实际，差在哪
+- 达成/未达成的核心原因（不超过 2 条）
+
+### 第二部分：分模块复盘
+- 内容：产出数量、爆款率、CTR 变化
+- 投放：消耗、成本、ROI、账户结构变化
+- 直播：场次、场均 GMV、停留、转化
+- 达人：合作数量、单达人产出
+
+### 第三部分：有效与无效
+明确写出：
+- **这个月什么有效**（可复用的方法）
+- **这个月什么无效**（不要再做的方法）
+
+这一部分最有价值，但最常被跳过。
+
+### 第四部分：下月计划
+- 目标（具体数字）
+- 三个关键动作
+- 需要的资源与客户配合
+
+## 汇报的三个原则
+1. **结论先行**：先说结果，再说过程
+2. **数据说话**：每个判断都挂一个数字
+3. **承担责任但不背锅**：属于投放的问题认，属于产品/价格/供应链的问题要如实指出并给建议
+
+## 常见错误
+- 通篇流水账（"本周一做了 A，周二做了 B"）
+- 只报喜不报忧，问题留到月底爆发
+- 计划写"继续优化"，没有具体动作
+- 数据没有对照，只有绝对值
+
+> 一份好周报的标准：客户看完知道"现在什么情况、你打算怎么办、需要我做什么"。`,
+      related: ['t9', 't10', 't12']
+    },
+    {
+      id: 't12',
+      cat: 'training',
+      sub: '数据与复盘',
+      title: '客户提案与汇报话术结构',
+      summary: '新客户比稿、季度汇报的通用结构，以及如何管理客户预期。',
+      tags: ['提案', '汇报', '话术', '客户', '预期管理'],
+      owner: '代理赋能组',
+      updated: '2026-10-25',
+      version: 'v1.6',
+      level: '参考',
+      readMin: 5,
+      status: '草稿',
+      body: `## 提案的黄金结构
+1. **我们理解你的问题**（复述客户的真实痛点，证明你听懂了）
+2. **我们的判断**（问题出在哪，为什么之前的做法没效果）
+3. **我们怎么做**（三件事，不要十件）
+4. **怎么衡量**（指标、周期、节点）
+5. **需要你配合什么**（资源、素材、决策时效）
+6. **投入与预期**（预算、人力、见效节奏）
+
+第 1 和第 2 部分决定客户信不信你，第 5 部分决定项目能不能跑起来。**大多数提案死在"只讲我们会做什么"，不讲"你要做什么"**。
+
+## 预期管理的三句话
+- 「第一个月是模型学习期，成本会波动，我们看趋势不看单日。」
+- 「素材有生命周期，我们会持续产出，但不是每条都能跑赢。」
+- 「ROI 的天花板由客单价和复购决定，投放只能逼近不能突破。」
+
+提前说清楚，比事后解释便宜。
+
+## 汇报时的应对
+**客户问"为什么没效果"**
+→ 先给归因（漏斗哪一层），再给动作，不要先解释客观原因。
+
+**客户要求"保证 ROI"**
+→ 说明影响 ROI 的变量中哪些不可控（客单、退款、供应），承诺可承诺的部分（成本控制、素材产能、响应时效）。
+
+**客户想砍预算**
+→ 给出不同预算档位的预期差异，让客户做选择，而不是直接接受降价后摆烂。
+
+**客户要"马上起量"**
+→ 说明起量的必要条件是素材数量与预算，缺一不可，给出最快路径与时间表。
+
+## 一个实用习惯
+每次汇报留一页「如果只做一件事」。当客户资源有限、注意力有限时，这一页往往是被记住的那一页。`,
+      related: ['t11', 't9', 't2']
+    }
+  ],
+
+  /* ========== FAQ ========== */
+  faqs: [
+    { id: 'f1', g: '审核', q: '素材被驳回最多的情况是什么？', a: '集中在三类：绝对化用语（最、第一、全网最低）、无依据的效果承诺（包治、稳赚、保证收益）、以及落地页与素材不一致。建议提交前按《素材高频驳回原因 Top 20》做 60 秒自查，能挡掉大部分常见驳回。', ref: 'p2', updated: '2026-11-02' },
+    { id: 'f2', g: '审核', q: '素材驳回后可以直接改了再提交吗？', a: '可以，但必须针对驳回原因实质修改，并在备注写清改了什么。同一违规点换词重提会触发重复违规判定，反而加重处置。同一素材重复提交 3 次以上仍驳回，建议联系行业对接人预审。', ref: 'p1', updated: '2026-10-28' },
+    { id: 'f3', g: '审核', q: '审核一般要多久？大促会变慢吗？', a: '常规 1 个工作日内出结果。大促与节点（618、双11、年货节）期间可能延长至 2-3 个工作日。建议大促前 T-14 天完成主素材过审，T-7 天完成备用素材过审。', ref: 'p13', updated: '2026-10-12' },
+    { id: 'f4', g: '审核', q: '医疗类客户没有资质可以先投吗？', a: '不可以。医疗、医美、药品、医疗器械必须提供对应资质且经营范围覆盖所推广服务，没有资质一律不接。也不要用「健康咨询」「养生科普」的外壳规避行业判定，平台按实际推广内容认定。', ref: 'p3', updated: '2026-10-15' },
+    { id: 'f5', g: '审核', q: '普通食品能说增强免疫力吗？', a: '不能。普通食品不得宣称任何保健或治疗功效，只能描述口味、原料、工艺、规格、食用场景。只有取得注册或备案的保健食品才能宣称批准的保健功能，且必须标注「本品不能代替药物」。', ref: 'p4', updated: '2026-10-15' },
+    { id: 'f6', g: '审核', q: '背景音乐用平台的音乐库就安全吗？', a: '相对安全，但仍需确认曲目的授权范围是否包含商用推广。不要从其他短视频下载音频、不要用仅限个人非商用的「免版权」曲库。建议建立团队可商用曲库并留存授权凭证。', ref: 'p8', updated: '2026-10-25' },
+    { id: 'f7', g: '审核', q: '违规扣分后怎么申诉才有用？', a: '申诉的关键是提供新的、可核验的证据，而不是重复解释。有效材料包括资质原件与授权链、整改前后对比、第三方报告、情况说明（原因+整改+预防）。只写「已修改请重审」基本无效。常规复核 1-3 个工作日。', ref: 'p12', updated: '2026-10-27' },
+    { id: 'f8', g: '审核', q: '达人自己写错话，品牌方会被处罚吗？', a: '会。通过聚星等产品进行的达人合作属于商业推广，广告主与达人共同承担内容责任。「达人自己写的脚本」不是免责理由。因此脚本必须审核、成片必须审核通过才可发布。', ref: 'p11', updated: '2026-10-29' },
+
+    { id: 'f9', g: '开户', q: '新客户开户需要准备什么？', a: '营业执照（与投放主体一致）、行业资质（按行业规范准备）、已搭建并通过审核的落地页/小店、对接人与结算信息、客户委托代理投放的授权。主体一致性是第一道关，不一致需提供完整授权链。', ref: 't4', updated: '2026-10-30' },
+    { id: 'f10', g: '开户', q: '开户主体和资质主体不一致怎么办？', a: '需要提供完整的授权链路证明，例如品牌方授权经销商、集团授权子公司。授权需覆盖推广内容与投放行为，且在有效期内。无法提供授权链的，建议调整为主体一致后再投。', ref: 't4', updated: '2026-10-30' },
+    { id: 'f11', g: '开户', q: '一个客户要开多个账户怎么管理？', a: '统一命名规范：客户简称-业务线-投放目标-日期。按营销目标切分计划，避免多账户重复投放同一人群。多账户并行时建议设置排除包（已购、已留资）防止重复触达浪费预算。', ref: 't4', updated: '2026-10-30' },
+    { id: 'f12', g: '开户', q: '企业号认证被拒了，常见原因？', a: '四个高频原因：名称含他人商标无授权、营业执照经营范围与账号定位不符、资质过期、公函主体与执照主体不一致。提交前逐项核对，剩余有效期不足 3 个月的资质建议先更新。', ref: 't3', updated: '2026-10-24' },
+
+    { id: 'f13', g: '投放', q: '账户不起量怎么办？', a: '按顺序排查：账户余额与限制、素材审核状态、出价是否低于竞争水平、日预算是否低于「目标成本×20」、定向是否过窄、计划是否过多导致预算分散、同组素材是否少于 3 条、落地页是否可打开。不要跳步，曝光不够时改落地页是无效优化。', ref: 't10', updated: '2026-11-02' },
+    { id: 'f14', g: '投放', q: '成本突然涨了怎么处理？', a: '先看是全局还是局部：分层看计划、人群、素材。再判断是否大盘因素（大促、节点）。单次调价幅度不超过 10%，间隔不少于 4-6 小时，消耗起量期不降价。给足 3 天或 100 个转化样本再判断优化是否有效。', ref: 't10', updated: '2026-11-02' },
+    { id: 'f15', g: '投放', q: '账户结构应该怎么搭？', a: '三层：账户→计划→广告组/创意。原则是一计划一目标、一组一人群、同组至少 3 条创意。不要把拉新和复购放在同一计划，也不要把多个人群混在一个组，否则无法归因。', ref: 't4', updated: '2026-10-30' },
+    { id: 'f16', g: '投放', q: '定向是越窄越好吗？', a: '不是。定向越窄，量级越小、成本越高、模型越难学习。冷启动期应适当放宽，跑出转化后再收窄，用人群包做精准放量。Lookalike 的种子量建议不低于 1 万。', ref: 't5', updated: '2026-10-28' },
+    { id: 'f17', g: '投放', q: 'CTR 正常但 CVR 很低，问题在哪？', a: '通常不在素材，而在承接：落地页首屏与素材不一致、加载慢、价格或优惠与素材不符、表单字段过多、人群与产品不匹配。先做一次素材-落地页一致性检查。', ref: 't9', updated: '2026-11-03' },
+    { id: 'f18', g: '投放', q: '冷启动预算给多少合适？', a: '建议单条计划日预算不低于「目标转化成本 × 20」，否则模型学不动，表现为消耗不出去或成本剧烈波动。同时不要一上来建 20 个计划分散预算，先跑通 1-2 个结构再复制。', ref: 't4', updated: '2026-10-30' },
+    { id: 'f19', g: '投放', q: '粉条和磁力金牛有什么区别，什么时候用哪个？', a: '粉条是内容加热工具，主要放大原生内容的曝光与互动，适合养号、测试内容、打基础流量；磁力金牛是电商广告投放平台，以转化为目标，适合有明确成交或线索目标的场景。实操上常用粉条测内容，跑赢的内容再进金牛放量。注：具体产品能力以官方最新说明为准。', ref: 't2', updated: '2026-11-05' },
+
+    { id: 'f20', g: '直播', q: '新号开播没人看怎么办？', a: '按五步走：开播前 3-7 天保持短视频更新养标签、准备好封面标题与预约、精简选品（引流款+主推款）、设计 20-30 分钟循环脚本、用投放承接。关键判断是分清「没曝光」还是「进来了留不住」，两者的解法完全不同。', ref: 't7', updated: '2026-10-30' },
+    { id: 'f21', g: '直播', q: '直播间停留时长怎么提升？', a: '前 3 分钟决定后续推流，开播即进入状态不要等人。用福利、抽奖、悬念留人，每 5 分钟设计一次互动，排品节奏上引流款反复上。停留差通常是开场话术与货品吸引力的问题，不是流量问题。', ref: 't7', updated: '2026-10-30' },
+    { id: 'f22', g: '直播', q: '直播口播有哪些绝对不能说的？', a: '十类：效果与收益承诺、绝对化用语、贬低同行、虚假原价与倒计时、诱导站外交易、医疗功效宣称、未授权明星专家形象、诱导未成年人消费、虚假抽奖免单、过度堆叠诱导互动话术。建议给主播准备「不能说的十句话」话术卡。', ref: 'p10', updated: '2026-10-30' },
+
+    { id: 'f23', g: '达人', q: '达人怎么筛选？', a: '四个维度打分：粉丝匹配度（30）、互动质量（25）、带货能力（25）、内容调性与风险（20）。不要只看粉丝量，重点看近期作品的自然完播与互动真实度。总分低于 70 不建议合作。', ref: 't8', updated: '2026-10-29' },
+    { id: 'f24', g: '达人', q: '达人内容用于付费投放需要额外授权吗？', a: '需要。仅授权「账号发布」不等于授权「广告投放」。把达人内容用于信息流投放必须在合同中明确约定，授权范围需包含付费推广，否则容易产生纠纷。', ref: 'p11', updated: '2026-10-29' },
+    { id: 'f25', g: '达人', q: '达人合作效果不好，是换达人还是换内容？', a: '先看数据卡在哪一层：播放低是内容/账号流量问题；播放高但点击低是内容没有勾起兴趣；点击高但转化低是落地页或价格问题。只有确认是达人粉丝不匹配才换人。', ref: 't8', updated: '2026-10-29' },
+
+    { id: 'f26', g: '数据', q: 'ROI 的口径到底怎么算？', a: '常用为 成交金额/消耗，但必须明确三个细节：成交是否含未付款、是否扣退款、归因窗口多长。两个团队用不同口径讨论同一指标会得出完全相反的结论，复盘前先对齐口径。', ref: 't9', updated: '2026-11-03' },
+    { id: 'f27', g: '数据', q: '3 秒完播率低说明什么？', a: '说明开头钩子没抓住人。0-3 秒必须有冲突、反常识、强利益点或明确提问，且画面要有人或强视觉变化。完播率低但 CTR 高，常见于标题党素材，会导致 CVR 也低。', ref: 't6', updated: '2026-11-01' },
+    { id: 'f28', g: '数据', q: '复盘时应该看哪些指标？', a: '按漏斗顺序：曝光→CTR→CVR→成本→ROI。看趋势不看单点（3-7 天移动平均），看分层不看总量，看对比（环比/同比/AB）。没有对照的数据只能叫描述，不能叫结论。', ref: 't9', updated: '2026-11-03' },
+
+    { id: 'f29', g: '合作', q: '客户要求保证 ROI，怎么回应？', a: '说明影响 ROI 的变量中哪些不可控（客单价、退款率、供应链），承诺可承诺的部分（成本控制、素材产能、响应时效），并给出不同预算档位的预期区间，让客户做选择而不是口头承诺。', ref: 't12', updated: '2026-10-25' },
+    { id: 'f30', g: '合作', q: '第一次给客户做提案，重点讲什么？', a: '重点是「我们理解你的问题」和「需要你配合什么」。大多数提案死在只讲我们会做什么，不讲客户要做什么。三件事比十件事更可信，每个判断都挂一个数字。', ref: 't12', updated: '2026-10-25' },
+    { id: 'f31', g: '合作', q: '客户预算很少，还值得接吗？', a: '先算清最低可行预算：素材产能 + 冷启动测试成本 + 学习期损耗。低于这个线，投放跑不出有效数据，双方都不会满意。要么提高预算，要么改为做内容与自然流量，不做投放。', ref: 't12', updated: '2026-10-25' },
+
+    { id: 'f32', g: '内容', q: '一条素材能跑多久？', a: '通常 7 天后 CTR 开始衰减。判断标准是 CTR 与 3 秒完播的下降幅度。跑赢的素材做二次剪辑（换钩子、换开头、换 BGM）可以延长生命周期，比重新做一条成本低得多。', ref: 't6', updated: '2026-11-01' },
+    { id: 'f33', g: '内容', q: '怎么高效测试素材？', a: '一次做 3 个钩子版本 + 同一套正文，这样正文验证内容、钩子验证开头。单条素材消耗达到「目标成本×3」再判断。连续 5 条都不行是选题问题，不是剪辑问题。', ref: 't6', updated: '2026-11-01' },
+    { id: 'f34', g: '内容', q: '主页装修真的影响转化吗？', a: '影响明显。主页是承接搜索与推荐的落地页，头像名称、简介、封面、置顶视频、合集、组件的顺序设计直接决定进店率。这是低成本高回报的动作，建议每 2 周更新一次封面与置顶。', ref: 't3', updated: '2026-10-24' }
+  ],
+
+  /* 内容治理：待补清单 */
+  gaps: [
+    { name: '本地生活行业投放规范', pri: 'P0', owner: '行业合规组', status: '待补', note: '已有本地生活客户在投，无规范可依，最优先' },
+    { name: '磁力金牛后台操作图解（逐屏截图版）', pri: 'P0', owner: '投放运营组', status: '待补', note: '文字版已有，新人仍看不懂，需配图' },
+    { name: '素材驳回原因分类归因表（月度）', pri: 'P0', owner: '投放合规组', status: '制作中', note: '按客户/行业/原因三维统计，月度更新' },
+    { name: '达人报价与议价参考区间', pri: 'P1', owner: '达人运营组', status: '待补', note: '敏感信息，需内部授权后分层开放' },
+    { name: '各行业投放成本基准区间', pri: 'P1', owner: '数据策略组', status: '待补', note: '用于诊断与预期管理，季度更新' },
+    { name: '直播切片二次创作规范', pri: 'P1', owner: '内容中心', status: '待补', note: '涉及达人授权，需与法务确认' },
+    { name: '客户交接与账户迁移流程', pri: 'P1', owner: '代理赋能组', status: '待补', note: '代理换手场景高频，当前靠口头传' },
+    { name: '结算、返点与对账周期说明', pri: 'P1', owner: '商务组', status: '待补', note: '涉财务口径，需商务确认后发布' },
+    { name: 'AI 工具在素材生产中的使用边界', pri: 'P2', owner: '内容中心', status: '待补', note: 'AI 生成素材的版权与标识要求尚不明确' },
+    { name: '跨境与出海业务投放指引', pri: 'P2', owner: '行业合规组', status: '暂缓', note: '当前业务未覆盖' }
+  ]
+};
+
+/* 全局便捷索引（运行时构建） */
+window.KB.docMap = {};
+window.KB.docs.forEach(function (d) { window.KB.docMap[d.id] = d; });
+window.KB.faqMap = {};
+window.KB.faqs.forEach(function (f) { window.KB.faqMap[f.id] = f; });
+
+</script>
+<script>
+/* 快手阵地业务知识工作台 —— 界面与检索引擎
+ * 纯前端运行：中文二元分词 + BM25 检索 + 意图识别 + 答案组装
+ */
+(function () {
+  'use strict';
+
+  var KB = window.KB;
+  var DOCS = KB.docs, FAQS = KB.faqs;
+  var DOC_MAP = KB.docMap, FAQ_MAP = KB.faqMap;
+  var CAT_NAME = { policy: '投放规范与政策', training: '培训与操作指南', faq: 'FAQ 答疑' };
+
+  /* ============ 图标 ============ */
+  var PATHS = {
+    search: '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>',
+    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8"/>',
+    home: '<path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"/>',
+    book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18.5V5.5"/>',
+    shield: '<path d="M12 3 5 6v6c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
+    chat: '<path d="M20 12a7.5 7.5 0 0 1-11 6.7L4 20l1.3-4.2A7.5 7.5 0 1 1 20 12z"/>',
+    star: '<path d="m12 4 2.4 5 5.6.8-4 3.9 1 5.5-5-2.7-5 2.7 1-5.5-4-3.9 5.6-.8z"/>',
+    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    file: '<path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/><path d="M14 3v4h4"/>',
+    down: '<path d="m7 10 5 5 5-5"/>',
+    right: '<path d="m10 7 5 5-5 5"/>',
+    arrow: '<path d="M5 12h13M13 6l6 6-6 6"/>',
+    send: '<path d="M4.5 12h14M13 6.5 19.5 12 13 17.5"/>',
+    up: '<path d="M7 14.5 12 9.5l5 5"/>',
+    dn: '<path d="M7 9.5 12 14.5l5-5"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M6 15H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7"/>',
+    warn: '<path d="M12 4.5 21 20H3z"/><path d="M12 10v4M12 17h.01"/>',
+    grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+    target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/>',
+    user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>',
+    live: '<rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 11 5-3v8l-5-3z"/>',
+    chart: '<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12.5 16V7M17 16v-8"/>',
+    layers: '<path d="m12 3 8 4.5-8 4.5-8-4.5z"/><path d="m4 12 8 4.5 8-4.5"/><path d="m4 16.5 8 4.5 8-4.5"/>',
+    close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    bolt: '<path d="M13 3 5 13.5h5L10 21l8-10.5h-5z"/>',
+    ext: '<path d="M14 4h6v6"/><path d="M20 4l-8.5 8.5"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+    dl: '<path d="M12 4v11M8 11.5l4 4 4-4"/><path d="M5 19h14"/>',
+    pinch: '<path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="8.5"/>'
+  };
+  function ico(n, c) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="' + (c || '') + '">' + (PATHS[n] || '') + '</svg>';
+  }
+
+  /* ============ 基础工具 ============ */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function uniq(a) { var o = [], s = {}; a.forEach(function (x) { if (!s[x]) { s[x] = 1; o.push(x); } }); return o; }
+  function clip(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function plainOf(s) {
+    return String(s || '')
+      .replace(/\*\*/g, '')
+      .replace(/\[\[([a-z0-9]+)\|([^\]]+)\]\]/g, '$2')
+      .replace(/\[\[([a-z0-9]+)\]\]/g, '$1')
+      .replace(/^#{1,3}\s+/gm, '')
+      .replace(/^>\s?/gm, '')
+      .replace(/^\|?[\s:|-]*-{3,}[\s:|-]*\|?\s*$/gm, '')
+      .replace(/\s*\|\s*/g, '，')
+      .replace(/^\d+[.、)]\s+/gm, '')
+      .replace(/^[-*]\s+/gm, '')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/，+/g, '，')
+      .trim();
+  }
+  function fmtDate(d) { return String(d || '').replace(/-/g, '.'); }
+
+  /* 本地存储 */
+  var S = {
+    get: function (k, d) {
+      try { var v = localStorage.getItem('kskb.' + k); return v ? JSON.parse(v) : d; }
+      catch (e) { return d; }
+    },
+    set: function (k, v) {
+      try { localStorage.setItem('kskb.' + k, JSON.stringify(v)); } catch (e) {}
+    }
+  };
+  function favs() { return S.get('fav', []); }
+  function toggleFav(id) {
+    var a = favs(), i = a.indexOf(id);
+    if (i >= 0) a.splice(i, 1); else a.unshift(id);
+    S.set('fav', a); return i < 0;
+  }
+  function pushRecent(id) {
+    var a = S.get('recent', []).filter(function (x) { return x.id !== id; });
+    a.unshift({ id: id, ts: Date.now() });
+    S.set('recent', a.slice(0, 24));
+  }
+  function pushPending(q) {
+    var a = S.get('pending', []);
+    a.unshift({ q: q, ts: Date.now() });
+    S.set('pending', a.slice(0, 60));
+  }
+
+  /* ============ 分词 & 索引 ============ */
+  var STOP = {};
+  ('的 了 是 在 和 有 就 不 人 都 一 上 也 很 到 说 要 去 你 会 着 没 看 好 自己 这 那 什么 怎么 怎样 如何 为 吗 呢 吧 啊 我 他 她 它 们 与 及 或 把 被 让 给 对 从 而 但 还 又 能 可以 需要 一个 这个 那个 哪些 多少 时候 东西 事情 情况 一下 一些 一般 具体 相关 关于 '
+    + '最 更 太 再 才 等 各 每 些 个 之 其 该 此 呢 呀 嘛 请 想 用 做 吗 么 哪 谁 何 若 则 并 且 '
+    + 'the a an to of is are and or for how what do does i my can you it this that be in on at with').split(/\s+/).forEach(function (w) { if (w) STOP[w] = 1; });
+
+  var SYN = [
+    [['金牛'], '磁力金牛'], [['聚星'], '磁力聚星'], [['智投'], '磁力智投'],
+    [['蓝v', '蓝V', '认证号', '商家号'], '企业号'],
+    [['封号', '被封', '封禁', '限制'], '违规 处罚'],
+    [['不过审', '没过', '被拒', '拒绝', '不通过'], '驳回'],
+    [['片子', '视频', '创意', '脚本'], '素材'],
+    [['投产比', 'roi'], 'ROI'],
+    [['千次展现', '千次曝光'], 'CPM'],
+    [['点击率'], 'CTR'], [['转化率'], 'CVR'],
+    [['开号', '开通账户', '注册账户'], '开户'],
+    [['预算', '花费'], '消耗'],
+    [['达人', '网红', '博主', 'kol'], '达人'],
+    [['直播'], '直播'], [['起量', '跑量'], '起量 消耗'],
+    [['新人', '小白'], '新人'],
+    [['退款', '退货'], '退款'],
+    [['罚款', '扣分'], '扣分']
+  ];
+
+  function tokenize(str) {
+    var s = String(str || '').toLowerCase(), out = [], re = /[a-z0-9][a-z0-9_.+-]*|[\u4e00-\u9fff]+/g, m;
+    while ((m = re.exec(s))) {
+      var t = m[0];
+      if (/^[a-z0-9]/.test(t)) {
+        if (t.length >= 2 && !STOP[t]) out.push(t);
+      } else {
+        if (t.length === 1) { if (!STOP[t]) out.push(t); continue; }
+        for (var i = 0; i < t.length - 1; i++) {
+          var bg = t.slice(i, i + 2);
+          if (!STOP[bg]) out.push(bg);
+        }
+        if (t.length <= 4 && !STOP[t]) out.push(t);
+      }
+    }
+    return out;
+  }
+  function expand(q) {
+    var terms = tokenize(q), low = String(q).toLowerCase();
+    SYN.forEach(function (pair) {
+      var hit = pair[0].some(function (k) { return low.indexOf(k.toLowerCase()) >= 0; });
+      if (hit) terms = terms.concat(tokenize(pair[1]));
+    });
+    return uniq(terms);
+  }
+
+  var CHUNKS = [], IDF = {}, AVG = 0;
+
+  function sections(body) {
+    var lines = String(body).split('\n'), out = [], cur = { h: '', t: [] };
+    lines.forEach(function (ln) {
+      var m = /^##\s+(.*)$/.exec(ln.trim());
+      if (m) { if (cur.t.join('').trim()) out.push(cur); cur = { h: m[1], t: [] }; }
+      else cur.t.push(ln);
+    });
+    if (cur.t.join('').trim()) out.push(cur);
+    return out.map(function (s) { return { h: s.h, t: s.t.join('\n').trim() }; });
+  }
+
+  function buildIndex() {
+    DOCS.forEach(function (d) {
+      sections(d.body).forEach(function (s) {
+        var txt = s.t;
+        CHUNKS.push({
+          docId: d.id, h: s.h, t: txt,
+          plain: plainOf((s.h ? s.h + '。' : '') + txt).toLowerCase(),
+          titlePlain: (d.title + ' ' + d.sub + ' ' + d.tags.join(' ')).toLowerCase()
+        });
+      });
+    });
+    var df = {}, total = 0;
+    CHUNKS.forEach(function (c) {
+      c.tf = {};
+      tokenize(c.plain).forEach(function (t) { c.tf[t] = (c.tf[t] || 0) + 1; });
+      c.len = tokenize(c.plain).length || 1;
+      total += c.len;
+      Object.keys(c.tf).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+    });
+    var N = CHUNKS.length;
+    AVG = total / N;
+    Object.keys(df).forEach(function (t) { IDF[t] = Math.log(1 + N / (1 + df[t])); });
+    /* FAQ 索引 */
+    FAQS.forEach(function (f) {
+      f._q = tokenize(f.q).concat(tokenize(f.g)).join(' ');
+      f._a = tokenize(f.a).join(' ');
+      f._plain = (f.q + ' ' + f.a).toLowerCase();
+    });
+  }
+
+  function scoreChunk(c, terms) {
+    var s = 0, matched = 0, k1 = 1.4, b = 0.62;
+    var seen = {};
+    terms.forEach(function (t) {
+      if (seen[t]) return;
+      seen[t] = 1;
+      var tf = c.tf[t];
+      if (tf) {
+        matched++;
+        var idf = IDF[t] || 1.2;
+        s += idf * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * c.len / AVG));
+      }
+      if (c.titlePlain.indexOf(t) >= 0) s += (IDF[t] || 1.2) * 0.55;
+    });
+    if (!matched) return 0;
+    var cov = matched / Math.min(terms.length, 8);
+    s *= 0.45 + 0.95 * Math.min(cov, 1);
+    return s;
+  }
+
+  function searchDocs(q, limit) {
+    var terms = expand(q);
+    if (!terms.length) return [];
+    var qn = String(q).toLowerCase().replace(/[\s，。？！、,.?!]/g, '');
+    var hits = [];
+    CHUNKS.forEach(function (c) {
+      var s = scoreChunk(c, terms);
+      if (!s) return;
+      if (qn.length >= 2 && c.plain.indexOf(qn) >= 0) s += 5;
+      hits.push({ c: c, s: s });
+    });
+    if (!hits.length) return [];
+    hits.sort(function (a, b) { return b.s - a.s; });
+    var byDoc = {};
+    hits.forEach(function (h) {
+      var id = h.c.docId;
+      if (!byDoc[id]) byDoc[id] = { doc: DOC_MAP[id], score: 0, chunks: [] };
+      byDoc[id].score += h.s * (byDoc[id].chunks.length === 0 ? 1 : 0.28);
+      if (byDoc[id].chunks.length < 3) byDoc[id].chunks.push(h.c);
+    });
+    var arr = Object.keys(byDoc).map(function (k) {
+      var x = byDoc[k];
+      var head = (x.doc.title + ' ' + x.doc.sub + ' ' + x.doc.tags.join(' ') + ' ' + x.doc.summary).toLowerCase();
+      var th = 0;
+      terms.forEach(function (t) { if (head.indexOf(t) >= 0) th++; });
+      x.titleHits = th;
+      x.score += th * 2.6;                       /* 标题/标签命中，强信号 */
+      var hay = head + ' ' + plainOf(x.doc.body).toLowerCase();
+      var cov = 0;
+      terms.forEach(function (t) { if (hay.indexOf(t) >= 0) cov++; });
+      x.coverage = cov / terms.length;
+      x.snippet = bestSentence(x.chunks[0], terms) || clip(x.doc.summary, 92);
+      return x;
+    });
+    arr.sort(function (a, b) { return b.score - a.score; });
+    return arr.slice(0, limit || 5);
+  }
+
+  function searchFaqs(q, limit) {
+    var terms = expand(q);
+    if (!terms.length) return [];
+    var out = [];
+    FAQS.forEach(function (f) {
+      var s = 0, matched = 0;
+      terms.forEach(function (t) {
+        if (f._q.indexOf(t) >= 0) { s += 3.2; matched++; }
+        else if (f._a.indexOf(t) >= 0) { s += 0.55; matched++; }
+      });
+      if (!matched) return;
+      s *= 0.5 + 0.9 * Math.min(matched / Math.min(terms.length, 6), 1);
+      out.push({ faq: f, score: s });
+    });
+    out.sort(function (a, b) { return b.score - a.score; });
+    return out.slice(0, limit || 4);
+  }
+
+  function bestSentence(chunk, terms) {
+    var raw = chunk.t.split('\n').filter(function (l) { return !/^\s*\|/.test(l); }).join('\n');
+    var parts = raw.split(/[。！？!?\n]+/).map(function (x) { return plainOf(x); })
+      .filter(function (x) { return x.length > 6 && x.indexOf('，') !== 0; });
+    if (!parts.length) {
+      var fb = plainOf(raw).replace(/^[，,、#\s]+/, '');
+      return fb.length > 8 ? clip(fb, 96) : '';
+    }
+    var best = parts[0], bs = -1;
+    parts.forEach(function (p) {
+      var sc = 0, lp = p.toLowerCase();
+      terms.forEach(function (t) { if (lp.indexOf(t) >= 0) sc += t.length; });
+      if (sc > bs) { bs = sc; best = p; }
+    });
+    return clip(best, 96);
+  }
+
+  /* ============ Markdown 渲染 ============ */
+  function inlineMd(s) {
+    return esc(s)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[\[([a-z0-9]+)\|([^\]]+)\]\]/g, function (m, id, txt) {
+        return '<span class="doc-link" data-nav="doc/' + id + '">' + txt + '</span>';
+      })
+      .replace(/\[\[([a-z0-9]+)\]\]/g, function (m, id) {
+        return '<span class="doc-link" data-nav="doc/' + id + '">' + (DOC_MAP[id] ? DOC_MAP[id].title : id) + '</span>';
+      });
+  }
+
+  function renderMd(src) {
+    var lines = String(src).replace(/\r/g, '').split('\n');
+    var html = '', toc = [], i = 0, para = [];
+    function flush() { if (para.length) { html += '<p>' + inlineMd(para.join(' ')) + '</p>'; para = []; } }
+    while (i < lines.length) {
+      var t = lines[i].trim();
+      if (!t) { flush(); i++; continue; }
+      if (/^##\s+/.test(t)) {
+        flush();
+        var txt = t.replace(/^##\s+/, ''), id = 'h' + toc.length;
+        toc.push({ id: id, text: txt });
+        html += '<h2 id="' + id + '">' + inlineMd(txt) + '</h2>'; i++; continue;
+      }
+      if (/^###\s+/.test(t)) { flush(); html += '<h3>' + inlineMd(t.replace(/^###\s+/, '')) + '</h3>'; i++; continue; }
+      if (/^>\s?/.test(t)) {
+        flush(); var bq = [];
+        while (i < lines.length && /^>\s?/.test(lines[i].trim())) { bq.push(lines[i].trim().replace(/^>\s?/, '')); i++; }
+        html += '<blockquote><p>' + inlineMd(bq.join(' ')) + '</p></blockquote>'; continue;
+      }
+      if (/^\|/.test(t)) {
+        flush(); var rows = [];
+        while (i < lines.length && /^\|/.test(lines[i].trim())) { rows.push(lines[i].trim()); i++; }
+        html += renderTable(rows); continue;
+      }
+      if (/^[-*]\s+/.test(t)) {
+        flush(); var ul = [];
+        while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) { ul.push(lines[i].trim().replace(/^[-*]\s+/, '')); i++; }
+        html += '<ul>' + ul.map(function (x) { return '<li>' + inlineMd(x) + '</li>'; }).join('') + '</ul>'; continue;
+      }
+      if (/^\d+[.、)]\s+/.test(t)) {
+        flush(); var ol = [];
+        while (i < lines.length && /^\d+[.、)]\s+/.test(lines[i].trim())) { ol.push(lines[i].trim().replace(/^\d+[.、)]\s+/, '')); i++; }
+        html += '<ol>' + ol.map(function (x) { return '<li>' + inlineMd(x) + '</li>'; }).join('') + '</ol>'; continue;
+      }
+      if (/^-{3,}$/.test(t)) { flush(); html += '<hr>'; i++; continue; }
+      para.push(t); i++;
+    }
+    flush();
+    return { html: html, toc: toc };
+  }
+
+  function renderTable(rows) {
+    var cells = rows.map(function (r) {
+      return r.replace(/^\||\|$/g, '').split('|').map(function (c) { return c.trim(); });
+    }).filter(function (r) { return !r.every(function (c) { return /^-{2,}$/.test(c) || c === ''; }); });
+    if (!cells.length) return '';
+    var head = cells[0], body = cells.slice(1);
+    var h = '<table><thead><tr>' + head.map(function (c) { return '<th>' + inlineMd(c) + '</th>'; }).join('') + '</tr></thead><tbody>';
+    body.forEach(function (r) {
+      h += '<tr>' + r.map(function (c) { return '<td>' + inlineMd(c) + '</td>'; }).join('') + '</tr>';
+    });
+    return h + '</tbody></table>';
+  }
+
+  /* ============ 答案引擎 ============ */
+  function intentOf(q) {
+    if (/(区别|差别|不一样|是什么|什么是|指什么|含义|定义|介绍|口径)/.test(q)) return 'define';
+    if (/(为什么|原因|不起量|跑不动|成本高|成本涨|没效果|没人看|没人|掉量|下滑|失败|异常|排查|诊断|怎么办|解决)/.test(q)) return 'diagnose';
+    if (/(能不能|可不可以|可以吗|是否可以|允许|禁止|不得|规范|标准|红线|要求|违规|驳回|处罚|扣分|申诉|资质|合规|风险)/.test(q)) return 'rule';
+    if (/(怎么|如何|怎样|流程|步骤|操作|开通|开户|申请|设置|配置|搭建|上手|制作|做|写|投放|起量)/.test(q)) return 'howto';
+    return 'general';
+  }
+
+  function sentences(text) {
+    return plainOf(text).split(/[。！？!?；;\n]/).map(function (s) { return s.trim().replace(/^[，,、\s]+/, ''); }).filter(function (s) { return s.length > 5; });
+  }
+  function orderedItems(text) {
+    var out = [], re = /^\s*\d+[.、)]\s+(.+)$/gm, m;
+    while ((m = re.exec(text))) out.push(plainOf(m[1]));
+    return out;
+  }
+  function bulletItems(text) {
+    var out = [], re = /^\s*[-*]\s+(.+)$/gm, m;
+    while ((m = re.exec(text))) out.push(plainOf(m[1]));
+    return out;
+  }
+  function pickSents(text, re, max) {
+    var out = sentences(text).filter(function (s) { return re.test(s); });
+    return out.slice(0, max || 4);
+  }
+  function overlaps(heading, terms) {
+    var h = String(heading || '').toLowerCase();
+    if (!h) return false;
+    return terms.some(function (t) { return t.length >= 2 && h.indexOf(t) >= 0; });
+  }
+  function quoteLines(text) {
+    var out = [], re = /^>\s?(.+)$/gm, m;
+    while ((m = re.exec(text))) out.push(plainOf(m[1]));
+    return out;
+  }
+  /* 优先取非表格段落，避免把表格拍平成一句话 */
+  function proseChunk(chunks, doc) {
+    for (var i = 0; i < chunks.length; i++) {
+      if (!/^\s*\|/m.test(chunks[i].t) && plainOf(chunks[i].t).length > 24) return chunks[i].t;
+    }
+    if (doc) {
+      var ss = sections(doc.body);
+      for (var j = 0; j < ss.length; j++) {
+        if (!/^\s*\|/m.test(ss[j].t) && plainOf(ss[j].t).length > 24) return ss[j].t;
+      }
+    }
+    return chunks.length ? chunks[0].t : (doc ? doc.body : '');
+  }
+  /* 文档里的"第一步/第二步"式章节，转成步骤 */
+  function headingSteps(body) {
+    var out = [];
+    sections(body).forEach(function (s) {
+      var m = /^第[一二三四五六七八九十\d]{1,2}步[：:\s]*(.+)$/.exec(s.h);
+      if (m) {
+        var d = sentences(s.t).filter(function (x) { return x.length > 8; })[0] || '';
+        out.push({ t: m[1], d: clip(d, 46) });
+      }
+    });
+    return out;
+  }
+  function firstTable(body) {
+    var ss = sections(body);
+    for (var i = 0; i < ss.length; i++) {
+      var rows = ss[i].t.split('\n').filter(function (l) { return /^\s*\|/.test(l); });
+      if (rows.length >= 3 && rows.length <= 12) return { h: ss[i].h, html: renderTable(rows) };
+    }
+    return null;
+  }
+
+  var KIND = {
+    howto: '操作路径', rule: '规范要点', define: '概念说明', diagnose: '问题诊断', general: '知识摘要'
+  };
+
+  /* 领域词表：用于挡住完全跑题的问题 */
+  var DOMAIN = ('快手 磁力 金牛 聚星 智投 粉条 企业号 小店 直播 短视频 素材 脚本 剪辑 投放 广告 审核 送审 驳回 违规 处罚 扣分 申诉 资质 行业 '
+    + '医疗 医美 食品 保健 教育 金融 借贷 美妆 达人 账户 开户 计划 广告组 定向 出价 预算 消耗 成本 roi ctr cvr gmv cpm 曝光 点击 转化 完播 '
+    + '投产 落地页 链路 报备 合规 封禁 限流 粉丝 选品 场控 复盘 数据 指标 提案 客户 代理 服务商 账号 主页 认证 内容 风控 侵权 版权 音乐 字体 '
+    + '肖像 未成年人 大促 线索 进店 客单 退款 复购 品牌 营销 流量 模型 学习期 赛马 人群包 lookalike 排期 开播 冷启动 起量 成本 报价 结算 返点 对账 '
+    + '周报 月报 日报 模板 话术 汇报 结案 方案 提案 排期表 流程 规范 制度 培训').split(/\s+/);
+
+  function notFoundAnswer() {
+    return {
+      kicker: '未找到',
+      lead: '知识库里暂时没有直接相关的内容。可以换个说法再问，或者看看下面这些方向；如果是新问题，点「记为待补内容」，会进入内容治理清单。',
+      blocks: [{
+        type: 'bullets', title: '换个方式试试',
+        items: [
+          '用具体场景描述，比如「直播间没人看」「素材被驳回」',
+          '用业务名词，比如「磁力金牛」「聚星」「企业号」',
+          '把长问题拆短，一次只问一件事'
+        ]
+      }],
+      sources: [], followups: KB.quickQuestions.slice(0, 4), unresolved: true
+    };
+  }
+
+  function answer(q) {
+    var query = String(q || '').trim();
+    if (!query) return null;
+    var terms = expand(query);
+    var intent = intentOf(query);
+    var docs = searchDocs(query, 4);
+    var faqs = searchFaqs(query, 3);
+
+    var isGreet = /^(你好|hi|hello|嗨|在吗|有人吗)[!！。.\s]*$/i.test(query);
+    var isHelp = /(你是谁|你能做什么|怎么用|使用说明|能帮我|会什么)/.test(query);
+
+    if (isGreet) {
+      return {
+        kicker: '在线',
+        lead: '在的。这里是代理侧的阵地业务知识库，投放规范、操作流程、高频答疑都在里面。直接把问题丢给我就行，比如「素材被驳回怎么办」「新客户开户要准备什么」。',
+        blocks: [], sources: [], followups: KB.quickQuestions.slice(0, 3)
+      };
+    }
+    if (isHelp) {
+      return {
+        kicker: '使用说明',
+        lead: '我的回答只来自这个知识库里的 25 篇文档和 34 条 FAQ，不会自己编。检索会同时匹配正文、标题和标签，所以用口语问也能找到。回答里会标出依据来自哪一篇，点开可以直接看原文。',
+        blocks: [{
+          type: 'bullets', title: '可以这样问',
+          items: ['流程类：磁力金牛开户怎么操作、直播冷启动怎么做', '规范类：医疗行业能不能投、食品能不能说增强免疫力', '诊断类：账户不起量怎么办、成本突然涨了怎么排查', '概念类：CTR 和 CVR 的口径是什么']
+        }],
+        sources: [], followups: KB.quickQuestions.slice(3, 6)
+      };
+    }
+
+    /* 相关性闸门：挡住跑题问题 */
+    var ql = query.toLowerCase();
+    var domHit = DOMAIN.some(function (w) { return ql.indexOf(w) >= 0; });
+    var hasAny = docs.length || faqs.length;
+    var strongEnough = !hasAny ? false : (!docs.length ? true : (docs[0].coverage >= 0.45 || domHit));
+    if (!strongEnough) return notFoundAnswer();
+
+    var primary = docs[0] || { doc: DOC_MAP[faqs[0].faq.ref] || DOCS[0], chunks: [], score: 1, coverage: 1 };
+    var pdoc = primary.doc;
+    var ptext = proseChunk(primary.chunks, pdoc);
+    var lowConf = primary.coverage != null && primary.coverage < 0.22;
+    var dname = pdoc ? '《' + pdoc.title + '》' : '知识库';
+
+    /* ---------- 组装 ---------- */
+    var lead = '', blocks = [], usedFaq = null;
+
+    if (faqs.length && faqs[0].faq.ref && faqs[0].score > (primary.score || 0) * 0.75) {
+      usedFaq = faqs[0].faq;
+      lead = usedFaq.a;
+    } else if (intent === 'howto') {
+      var steps = [];
+      primary.chunks.slice(0, 2).forEach(function (c) { steps = steps.concat(orderedItems(c.t)); });
+      if (steps.length < 2) {
+        var hs = pdoc ? headingSteps(pdoc.body) : [];
+        if (hs.length >= 2) steps = hs.map(function (s) { return s.d ? s.t + '：' + s.d : s.t; });
+      }
+      if (!steps.length) steps = pickSents(ptext, /(先|然后|再|最后|第一|第二|接着|首先)/, 4);
+      var intro = pdoc ? clip(String(pdoc.summary).replace(/[。！]\s*$/, ''), 66) : (sentences(ptext)[0] || '');
+      lead = '按 ' + dname + ' 的做法，' + intro + '。';
+      if (steps.length) blocks.push({ type: 'steps', title: '操作步骤', items: steps.slice(0, 6) });
+      var reqs = pickSents(ptext, /(必须|不得|禁止|需要|要求|务必)/, 3);
+      if (reqs.length) blocks.push({ type: 'bullets', title: '关键要求', items: reqs });
+    } else if (intent === 'rule') {
+      var rules = pickSents(ptext, /(必须|不得|禁止|不可|一律|需|要求|属于|视为)/, 4);
+      var tb1 = pdoc ? firstTable(pdoc.body) : null;
+      var tb1ok = tb1 && overlaps(tb1.h, terms);
+      if (tb1ok) {
+        lead = '《' + pdoc.title + '》：' + clip(String(pdoc.summary).replace(/[。！]\s*$/, ''), 76) + '。';
+        blocks.push({ type: 'table', title: tb1.h || '对照表', html: tb1.html });
+      } else {
+        lead = '结论先说：' + clip(sentences(ptext).filter(function (s) { return s.length > 8; })[0] || primary.snippet || '', 90);
+      }
+      if (rules.length) blocks.push({ type: 'bullets', title: '关键要求', items: rules });
+      var more = bulletItems(ptext).slice(0, 3);
+      if (more.length) blocks.push({ type: 'bullets', title: '具体情形', items: more });
+    } else if (intent === 'diagnose') {
+      var order = [];
+      primary.chunks.slice(0, 2).forEach(function (c) { order = order.concat(orderedItems(c.t)); });
+      var causes = pickSents(ptext, /(通常|常见|原因|说明|问题在|导致|往往)/, 4);
+      lead = '先别急着调参数。' + clip(sentences(ptext).filter(function (s) { return s.length > 8; })[0] || primary.snippet || '', 82);
+      if (order.length) blocks.push({ type: 'steps', title: '排查顺序', items: order.slice(0, 6) });
+      if (causes.length) blocks.push({ type: 'bullets', title: '可能的原因', items: causes });
+    } else if (intent === 'define') {
+      var tb2 = pdoc ? firstTable(pdoc.body) : null;
+      var tb2ok = tb2 && overlaps(tb2.h, terms);
+      if (tb2ok) {
+        lead = '《' + pdoc.title + '》：' + clip(String(pdoc.summary).replace(/[。！]\s*$/, ''), 76) + '。';
+        blocks.push({ type: 'table', title: tb2.h || '对照表', html: tb2.html });
+      } else {
+        lead = clip(sentences(ptext).filter(function (s) { return s.length > 8; }).slice(0, 2).join('。') || primary.snippet, 130);
+      }
+      var pts = bulletItems(ptext).slice(0, 4);
+      if (pts.length) blocks.push({ type: 'bullets', title: '要点', items: pts });
+    } else {
+      var lines = String(ptext).split('\n').map(function (x) { return x.trim(); })
+        .filter(function (x) { return x && !/^#{1,4}\s/.test(x); });
+      var firstLine = lines[0] || '';
+      var bulletStart = /^[-*]\s/.test(firstLine);
+      lead = bulletStart && pdoc
+        ? '《' + pdoc.title + '》：' + clip(String(pdoc.summary).replace(/[。！]\s*$/, ''), 76) + '。'
+        : clip(sentences(ptext).filter(function (s) { return s.length > 8; }).slice(0, 2).join('。') || primary.snippet, 130);
+      var gen = bulletItems(ptext).slice(0, 4);
+      if (gen.length) blocks.push({ type: 'bullets', title: '要点', items: gen });
+    }
+
+    /* 回答太单薄时补一组要点 */
+    if (!blocks.length) {
+      var fbItems = bulletItems(ptext).slice(0, 4);
+      if (!fbItems.length && primary.chunks[1]) fbItems = bulletItems(primary.chunks[1].t).slice(0, 4);
+      if (!fbItems.length && pdoc) fbItems = sentences(pdoc.body).filter(function (s) { return s.length > 12; }).slice(0, 3);
+      if (fbItems.length) blocks.push({ type: 'bullets', title: '要点', items: fbItems });
+    }
+
+    /* 补充第二篇的关键信息 */
+    if (docs[1] && intent !== 'howto' && blocks.length < 3) {
+      var s2 = pickSents(docs[1].chunks[0].t, /(必须|不得|禁止|注意|建议|通常|如果)/, 2);
+      if (s2.length) blocks.push({ type: 'bullets', title: '补充 · ' + clip(docs[1].doc.title, 16), items: s2 });
+    }
+
+    /* 注意事项 */
+    var notes = [];
+    primary.chunks.slice(0, 2).forEach(function (c) { notes = notes.concat(quoteLines(c.t)); });
+    if (!notes.length) notes = pickSents(ptext, /(注意|切忌|警惕|避免|容易|风险|不要)/, 2);
+    if (notes.length) blocks.push({ type: 'note', title: '注意', items: [notes[0]] });
+
+    if (lowConf && !faqs.length) {
+      lead = '这个问题知识库里没有完全对应的答案，以下是相关度最高的内容，供参考。' + lead;
+    }
+
+    /* 来源：FAQ 命中的原文优先排第一 */
+    var srcList = docs.slice(0, 3).map(function (d) {
+      return {
+        id: d.doc.id, title: d.doc.title, cat: CAT_NAME[d.doc.cat],
+        sub: d.doc.sub, snippet: d.snippet, updated: d.doc.updated
+      };
+    });
+    if (usedFaq && usedFaq.ref) {
+      var fr = DOC_MAP[usedFaq.ref];
+      if (fr) {
+        var at = -1;
+        srcList.forEach(function (s, i) { if (s.id === fr.id) at = i; });
+        if (at < 0) srcList.unshift({ id: fr.id, title: fr.title, cat: CAT_NAME[fr.cat], sub: fr.sub, snippet: clip(usedFaq.a, 96), updated: fr.updated });
+        else if (at > 0) srcList.unshift(srcList.splice(at, 1)[0]);
+      }
+    }
+    var sources = srcList.slice(0, 3).map(function (s, i) {
+      s.n = i + 1; return s;
+    });
+
+    /* 追问 */
+    var fu = [];
+    if (faqs.length) faqs.forEach(function (x) { if (fu.length < 3) fu.push(x.faq.q); });
+    if (pdoc) (pdoc.related || []).forEach(function (rid) {
+      var r = DOC_MAP[rid];
+      if (r && fu.length < 4 && r.id !== pdoc.id) fu.push(r.title);
+    });
+    fu = uniq(fu).slice(0, 3);
+
+    return {
+      kicker: KIND[intent] + (sources.length > 1 ? ' · ' + sources.length + ' 篇依据' : ''),
+      intent: intent,
+      lead: lead,
+      blocks: blocks,
+      sources: sources,
+      followups: fu,
+      lowConf: lowConf,
+      unresolved: !docs.length && !faqs.length
+    };
+  }
+
+  /* ============ LLM（可选） ============ */
+  function llmCfg() { return S.get('llm', null); }
+  function llmReady() { var c = llmCfg(); return !!(c && c.base && c.key && c.model); }
+
+  function callLLM(q, sources) {
+    var c = llmCfg();
+    var ctx = sources.map(function (s, i) {
+      var d = DOC_MAP[s.id];
+      return '[' + (i + 1) + '] 《' + s.title + '》\n' + (d ? plainOf(d.body).slice(0, 2200) : s.snippet);
+    }).join('\n\n');
+    return fetch(c.base.replace(/\/+$/, '') + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + c.key },
+      body: JSON.stringify({
+        model: c.model, temperature: 0.25, max_tokens: 900,
+        messages: [
+          { role: 'system', content: '你是快手阵地业务知识库的问答助手，服务对象是外部代理公司的运营同学。只能依据给定资料回答，资料里没有的内容明确说「知识库暂未收录」，不要编造。用中文，先给结论，再分点说明，必要时给步骤。回答控制在 400 字内，末尾用 [1][2] 标注引用的资料编号。' },
+          { role: 'user', content: '资料：\n' + ctx + '\n\n问题：' + q }
+        ]
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) {
+      var t = j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+      if (!t) throw new Error('返回为空');
+      return t.trim();
+    });
+  }
+
+  /* ============ 路由 ============ */
+  var main, chatLog = null, thinking = false, curChatQ = '';
+
+  function go(path) {
+    if (location.hash === '#/' + path) { route(); return; }
+    location.hash = '#/' + path;
+  }
+  function parseHash() {
+    var h = location.hash.replace(/^#\/?/, '');
+    if (!h) return { view: 'home' };
+    var qs = '', qi = h.indexOf('?');
+    if (qi >= 0) { qs = h.slice(qi + 1); h = h.slice(0, qi); }
+    var p = h.split('/');
+    var o = { view: p[0] || 'home', arg: p[1] ? decodeURIComponent(p[1]) : '' };
+    qs.split('&').forEach(function (kv) {
+      var a = kv.split('=');
+      if (a[0]) o[a[0]] = decodeURIComponent(a[1] || '');
+    });
+    return o;
+  }
+
+  function route() {
+    var r = parseHash();
+    main = document.getElementById('main');
+    document.querySelectorAll('.nav-item[data-nav]').forEach(function (el) {
+      el.classList.toggle('active', el.getAttribute('data-nav') === r.view || (r.view === 'doc' && el.getAttribute('data-nav') === 'lib'));
+    });
+    var sb = document.getElementById('sidebar');
+    if (sb) sb.classList.remove('on');
+    switch (r.view) {
+      case 'home': viewHome(); break;
+      case 'ask': viewAsk(); break;
+      case 'list': viewList(r.arg); break;
+      case 'doc': viewDoc(r.arg); break;
+      case 'faq': viewFaq(); break;
+      case 'mine': viewMine(r.arg || 'fav'); break;
+      case 'gov': viewGov(); break;
+      case 'search': viewSearch(r.q || ''); break;
+      default: viewHome();
+    }
+    if (main) main.scrollTop = 0;
+  }
+
+  /* ============ 视图：首页 ============ */
+  function bannerHtml() {
+    return '<div class="banner">' + ico('warn') +
+      '<span>' + esc(KB.meta.notice) + ' 当前版本 ' + esc(KB.meta.version) + '。</span>' +
+      '<button data-nav="gov">查看内容治理 →</button></div>';
+  }
+
+  function viewHome() {
+    var docCount = DOCS.length, faqCount = FAQS.length;
+    var recent = DOCS.concat([]).sort(function (a, b) { return b.updated.localeCompare(a.updated); }).slice(0, 5);
+    var hot = ['素材被驳回最多的情况是什么？', '账户不起量怎么办？', '新客户开户需要准备什么？', '直播间冷启动五步法', 'CTR 和 CVR 的口径是什么', '账户结构应该怎么搭？'];
+
+    var h = '<div class="view">' + bannerHtml();
+
+    h += '<section class="hero"><div class="hero-inner">' +
+      '<span class="tagline">' + ico('spark') + ' 智能知识库 · ' + docCount + ' 篇文档 / ' + faqCount + ' 条答疑</span>' +
+      '<h1>代理的问题，<em>直接问就行</em></h1>' +
+      '<p>投放规范、操作流程、高频答疑都在这里。不用再翻几十个群聊、网盘和聊天记录。</p>' +
+      '<form class="hero-ask" id="heroForm">' + ico('search') +
+      '<input id="heroInput" placeholder="例如：素材被驳回最常见的原因是什么？" autocomplete="off"/>' +
+      '<button type="submit" class="btn btn-primary">问一下</button></form>' +
+      '<div class="hero-chips">' + KB.quickQuestions.slice(0, 4).map(function (q) {
+        return '<button data-ask="' + esc(q) + '">' + esc(q) + '</button>';
+      }).join('') + '</div>' +
+      '</div></section>';
+
+    h += '<div class="stats">' +
+      '<div class="stat"><b>' + docCount + '</b><span>知识文档 · 全部可检索</span></div>' +
+      '<div class="stat"><b>' + faqCount + '</b><span>FAQ 标准答复</span></div>' +
+      '<div class="stat"><b>' + KB.scenes.length + '</b><span>高频场景直达</span></div>' +
+      '<div class="stat"><b>' + KB.gaps.length + '</b><span>待补内容 · 治理中</span></div>' +
+      '</div>';
+
+    h += '<div class="sec-head"><h2>从场景进入</h2><p>不知道搜什么？按你现在遇到的事选</p></div>' +
+      '<div class="scenes">' + KB.scenes.map(function (s) {
+        return '<button class="scene" data-scene="' + s.id + '">' +
+          '<span class="s-ico">' + ico(s.icon) + '</span>' +
+          '<b>' + esc(s.title) + '</b><span>' + esc(s.desc) + '</span>' +
+          '<span class="s-arrow">' + ico('arrow') + '</span></button>';
+      }).join('') + '</div>';
+
+    h += '<div class="cols"><div>' +
+      '<div class="sec-head"><h2>最近更新</h2><a class="more" data-nav="list/policy">全部文档 →</a></div>' +
+      '<div class="row-list">' + recent.map(function (d) {
+        return '<button class="row" data-nav="doc/' + d.id + '">' +
+          '<span class="r-ico">' + ico(d.cat === 'policy' ? 'shield' : 'book') + '</span>' +
+          '<span class="r-body"><span class="r-t">' + esc(d.title) +
+          (d.level === '必读' ? ' <span class="chip chip-must">必读</span>' : '') + '</span>' +
+          '<span class="r-d">' + esc(d.summary) + '</span></span>' +
+          '<span class="r-meta">' + fmtDate(d.updated) + '</span></button>';
+      }).join('') + '</div></div>';
+
+    h += '<div><div class="sec-head"><h2>大家常问</h2><a class="more" data-nav="faq">全部 FAQ →</a></div>' +
+      '<div class="q-list">' + hot.map(function (q, i) {
+        return '<button class="q-item" data-ask="' + esc(q) + '"><span class="num">' + (i + 1) + '</span>' +
+          '<span>' + esc(q) + '</span>' + ico('right') + '</button>';
+      }).join('') + '</div></div></div>';
+
+    h += '</div>';
+    main.innerHTML = h;
+
+    var form = document.getElementById('heroForm');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = document.getElementById('heroInput').value.trim();
+      if (v) askFrom(v);
+    });
+  }
+
+  /* ============ 视图：问答 ============ */
+  function viewAsk() {
+    var h = '<div class="chat-wrap"><div class="chat-scroll" id="chatScroll"><div class="chat-inner" id="chatLog"></div></div>' +
+      '<div class="chat-composer-outer"><div class="chat-composer">' +
+      '<div class="composer-box"><textarea id="askInput" rows="1" placeholder="问点什么，比如：素材被驳回最常见的原因？"></textarea>' +
+      '<button class="send-btn" id="sendBtn">' + ico('send') + '</button></div>' +
+      '<div class="composer-hint">回答仅基于知识库内容 · <b>Enter</b> 发送，<b>Shift+Enter</b> 换行' +
+      (llmReady() ? ' · 已接入大模型增强' : '') + '</div>' +
+      '</div></div></div>';
+    main.innerHTML = h;
+    chatLog = document.getElementById('chatLog');
+    renderChatLog();
+    var ta = document.getElementById('askInput');
+    ta.focus();
+    ta.addEventListener('input', function () {
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+    });
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAsk(); }
+    });
+    document.getElementById('sendBtn').addEventListener('click', submitAsk);
+    scrollChat();
+  }
+
+  function submitAsk() {
+    var ta = document.getElementById('askInput');
+    if (!ta) return;
+    var v = ta.value.trim();
+    if (!v) return;
+    ta.value = ''; ta.style.height = 'auto';
+    doAsk(v);
+  }
+
+  function askFrom(q) { go('ask'); setTimeout(function () { doAsk(q); }, 60); }
+
+  function doAsk(q) {
+    if (!chatLog) return;
+    if (thinking) return;
+    chatLogState.push({ role: 'user', text: q });
+    thinking = true; curChatQ = q;
+    renderChatLog();
+    setTimeout(function () {
+      var ans = answer(q);
+      chatLogState.push({ role: 'ai', ans: ans, q: q });
+      thinking = false;
+      renderChatLog();
+      if (llmReady() && ans.sources && ans.sources.length) {
+        var idx = chatLogState.length - 1;
+        callLLM(q, ans.sources).then(function (txt) {
+          chatLogState[idx].ans.llmText = txt;
+          renderChatLog();
+        }).catch(function (err) {
+          chatLogState[idx].ans.llmError = err.message;
+          renderChatLog();
+        });
+      }
+    }, 480);
+  }
+
+  var chatLogState = [];
+
+  function scrollChat() {
+    var sc = document.getElementById('chatScroll');
+    if (sc) sc.scrollTop = sc.scrollHeight;
+  }
+
+  function renderChatLog() {
+    if (!chatLog) return;
+    if (!chatLogState.length && !thinking) {
+      chatLog.innerHTML = welcomeHtml();
+      return;
+    }
+    chatLog.innerHTML = chatLogState.map(renderMsg).join('') +
+      (thinking ? '<div class="msg msg-ai"><div class="ai-ava">' + ico('spark') + '</div>' +
+        '<div class="ai-body"><div class="ai-name">知识助手</div><div class="typing"><i></i><i></i><i></i></div></div></div>' : '');
+    scrollChat();
+  }
+
+  function welcomeHtml() {
+    var cards = [
+      { q: '素材被驳回最常见的原因有哪些', t: '素材总不过审', s: '归因与改稿方向' },
+      { q: '新客户开户流程是什么', t: '新客户要开户', s: '资质与账户结构' },
+      { q: '直播间冷启动怎么做', t: '直播间没人看', s: '冷启动五步法' },
+      { q: 'CTR 和 CVR 的口径是什么', t: '看不懂数据', s: '指标口径与诊断' }
+    ];
+    return '<div class="welcome">' +
+      '<div class="w-ico">' + ico('spark') + '</div>' +
+      '<h2>问吧，我知道这个知识库里的一切</h2>' +
+      '<p>覆盖投放规范、政策红线、操作流程、数据口径和日常答疑。回答会标出依据来源，可以点开原文核对。</p>' +
+      '<div class="w-grid">' + cards.map(function (c) {
+        return '<button class="w-card" data-ask="' + esc(c.q) + '"><b>' + esc(c.t) + '</b><span>' + esc(c.s) + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="w-note">检索范围为当前知识库全部 ' + DOCS.length + ' 篇文档与 ' + FAQS.length + ' 条 FAQ。找不到的会明确告诉你没找到，并记为待补内容。</div>' +
+      '</div>';
+  }
+
+  function renderMsg(m) {
+    if (m.role === 'user') {
+      return '<div class="msg msg-user"><div class="bubble">' + esc(m.text) + '</div></div>';
+    }
+    var a = m.ans;
+    if (!a) return '';
+    var body = '';
+    if (a.llmText) {
+      var md = renderMd(a.llmText);
+      body = '<div class="ans-head"><span class="ans-kicker">' + ico('spark') + '大模型增强回答</span></div>' +
+        '<div class="ans-body"><div class="prose" style="font-size:13.8px">' + md.html + '</div></div>';
+    } else {
+      body = '<div class="ans-head"><span class="ans-kicker">' + esc(a.kicker) + '</span>' +
+        '<div class="ans-lead">' + esc(a.lead) + '</div></div>' +
+        '<div class="ans-body">' + (a.blocks || []).map(function (b) {
+          if (b.type === 'steps') {
+            return '<div class="ans-block"><div class="ans-block-t">' + esc(b.title) + '</div><ol class="steps">' +
+              b.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></div>';
+          }
+          if (b.type === 'table') {
+            return '<div class="ans-block"><div class="ans-block-t">' + esc(b.title) + '</div><div class="ans-table">' + b.html + '</div></div>';
+          }
+          if (b.type === 'note') {
+            return '<div class="note">' + ico('warn') + ' <b>注意：</b>' + esc(b.items[0]) + '</div>';
+          }
+          return '<div class="ans-block"><div class="ans-block-t">' + esc(b.title) + '</div><ul class="bullets">' +
+            b.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
+        }).join('') + '</div>';
+      if (a.llmError) {
+        body += '<div style="padding:0 18px 10px"><div class="note">大模型增强调用失败（' + esc(a.llmError) + '），以上为本地知识库检索结果。</div></div>';
+      }
+    }
+
+    if (a.sources && a.sources.length) {
+      body += '<div class="src-wrap"><div class="src-t">依据来源 · 点击查看原文</div><div class="src-list">' +
+        a.sources.map(function (s) {
+          return '<button class="src" data-nav="doc/' + s.id + '"><span class="s-n">' + s.n + '</span><span class="s-b">' +
+            '<span class="s-title">' + esc(s.title) + '<i>' + esc(s.sub || s.cat) + '</i></span>' +
+            '<span class="s-snip s-quote">' + esc(s.snippet) + '</span></span></button>';
+        }).join('') + '</div></div>';
+    }
+
+    var fu = (a.followups || []).filter(Boolean);
+    var ansId = 'ans' + Math.random().toString(36).slice(2, 8);
+    var foot = '<div class="ans-foot"><span class="lbl">这个回答有帮助吗</span>' +
+      '<button class="fb-btn" data-fb="1" data-q="' + esc(m.q || '') + '">' + ico('up') + '有用</button>' +
+      '<button class="fb-btn" data-fb="0" data-q="' + esc(m.q || '') + '">' + ico('dn') + '没解决</button>' +
+      '<span class="spacer"></span>' +
+      '<button class="copy-btn" data-copy="' + ansId + '">复制回答</button></div>';
+    if (a.unresolved) {
+      foot = '<div class="ans-foot"><button class="fb-btn" data-fb="0" data-q="' + esc(m.q || '') + '">' + ico('pinch') + '记为待补内容</button>' +
+        '<span class="spacer"></span><button class="copy-btn" data-copy="' + ansId + '">复制</button></div>';
+    }
+
+    var plainForCopy = a.llmText || [a.lead].concat((a.blocks || []).filter(function (b) { return b.items; })
+      .map(function (b) { return b.title + '：' + b.items.join('；'); })).join('\n');
+
+    return '<div class="msg msg-ai"><div class="ai-ava">' + ico('spark') + '</div><div class="ai-body">' +
+      '<div class="ai-name">知识助手 <span class="mode">检索增强</span></div>' +
+      '<div class="answer" id="' + ansId + '" data-plain="' + esc(plainForCopy) + '">' + body + foot + '</div>' +
+      (fu.length ? '<div class="followups">' + fu.map(function (x) {
+        return '<button class="fu" data-ask="' + esc(x) + '">' + esc(x) + '</button>';
+      }).join('') + '</div>' : '') +
+      '</div></div>';
+  }
+
+  /* ============ 视图：知识库列表 ============ */
+  var listState = { cat: 'policy', tag: '全部', q: '' };
+
+  function viewList(cat) {
+    cat = cat || 'policy';
+    listState = { cat: cat, tag: '全部', q: '' };
+    var name = CAT_NAME[cat];
+    main.innerHTML = '<div class="view">' + bannerHtml() +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>' + name + '</span></div>' +
+      '<h1>' + name + '</h1><p>' + esc((KB.cats.filter(function (c) { return c.key === cat; })[0] || {}).desc || '') + '</p></div>' +
+      '<div id="listBody"></div></div>';
+    renderListBody();
+  }
+
+  function renderListBody() {
+    var docs = DOCS.filter(function (d) { return d.cat === listState.cat; });
+    var subs = uniq(docs.map(function (d) { return d.sub; }));
+    if (listState.tag !== '全部') {
+      docs = docs.filter(function (d) { return listState.tag === '必读' ? d.level === '必读' : d.sub === listState.tag; });
+    }
+    if (listState.q) {
+      var ql = listState.q.toLowerCase();
+      docs = docs.filter(function (d) {
+        return (d.title + d.summary + d.tags.join('') + d.body).toLowerCase().indexOf(ql) >= 0;
+      });
+    }
+    var body = '<div class="toolbar">' +
+      ['全部', '必读'].concat(subs).map(function (t) {
+        return '<button class="filter-chip' + (listState.tag === t ? ' on' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + '</button>';
+      }).join('') +
+      '<span class="spacer"></span>' +
+      '<div class="mini-search">' + ico('search') + '<input id="listQ" placeholder="在本文档类中筛选" value="' + esc(listState.q) + '"/></div></div>';
+
+    if (!docs.length) {
+      body += '<div class="empty"><div class="e-ico">' + ico('file') + '</div><h3>没有匹配的文档</h3><p>换个筛选条件，或者直接问知识助手。</p></div>';
+    } else {
+      body += '<div class="doc-grid">' + docs.map(docCard).join('') + '</div>';
+    }
+    document.getElementById('listBody').innerHTML = body;
+
+    document.querySelectorAll('[data-tag]').forEach(function (b) {
+      b.addEventListener('click', function () { listState.tag = b.getAttribute('data-tag'); renderListBody(); });
+    });
+    var lq = document.getElementById('listQ');
+    if (lq) lq.addEventListener('input', function () { listState.q = lq.value; renderListBody(); var el = document.getElementById('listQ'); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
+  }
+
+  function docCard(d) {
+    return '<button class="doc-card" data-nav="doc/' + d.id + '">' +
+      '<span class="dc-top">' +
+      (d.level === '必读' ? '<span class="chip chip-must">必读</span>' : '') +
+      '<span class="chip chip-tag">' + esc(d.sub) + '</span>' +
+      '<span class="chip chip-draft">' + esc(d.status) + '</span></span>' +
+      '<h3>' + esc(d.title) + '</h3><p>' + esc(d.summary) + '</p>' +
+      '<span class="dc-foot"><span>' + esc(d.owner) + '</span><span>·</span><span>' + fmtDate(d.updated) + '</span>' +
+      '<span>·</span><span>' + d.readMin + ' 分钟</span></span></button>';
+  }
+
+  /* ============ 视图：文档 ============ */
+  function viewDoc(id) {
+    var d = DOC_MAP[id];
+    if (!d) { viewHome(); return; }
+    pushRecent(id);
+    var md = renderMd(d.body);
+    var rel = (d.related || []).map(function (r) { return DOC_MAP[r]; }).filter(Boolean);
+    var isFav = favs().indexOf(id) >= 0;
+
+    var h = '<div class="view"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') +
+      ' <a data-nav="list/' + d.cat + '">' + CAT_NAME[d.cat] + '</a> ' + ico('right') + ' <span>' + esc(d.sub) + '</span></div>' +
+      '<div class="doc-layout"><div>' +
+      '<div class="doc-head">' +
+      '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
+      (d.level === '必读' ? '<span class="chip chip-must">必读</span>' : '') +
+      '<span class="chip chip-tag">' + esc(d.sub) + '</span>' +
+      '<span class="chip chip-draft">' + esc(d.status) + '</span></div>' +
+      '<h1>' + esc(d.title) + '</h1>' +
+      '<p class="dh-sum">' + esc(d.summary) + '</p>' +
+      '<div class="doc-meta"><span>责任方 <b>' + esc(d.owner) + '</b></span>' +
+      '<span>更新 <b>' + fmtDate(d.updated) + '</b></span>' +
+      '<span>版本 <b>' + esc(d.version) + '</b></span>' +
+      '<span>阅读 <b>' + d.readMin + ' 分钟</b></span></div>' +
+      '<div class="doc-tags">' + d.tags.map(function (t) { return '<span class="chip chip-tag">#' + esc(t) + '</span>'; }).join('') + '</div>' +
+      '</div>' +
+      '<div class="prose">' + md.html + '</div>' +
+      '<div class="doc-foot-fb"><b>这篇内容对你有用吗？</b><span>内容有问题或已过期，直接告诉我们。</span><span class="spacer"></span>' +
+      '<button class="fb-btn" data-docfb="1" data-id="' + d.id + '">' + ico('up') + '有用</button>' +
+      '<button class="fb-btn" data-docfb="0" data-id="' + d.id + '">' + ico('dn') + '需要更新</button></div>' +
+      '<div class="doc-actions">' +
+      '<button class="btn btn-sm" data-fav="' + d.id + '">' + ico('star') + (isFav ? '已收藏' : '收藏') + '</button>' +
+      '<button class="btn btn-sm" data-ask="' + esc('关于《' + d.title + '》，还有哪些要注意的') + '">' + ico('spark') + '就这篇提问</button>' +
+      '<button class="btn btn-sm" data-copy-doc="' + d.id + '">' + ico('copy') + '复制全文</button>' +
+      '</div></div>' +
+
+      '<aside class="doc-rail">' +
+      '<div class="rail-box"><h4>本文目录</h4><div class="toc" id="toc">' +
+      md.toc.map(function (t, i) {
+        return '<button data-jump="' + t.id + '"' + (i === 0 ? ' class="active"' : '') + '>' + esc(t.text) + '</button>';
+      }).join('') + '</div></div>' +
+      (rel.length ? '<div class="rail-box"><h4>相关文档</h4><div class="rail-rel">' +
+        rel.map(function (r) { return '<button data-nav="doc/' + r.id + '"><i>·</i>' + esc(r.title) + '</button>'; }).join('') + '</div></div>' : '') +
+      '<div class="rail-box"><h4>阅读反馈</h4><div style="font-size:11.5px;color:var(--ink-3);line-height:1.65">发现错漏？点下方「需要更新」，会进入内容治理清单，由 ' + esc(d.owner) + ' 处理。</div></div>' +
+      '</aside></div></div>';
+
+    main.innerHTML = h;
+
+    document.querySelectorAll('[data-jump]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var el = document.getElementById(b.getAttribute('data-jump'));
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    var tocBtns = document.querySelectorAll('#toc button');
+    if (tocBtns.length && 'IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) {
+          if (e.isIntersecting) {
+            tocBtns.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-jump') === e.target.id); });
+          }
+        });
+      }, { rootMargin: '-10% 0px -75% 0px' });
+      document.querySelectorAll('.prose h2').forEach(function (h2) { obs.observe(h2); });
+    }
+  }
+
+  /* ============ 视图：FAQ ============ */
+  var faqFilter = '全部';
+  function viewFaq() {
+    main.innerHTML = '<div class="view">' + bannerHtml() +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>FAQ 答疑</span></div>' +
+      '<h1>FAQ 答疑沉淀</h1><p>代理日常问得最多的问题，已经整理成标准答复口径。没覆盖到的可以提问，会进入待补清单。</p></div>' +
+      '<div id="faqBody"></div></div>';
+    renderFaqBody();
+  }
+  function renderFaqBody() {
+    var groups = uniq(FAQS.map(function (f) { return f.g; }));
+    var list = faqFilter === '全部' ? FAQS : FAQS.filter(function (f) { return f.g === faqFilter; });
+    var h = '<div class="toolbar">' + ['全部'].concat(groups).map(function (g) {
+      return '<button class="filter-chip' + (faqFilter === g ? ' on' : '') + '" data-fg="' + esc(g) + '">' + esc(g) +
+        (g === '全部' ? ' ' + FAQS.length : '') + '</button>';
+    }).join('') + '<span class="spacer"></span><div class="mini-search">' + ico('search') + '<input id="faqQ" placeholder="搜索问题"/></div></div>';
+
+    var byG = {};
+    list.forEach(function (f) { (byG[f.g] = byG[f.g] || []).push(f); });
+    Object.keys(byG).forEach(function (g) {
+      h += '<div class="faq-group"><h3>' + esc(g) + ' <span class="cnt">' + byG[g].length + ' 条</span></h3>' +
+        byG[g].map(function (f) {
+          return '<div class="faq-item" data-qid="' + f.id + '"><button class="faq-q"><span class="qi">Q</span>' +
+            '<span>' + esc(f.q) + '</span><span class="arr">' + ico('down') + '</span></button>' +
+            '<div class="faq-a">' + esc(f.a) +
+            '<div class="faq-src"><span>更新 ' + fmtDate(f.updated) + '</span><span>·</span>' +
+            (f.ref && DOC_MAP[f.ref] ? '<button data-nav="doc/' + f.ref + '">查看依据：' + esc(DOC_MAP[f.ref].title) + '</button>' : '') +
+            '<span>·</span><button data-ask="' + esc(f.q) + '">问知识助手</button></div></div></div>';
+        }).join('') + '</div>';
+    });
+    document.getElementById('faqBody').innerHTML = h;
+
+    document.querySelectorAll('[data-fg]').forEach(function (b) {
+      b.addEventListener('click', function () { faqFilter = b.getAttribute('data-fg'); renderFaqBody(); });
+    });
+    document.querySelectorAll('.faq-q').forEach(function (b) {
+      b.addEventListener('click', function () { b.parentNode.classList.toggle('open'); });
+    });
+    var fq = document.getElementById('faqQ');
+    if (fq) fq.addEventListener('input', function () {
+      var v = fq.value.trim().toLowerCase();
+      document.querySelectorAll('.faq-item').forEach(function (it) {
+        var f = FAQ_MAP[it.getAttribute('data-qid')];
+        it.style.display = (!v || (f.q + f.a).toLowerCase().indexOf(v) >= 0) ? '' : 'none';
+      });
+    });
+  }
+
+  /* ============ 视图：我的 ============ */
+  function viewMine(tab) {
+    var ids = favs(), recent = S.get('recent', []);
+    var h = '<div class="view">' +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>我的</span></div>' +
+      '<h1>' + (tab === 'recent' ? '最近浏览' : '我的收藏') + '</h1>' +
+      '<p>' + (tab === 'recent' ? '最近打开过的文档，存在本机浏览器里。' : '收藏的文档，换设备不会同步，但不需要登录。') + '</p></div>' +
+      '<div class="toolbar">' +
+      '<button class="filter-chip' + (tab !== 'recent' ? ' on' : '') + '" data-nav="mine/fav">收藏 ' + ids.length + '</button>' +
+      '<button class="filter-chip' + (tab === 'recent' ? ' on' : '') + '" data-nav="mine/recent">最近浏览 ' + recent.length + '</button>' +
+      '</div>';
+
+    var items = tab === 'recent'
+      ? recent.map(function (r) { return DOC_MAP[r.id]; }).filter(Boolean)
+      : ids.map(function (i) { return DOC_MAP[i]; }).filter(Boolean);
+
+    if (!items.length) {
+      h += '<div class="empty"><div class="e-ico">' + ico(tab === 'recent' ? 'clock' : 'star') + '</div>' +
+        '<h3>' + (tab === 'recent' ? '还没有浏览记录' : '还没有收藏') + '</h3>' +
+        '<p>在文档页点「收藏」或「' + (tab === 'recent' ? '直接阅读' : '收藏') + '」就会出现在这里。</p>' +
+        '<div style="margin-top:14px"><button class="btn" data-nav="list/policy">去看文档</button></div></div>';
+    } else {
+      h += '<div class="doc-grid">' + items.map(docCard).join('') + '</div>';
+    }
+    main.innerHTML = h + '</div>';
+  }
+
+  /* ============ 视图：搜索 ============ */
+  function viewSearch(q) {
+    var docs = searchDocs(q, 8), faqs = searchFaqs(q, 8);
+    var h = '<div class="view">' +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>搜索结果</span></div>' +
+      '<h1>「' + esc(q) + '」的搜索结果</h1><p>文档 ' + docs.length + ' 篇 · FAQ ' + faqs.length + ' 条</p></div>';
+    if (!docs.length && !faqs.length) {
+      h += '<div class="empty"><div class="e-ico">' + ico('search') + '</div><h3>没有找到相关内容</h3>' +
+        '<p>换个说法试试，或者直接让知识助手回答。</p>' +
+        '<div style="margin-top:14px"><button class="btn btn-primary" data-ask="' + esc(q) + '">问知识助手</button></div></div>';
+    } else {
+      if (docs.length) {
+        h += '<div class="sec-head"><h2>文档</h2></div><div class="doc-grid">' + docs.map(function (x) {
+          var d = x.doc;
+          return '<button class="doc-card" data-nav="doc/' + d.id + '"><span class="dc-top">' +
+            '<span class="chip chip-tag">' + esc(d.sub) + '</span>' +
+            (d.level === '必读' ? '<span class="chip chip-must">必读</span>' : '') + '</span>' +
+            '<h3>' + esc(d.title) + '</h3><p>' + esc(x.snippet || d.summary) + '</p>' +
+            '<span class="dc-foot"><span>' + esc(d.owner) + '</span><span>·</span><span>' + fmtDate(d.updated) + '</span></span></button>';
+        }).join('') + '</div>';
+      }
+      if (faqs.length) {
+        h += '<div class="sec-head" style="margin-top:24px"><h2>FAQ</h2></div><div class="faq-group">' +
+          faqs.map(function (x) {
+            var f = x.faq;
+            return '<div class="faq-item" data-qid="' + f.id + '"><button class="faq-q"><span class="qi">Q</span>' +
+              '<span>' + esc(f.q) + '</span><span class="arr">' + ico('down') + '</span></button>' +
+              '<div class="faq-a">' + esc(f.a) + '<div class="faq-src">' +
+              (f.ref && DOC_MAP[f.ref] ? '<button data-nav="doc/' + f.ref + '">查看依据：' + esc(DOC_MAP[f.ref].title) + '</button>' : '') +
+              '</div></div></div>';
+          }).join('') + '</div>';
+      }
+    }
+    main.innerHTML = h + '</div>';
+    document.querySelectorAll('.faq-q').forEach(function (b) {
+      b.addEventListener('click', function () { b.parentNode.classList.toggle('open'); });
+    });
+  }
+
+  /* ============ 视图：内容治理 ============ */
+  function viewGov() {
+    var pending = S.get('pending', []);
+    var bySub = {};
+    DOCS.forEach(function (d) { (bySub[d.cat] = bySub[d.cat] || {})[d.sub] = ((bySub[d.cat] || {})[d.sub] || 0) + 1; });
+
+    var h = '<div class="view">' +
+      '<div class="page-head"><div class="crumb"><a data-nav="home">工作台</a> ' + ico('right') + ' <span>内容治理</span></div>' +
+      '<h1>内容治理台</h1><p>知识库是活的。这一页给内容负责人看：现在覆盖了什么、还缺什么、代理在问什么我们答不上来。</p></div>';
+
+    h += '<div class="gov-grid">' +
+      '<div class="card"><h3>内容地图</h3><p class="card-sub">当前 ' + DOCS.length + ' 篇文档的分布。红色为已知缺口。</p>' +
+      KB.cats.filter(function (c) { return c.key !== 'faq'; }).map(function (c) {
+        return '<div class="map-col"><div class="mc-t"><span class="dot"></span>' + esc(c.name) + '</div><ul>' +
+          Object.keys(bySub[c.key] || {}).map(function (s) {
+            return '<li>' + esc(s) + '<span class="c">' + bySub[c.key][s] + ' 篇</span></li>';
+          }).join('') +
+          '</ul></div>';
+      }).join('') +
+      '<div class="map-col"><div class="mc-t"><span class="dot" style="background:#8B8B99"></span>FAQ 答疑</div><ul>' +
+      uniq(FAQS.map(function (f) { return f.g; })).map(function (g) {
+        return '<li>' + esc(g) + '<span class="c">' + FAQS.filter(function (f) { return f.g === g; }).length + ' 条</span></li>';
+      }).join('') + '</ul></div></div>' +
+
+      '<div class="card"><h3>代理问过但答不上的</h3><p class="card-sub">来自问答页的「没解决」和「找不到」反馈，按时间倒序。这是最真实的内容需求。</p>' +
+      (pending.length ? '<div class="unresolved">' + pending.slice(0, 8).map(function (p) {
+        return '<div class="u-item"><span class="q">' + esc(clip(p.q, 60)) + '</span>' +
+          '<span class="tm">' + new Date(p.ts).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }) + '</span></div>';
+      }).join('') + '</div>' : '<div class="empty" style="padding:26px 10px"><div class="e-ico">' + ico('check') + '</div><h3>暂时没有未解决问题</h3><p>代理在问答页点「没解决」后，会出现在这里。</p></div>') +
+      (pending.length > 3 ? '<div style="margin-top:10px"><button class="btn btn-sm" id="clrPending">清空记录</button></div>' : '') +
+      '</div></div>';
+
+    h += '<div class="card" style="margin-bottom:14px"><h3>待补清单</h3><p class="card-sub">按优先级排，P0 是本季度必须补齐的。清单可以直接下载成表格，贴到项目管理工具里。</p>' +
+      '<div style="overflow-x:auto"><table class="gov-table"><thead><tr><th>优先级</th><th>内容</th><th>责任方</th><th>状态</th><th>说明</th></tr></thead><tbody>' +
+      KB.gaps.map(function (g) {
+        return '<tr><td><span class="pri pri-' + g.pri + '">' + g.pri + '</span></td><td class="nm">' + esc(g.name) +
+          '</td><td>' + esc(g.owner) + '</td><td>' + esc(g.status) + '</td><td class="nt">' + esc(g.note) + '</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-sm" id="exportGaps">' + ico('dl') + '导出清单 CSV</button></div></div>';
+
+    h += '<div class="card"><h3>更新机制</h3><p class="card-sub">内容不治理就会腐化。这三步是维持可信度的最低成本做法。</p>' +
+      '<div class="flow3">' +
+      '<div class="flow-step"><div class="fs-n">STEP 01</div><b>月度归因</b><span>每月汇总驳回原因、代理提问、错误答复，反向定位哪几篇需要改或需要新写。</span></div>' +
+      '<div class="flow-step"><div class="fs-n">STEP 02</div><b>单一责任方</b><span>每篇文档只有一个 owner，改稿请求直接到人。避免「大家都负责等于没人负责」。</span></div>' +
+      '<div class="flow-step"><div class="fs-n">STEP 03</div><b>版本与时效</b><span>政策类内容标注版本号与生效日期，过期内容下线而不是留在库里误导人。</span></div>' +
+      '</div></div>';
+
+    h += '</div>';
+    main.innerHTML = h;
+
+    var clr = document.getElementById('clrPending');
+    if (clr) clr.addEventListener('click', function () { S.set('pending', []); viewGov(); toast('已清空'); });
+    var ex = document.getElementById('exportGaps');
+    if (ex) ex.addEventListener('click', exportGaps);
+  }
+
+  function exportGaps() {
+    var rows = [['优先级', '内容', '责任方', '状态', '说明']].concat(KB.gaps.map(function (g) {
+      return [g.pri, g.name, g.owner, g.status, g.note];
+    }));
+    var csv = '\ufeff' + rows.map(function (r) {
+      return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+    }).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '快手阵地知识库_待补清单.csv';
+    a.click();
+    toast('已导出 CSV');
+  }
+
+  /* ============ 全局搜索 ============ */
+  var gsIdx = -1, gsItems = [];
+
+  function initGlobalSearch() {
+    var input = document.getElementById('gsearch');
+    var panel = document.getElementById('gsp');
+    if (!input) return;
+
+    function close() { panel.classList.remove('on'); gsIdx = -1; }
+
+    function run() {
+      var q = input.value.trim();
+      if (!q) { close(); panel.innerHTML = ''; return; }
+      var docs = searchDocs(q, 4), faqs = searchFaqs(q, 3);
+      gsItems = [];
+      var h = '';
+      if (docs.length) {
+        h += '<div class="gs-group-t">文档</div>';
+        docs.forEach(function (x, i) {
+          gsItems.push({ nav: 'doc/' + x.doc.id });
+          h += '<div class="gs-item" data-gi="' + (gsItems.length - 1) + '"><div class="t">' + esc(x.doc.title) +
+            '<div class="s">' + esc(clip(x.snippet || x.doc.summary, 56)) + '</div></div></div>';
+        });
+      }
+      if (faqs.length) {
+        h += '<div class="gs-group-t">FAQ</div>';
+        faqs.forEach(function (x) {
+          gsItems.push({ nav: 'faq', q: x.faq.q });
+          h += '<div class="gs-item" data-gi="' + (gsItems.length - 1) + '"><div class="t">' + esc(x.faq.q) + '</div></div>';
+        });
+      }
+      if (!docs.length && !faqs.length) {
+        h = '<div class="gs-empty">没找到相关内容，按 Enter 让知识助手回答</div>';
+      }
+      h += '<div class="gs-foot"><span>↑↓ 选择 · Enter 打开 · Esc 关闭</span><span>' + (docs.length + faqs.length) + ' 个结果</span></div>';
+      panel.innerHTML = h;
+      panel.classList.add('on');
+      gsIdx = -1;
+      panel.querySelectorAll('[data-gi]').forEach(function (el) {
+        el.addEventListener('click', function () { pickGs(parseInt(el.getAttribute('data-gi'), 10)); });
+      });
+    }
+
+    function pickGs(i) {
+      var it = gsItems[i];
+      if (!it) return;
+      close();
+      input.value = '';
+      if (it.nav === 'faq') askFrom(it.q);
+      else go(it.nav);
+    }
+
+    input.addEventListener('input', run);
+    input.addEventListener('focus', function () { if (input.value.trim()) run(); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); input.blur(); return; }
+      if (e.key === 'Enter') {
+        if (gsIdx >= 0 && gsItems[gsIdx]) { e.preventDefault(); pickGs(gsIdx); return; }
+        var q = input.value.trim();
+        if (q) { close(); input.value = ''; askFrom(q); }
+        return;
+      }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!gsItems.length) return;
+        gsIdx = e.key === 'ArrowDown' ? (gsIdx + 1) % gsItems.length : (gsIdx - 1 + gsItems.length) % gsItems.length;
+        panel.querySelectorAll('[data-gi]').forEach(function (el, i) { el.classList.toggle('cur', i === gsIdx); });
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (!panel.contains(e.target) && e.target !== input) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault(); input.focus(); input.select();
+      }
+    });
+  }
+
+  /* ============ 设置（大模型，可选） ============ */
+  function initSettings() {
+    var mask = document.getElementById('modalMask');
+    var btn = document.getElementById('cfgBtn');
+    if (!mask || !btn) return;
+
+    function open() {
+      var c = llmCfg() || { base: '', key: '', model: '' };
+      document.getElementById('llmBase').value = c.base || 'https://api.deepseek.com/v1';
+      document.getElementById('llmKey').value = c.key || '';
+      document.getElementById('llmModel').value = c.model || 'deepseek-chat';
+      mask.classList.add('on');
+    }
+    function close() { mask.classList.remove('on'); }
+
+    btn.addEventListener('click', open);
+    mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
+    document.getElementById('cfgCancel').addEventListener('click', close);
+    document.getElementById('cfgClear').addEventListener('click', function () {
+      S.set('llm', null); close(); toast('已关闭大模型增强');
+    });
+    document.getElementById('cfgSave').addEventListener('click', function () {
+      var base = document.getElementById('llmBase').value.trim();
+      var key = document.getElementById('llmKey').value.trim();
+      var model = document.getElementById('llmModel').value.trim();
+      if (!base || !key || !model) { toast('三项都要填'); return; }
+      S.set('llm', { base: base, key: key, model: model });
+      close(); toast('已启用大模型增强');
+    });
+  }
+
+  /* ============ 交互代理 ============ */
+  function bindGlobal() {
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+
+    var nav = t.closest('[data-nav]');
+    if (nav) { e.preventDefault(); go(nav.getAttribute('data-nav')); return; }
+
+    var ask = t.closest('[data-ask]');
+    if (ask) { e.preventDefault(); askFrom(ask.getAttribute('data-ask')); return; }
+
+    var sc = t.closest('[data-scene]');
+    if (sc) {
+      var s = KB.scenes.filter(function (x) { return x.id === sc.getAttribute('data-scene'); })[0];
+      if (s) askFrom(s.q);
+      return;
+    }
+
+    var fav = t.closest('[data-fav]');
+    if (fav) {
+      var on = toggleFav(fav.getAttribute('data-fav'));
+      fav.innerHTML = ico('star') + (on ? '已收藏' : '收藏');
+      toast(on ? '已收藏' : '已取消收藏');
+      return;
+    }
+
+    var fb = t.closest('[data-fb]');
+    if (fb && !fb.classList.contains('on')) {
+      var helpful = fb.getAttribute('data-fb') === '1';
+      var q = fb.getAttribute('data-q');
+      var arr = S.get('fb', []);
+      arr.unshift({ q: q, help: helpful, ts: Date.now() });
+      S.set('fb', arr.slice(0, 100));
+      if (!helpful) pushPending(q);
+      fb.parentNode.querySelectorAll('[data-fb]').forEach(function (b) { b.classList.remove('on'); });
+      fb.classList.add('on');
+      toast(helpful ? '谢谢反馈' : '已记录，会进入内容治理清单');
+      return;
+    }
+
+    var dfb = t.closest('[data-docfb]');
+    if (dfb) {
+      if (dfb.getAttribute('data-docfb') === '1') { toast('谢谢反馈'); dfb.classList.add('on'); }
+      else {
+        var d = DOC_MAP[dfb.getAttribute('data-id')];
+        pushPending('需要更新：《' + (d ? d.title : '') + '》');
+        toast('已提交给内容负责人');
+      }
+      return;
+    }
+
+    var cp = t.closest('[data-copy]');
+    if (cp) {
+      var box = document.getElementById(cp.getAttribute('data-copy'));
+      if (box) {
+        copyText(box.getAttribute('data-plain') || '');
+      }
+      return;
+    }
+    var cpd = t.closest('[data-copy-doc]');
+    if (cpd) {
+      var dd = DOC_MAP[cpd.getAttribute('data-copy-doc')];
+      if (dd) copyText(dd.title + '\n\n' + plainOf(dd.body));
+      return;
+    }
+
+    var mt = t.closest('#menuToggle');
+    if (mt) { document.getElementById('sidebar').classList.toggle('on'); return; }
+  });
+  }
+
+  function copyText(txt) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { toast('已复制'); }, function () { toast('复制失败，请手动选择'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast('已复制'); } catch (e) { toast('复制失败'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('on'); }, 1900);
+  }
+
+  /* ============ 初始化 ============ */
+  function initSidebar() {
+    var counts = {};
+    DOCS.forEach(function (d) { counts[d.cat] = (counts[d.cat] || 0) + 1; });
+    document.getElementById('cntPolicy').textContent = counts.policy || 0;
+    document.getElementById('cntTraining').textContent = counts.training || 0;
+    document.getElementById('cntFaq').textContent = FAQS.length;
+  }
+
+  function init() {
+    buildIndex();
+    initSidebar();
+    initGlobalSearch();
+    initSettings();
+    bindGlobal();
+    window.addEventListener('hashchange', route);
+    route();
+  }
+
+  /* 测试导出（node 环境可用） */
+  window.__KSKB = {
+    buildIndex: buildIndex, tokenize: tokenize, expand: expand,
+    searchDocs: searchDocs, searchFaqs: searchFaqs,
+    answer: answer, renderMd: renderMd, intentOf: intentOf
+  };
+
+  if (typeof document !== 'undefined' && document.getElementById) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  }
+})();
+
+</script>
+</body>
+</html>
